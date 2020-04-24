@@ -1,10 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks
-	goroman:1.2; strict;
+	goroman:1.3; strict;
 comment	@# @;
 
+
+1.3
+date	2020.04.24.07.21.54;	author goroman;	state Exp;
+branches;
+next	1.2;
 
 1.2
 date	2020.04.24.06.54.59;	author goroman;	state Exp;
@@ -22,15 +27,16 @@ desc
 @
 
 
-1.2
+1.3
 log
-@*** empty log message ***
+@右クリック禁止
 @
 text
 @<html>
 <head>
 <title>GOROman's Homepage</title>
 </head>
+<body onContextmenu="window.alert('右クリック禁止です。');return false"></body>
 <body>
 Sorry, Japanese Only!!
 <hr>
@@ -59,10 +65,22 @@ Sorry, Japanese Only!!
 </center>
 直リン歓迎します。
 <hr>
-$Id$
+$Id: index.html,v 1.2 2020/04/24 06:54:59 goroman Exp goroman $
 </body>
 </html>
 
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@d5 1
+d34 1
+a34 1
+$Id$
 @
 
 

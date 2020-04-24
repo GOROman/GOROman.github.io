@@ -1,4 +1,33 @@
-<html>
+head	1.2;
+access;
+symbols;
+locks
+	goroman:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2020.04.24.06.54.59;	author goroman;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2020.04.24.06.48.43;	author goroman;	state Exp;
+branches;
+next	;
+
+
+desc
+@てすと
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@<html>
 <head>
 <title>GOROman's Homepage</title>
 </head>
@@ -30,7 +59,19 @@ Sorry, Japanese Only!!
 </center>
 直リン歓迎します。
 <hr>
-$Id: index.html,v 1.2 2020/04/24 06:54:59 goroman Exp goroman $
+$Id$
 </body>
 </html>
 
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d23 1
+d32 2
+d36 1
+@

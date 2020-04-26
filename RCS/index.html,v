@@ -1,10 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks
-	goroman:1.3; strict;
+	goroman:1.4; strict;
 comment	@# @;
 
+
+1.4
+date	2020.04.26.07.50.28;	author goroman;	state Exp;
+branches;
+next	1.3;
 
 1.3
 date	2020.04.24.07.21.54;	author goroman;	state Exp;
@@ -27,9 +32,9 @@ desc
 @
 
 
-1.3
+1.4
 log
-@右クリック禁止
+@キリ番
 @
 text
 @<html>
@@ -47,11 +52,13 @@ Sorry, Japanese Only!!
 <br>
 <hr>
 
-あなたは <img src="1"><img src="1"><img src="1"><img src="1"><img src="1"><img src="1"><img src="1"> 番目のお客さんです。<br>
-今週のキリ番。
+あなたは <br>
+<table border="0" cellspacing="0" cellpadding="0"><tr><td align="center"><a href="http://www.rays-counter.com/"><img src="http://www.rays-counter.com/d457_f6_022/5ea53c57d2ce6/" alt="アクセスカウンター" border="0"></a></td></tr><tr><td align="center" style="font-size:xx-small"><img src="http://www.rays-counter.com/images/counter_01.gif" border="0"><img src="http://www.rays-counter.com/images/counter_02.gif" border="0"><img src="http://www.rays-counter.com/images/counter_03.gif" border="0"><img src="http://www.rays-counter.com/images/counter_04.gif" border="0"><img src="http://www.rays-counter.com/images/counter_05.gif" border="0"></td></tr></table><br>
+番目のお客さんです。<br>
+<blink>今週のキリ番</blink>
 <br>
 <br>
-最終更新日: 2020/04/24
+最終更新日: 2020/04/26
 <br>
 <br>
 <br>
@@ -65,10 +72,28 @@ Sorry, Japanese Only!!
 </center>
 直リン歓迎します。
 <hr>
-$Id: index.html,v 1.2 2020/04/24 06:54:59 goroman Exp goroman $
+$Id: index.html,v 1.3 2020/04/24 07:21:54 goroman Exp goroman $
 </body>
 </html>
 
+@
+
+
+1.3
+log
+@右クリック禁止
+@
+text
+@d16 4
+a19 2
+あなたは <img src="1"><img src="1"><img src="1"><img src="1"><img src="1"><img src="1"><img src="1"> 番目のお客さんです。<br>
+今週のキリ番。
+d22 1
+a22 1
+最終更新日: 2020/04/24
+d36 1
+a36 1
+$Id: index.html,v 1.2 2020/04/24 06:54:59 goroman Exp goroman $
 @
 
 

@@ -29,6 +29,22 @@ class SynthProcessor extends AudioWorkletProcessor {
 
     this._wasmBuffer = new WASMAudioBuffer(Module, NUM_FRAMES, 2, 2);
     this.port.onmessage = this._playTone.bind(this);
+    /* 
+        const log = function(o){
+          var element = document.getElementById("opmreg");
+          var str = "";
+          for (let y=0;y<16;++y) {
+            for (let x=0;x<16;++x) {
+              str += (getReg(x+y*16).toString(16)+" ";
+            }
+            str += "<br>";
+          }
+          element.innerHTML = str;
+    //                   console.log(o._synthNode.getReg(40));
+         };
+         
+         setInterval(log, 500, this);
+    */
   }
 
   process(inputs, outputs) {
@@ -48,12 +64,22 @@ class SynthProcessor extends AudioWorkletProcessor {
   }
 
   _playTone(event) {
-    console.log(event);
+//    console.log(event);
+  var str = "";
+  for (let y = 0; y < 16; ++y) {
+    for (let x = 0; x < 16; ++x) {
+      var s = this._synth.getReg(x + y * 16).toString(16).toUpperCase();  
+      if (s.length == 1 ) {
+        s = "0"+s;
+      }
+      str += s + " ";
+    }
+    str += "<br>";
+  }
 
-    //     var num = this._synth.getReg(128);
-    //     console.log("reg:"+num);
-    const isDown = event.data;
-    isDown ? this._synth.noteOn(60) : this._synth.noteOff(60);
+//    const isDown = event.data;
+//    isDown ? this._synth.noteOn(60) : this._synth.noteOff(60);
+    this.port.postMessage(str);
   }
 }
 

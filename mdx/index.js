@@ -30,17 +30,17 @@ class MDXPlayer {
     this._container = document.getElementById('demo-app');
     this._toggleButton = document.getElementById('audio-toggle');
     this._toggleButton.addEventListener(
-        'mouseup', () => this._handleToggle());
+      'mouseup', () => this._handleToggle());
     this._toneButton = document.getElementById('play-tone');
     this._toneButton.addEventListener(
-        'mousedown', () => this._handleToneButton(true));
+      'mousedown', () => this._handleToneButton(true));
     this._toneButton.addEventListener(
-          'mouseup', () => this._handleToneButton(false));
-    
+      'mouseup', () => this._handleToneButton(false));
+
     this._toggleButton.disabled = false;
     this._toneButton.disabled = false;
-//    this._container.style.pointerEvents = 'auto';
-//    this._container.style.backgroundColor = '#D2E3FC';
+    //    this._container.style.pointerEvents = 'auto';
+    //    this._container.style.backgroundColor = '#D2E3FC';
   }
 
   async _initializeAudio() {
@@ -50,28 +50,21 @@ class MDXPlayer {
     });
     await this._context.audioWorklet.addModule('./SynthProcessor.js');
     this._synthNode = new AudioWorkletNode(this._context, 'wasm-synth');
-    this._volumeNode = new GainNode(this._context, {gain: 1.0});
+    this._volumeNode = new GainNode(this._context, { gain: 0.5 });
     this._synthNode.connect(this._volumeNode)
-                   .connect(this._context.destination);
+      .connect(this._context.destination);
 
-//                   var data = o.getReg(128);
-  //                 console.log("test:"+data);
-                 
-                 const log = function(o){
-                  var element = document.getElementById("opmreg");
-                  var str = "";
-                  for (let y=0;y<16;++y) {
-                    for (let x=0;x<16;++x) {
-                      str += (x+y*16).toString(16)+" ";
-                    }
-                    str += "<br>";
-                  }
-                  element.innerHTML = str;
-//                   console.log(o._synthNode.getReg(40));
-                 };
-                 
-                 setInterval(log, 500, this);
-           
+      this._synthNode.port.onmessage = (event) => {
+        // Handling data from the node.
+        var element = document.getElementById("opmreg");
+        element.innerHTML = event.data;
+      };
+
+    // OPMレジスタの更新
+    const getopmreg = function (self) {
+      self.port.postMessage(true);
+    };
+    setInterval(getopmreg, 16, this._synthNode);  // 16ms
 
     if (!this._toggleState) this._context.suspend();
   }
@@ -93,10 +86,8 @@ class MDXPlayer {
 
   onWindowLoad() {
     console.log("onWindowLoad!");
-//    document.body.addEventListener('click', () => {
-      this._initializeAudio();
-      this._initializeView();
-//    }, {once: true});
+    this._initializeAudio();
+    this._initializeView();
   }
 }
 

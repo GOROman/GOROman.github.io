@@ -39,8 +39,6 @@ class MDXPlayer {
 
     this._toggleButton.disabled = false;
     this._toneButton.disabled = false;
-    //    this._container.style.pointerEvents = 'auto';
-    //    this._container.style.backgroundColor = '#D2E3FC';
   }
 
   async _initializeAudio() {
@@ -48,16 +46,15 @@ class MDXPlayer {
       latencyHint: "interactive",
       sampleRate: 48000
     });
+
     await this._context.audioWorklet.addModule('./SynthProcessor.js');
     this._synthNode = new AudioWorkletNode(this._context, 'wasm-synth',
       { 
         outputChannelCount: [2]
       }
      );
-//    this._volumeNode = new GainNode(this._context, { gain: 0.5, numberOfOutputs:2 });
-//    this._synthNode.connect(this._volumeNode)
-//      .connect(this._context.destination);
-      this._synthNode.connect(this._context.destination);
+
+     this._synthNode.connect(this._context.destination);
 
       this._synthNode.port.onmessage = (event) => {
         // Handling data from the node.
@@ -71,7 +68,7 @@ class MDXPlayer {
     };
     setInterval(getopmreg, 16, this._synthNode);  // 16ms
 
-//    if (!this._toggleState) this._context.suspend();
+    if (!this._toggleState) this._context.suspend();
   }
 
   _handleToggle() {

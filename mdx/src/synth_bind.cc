@@ -31,7 +31,7 @@
 #include "mxdrv_context.h"
 
 static const char MDXDATA[] = {
-#include "mdxdata.inc"
+#include "ds02.inc"
 };
 static const char PDXDATA[] = {
 #include "bos.pdx.inc"

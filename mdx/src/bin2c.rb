@@ -1,6 +1,6 @@
 
 print "\t"
-File.open("bos.pdx","rb") {
+File.open("ds02.mdx","rb") {
     |f|
     a = f.read
     count = 0

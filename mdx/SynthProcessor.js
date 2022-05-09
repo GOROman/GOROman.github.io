@@ -53,12 +53,11 @@ class SynthProcessor extends AudioWorkletProcessor {
     } else {
       console.log("--------");
       console.log(data);
-      console.log();
 
       var a1 = new Uint8Array(data);
       let pointer = Module._malloc(data.byteLength);
       Module.HEAPU8.set(a1, pointer);
-      this._synth.load(pointer, data.byteLength);
+      this._synth.loadMDX(pointer, data.byteLength);
       Module._free(pointer);
       a1 = null;
     }

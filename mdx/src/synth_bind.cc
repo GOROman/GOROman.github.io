@@ -95,7 +95,7 @@ public:
     MXDRV_TotalVolume(&context, 256);
 
 
-    load((uintptr_t)mdxFileImage, mdxFileImageSizeInBytes);
+    loadMDX((uintptr_t)mdxFileImage, mdxFileImageSizeInBytes);
   }
 
   virtual ~SynthesizerWrapper()
@@ -127,7 +127,7 @@ public:
     return data;
   }
 
-  virtual void load(uintptr_t output_ptr,int32_t mdxFileImageSizeInBytes)
+  virtual void loadMDX(uintptr_t output_ptr,int32_t mdxFileImageSizeInBytes)
   {
     reset();
     
@@ -328,12 +328,13 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .function("noteOff", &Synthesizer::noteOff)
       .function("noteOn", &Synthesizer::noteOn)
       .function("getReg", &Synthesizer::getReg)
+      .function("loadMDX", &SynthesizerWrapper::loadMDX, allow_raw_pointers())
   ;
 
   // Then expose the overridden `render` method from the wrapper class.
   class_<SynthesizerWrapper, base<Synthesizer>>("Synthesizer")
       .constructor<int32_t>()
       .function("render", &SynthesizerWrapper::render, allow_raw_pointers())
-      .function("load", &SynthesizerWrapper::load, allow_raw_pointers())
+      .function("loadMDX", &SynthesizerWrapper::loadMDX, allow_raw_pointers())
   ;
 }

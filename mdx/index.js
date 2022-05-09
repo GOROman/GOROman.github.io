@@ -163,8 +163,7 @@ class MDXPlayer {
             console.log(data);
             this._synthNode.port.postMessage(data);
 
-            const title = document.getElementById("title");
-            title.innerHTML = file.name;
+            document.getElementById("title").innerHTML = file.name;
 
             this.play();
 

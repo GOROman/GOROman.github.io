@@ -40,7 +40,9 @@ public:
   virtual uint8_t getReg(uint8_t addr)
   {
   }
-
+  virtual void loadMDX(uintptr_t output_ptr, int32_t mdxFileImageSizeInBytes)
+  {
+  }
 
   void render(float *output, int32_t numFrames)
   {

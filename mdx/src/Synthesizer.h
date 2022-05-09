@@ -39,9 +39,8 @@ public:
 
   virtual uint8_t getReg(uint8_t addr)
   {
-    printf("getReg: %d\n", addr);
-    return 64;
   }
+
 
   void render(float *output, int32_t numFrames)
   {

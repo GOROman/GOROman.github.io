@@ -46,6 +46,9 @@ class SynthesizerWrapper : public Synthesizer
 {
   MxdrvContext context;
 
+  void *mdxBuffer = NULL;
+  void *pdxBuffer = NULL;
+
 public:
   SynthesizerWrapper(int32_t sampleRate)
       : Synthesizer(sampleRate)
@@ -56,6 +59,85 @@ public:
     /* MDX ファイルの読み込み */
     uint32_t mdxFileImageSizeInBytes = sizeof(MDXDATA);
     void *mdxFileImage = (void *)MDXDATA;
+
+
+    /* コンテキストの初期化 */
+#define MDX_BUFFER_SIZE 1 * 1024 * 1024
+#define PDX_BUFFER_SIZE 2 * 1024 * 1024
+#define MEMORY_POOL_SIZE 8 * 1024 * 1024
+    if (MxdrvContext_Initialize(&context, MEMORY_POOL_SIZE) == false)
+    {
+      printf("MxdrvContext_Initialize failed.\n");
+    }
+
+    /* MXDRV の初期化 */
+    //#define NUM_SAMPLES_PER_SEC 48000
+    {
+      int ret = MXDRV_Start(
+          &context,
+          sampleRate,
+          0, 0, 0,
+          MDX_BUFFER_SIZE,
+          PDX_BUFFER_SIZE,
+          0);
+      if (ret != 0)
+      {
+        printf("MXDRV_Start failed. return code = %d\n", ret);
+        exit(EXIT_FAILURE);
+      }
+    }
+
+    /* PCM8 を有効化 */
+    uint8_t *pcm8EnableFlag = (uint8_t *)MXDRV_GetWork(&context, MXDRV_WORK_PCM8);
+    *(pcm8EnableFlag) = 1;
+
+    /* 音量設定 */
+    MXDRV_TotalVolume(&context, 256);
+
+
+    load((uintptr_t)mdxFileImage, mdxFileImageSizeInBytes);
+  }
+
+  virtual ~SynthesizerWrapper()
+  {
+    MXDRV_End(&context);
+    MxdrvContext_Terminate(&context);
+    reset();
+  }
+
+  void reset() {
+    if (pdxBuffer != NULL) {
+      free(pdxBuffer);
+      pdxBuffer = NULL;
+    }
+    if (mdxBuffer != NULL) {
+      free(mdxBuffer);
+      mdxBuffer = NULL;
+    }
+    
+  }
+
+  virtual uint8_t getReg(uint8_t addr)
+  {
+    //    MXWORK_OPM* opm = (MXWORK_OPM*)MXDRV_GetWork(&context, MXDRV_WORK_OPM);
+    //    uint8_t data = *opm[addr];
+    uint8_t data = 0;
+    bool updated = false;
+    MxdrvContext_GetOpmReg(&context, addr, &data, &updated);
+    return data;
+  }
+
+  virtual void load(uintptr_t output_ptr,int32_t mdxFileImageSizeInBytes)
+  {
+    reset();
+    
+    uint8_t* mdxFileImage = (uint8_t*)output_ptr;
+//    uint8_t* mdxFileImage = new uint8_t[mdxFileImageSizeInBytes];
+//    memcpy(mdxFileImage, a, mdxFileImageSizeInBytes);
+    for (int i=0;i<mdxFileImageSizeInBytes;++i){
+      printf("%02x ", mdxFileImage[i]);
+    }
+    printf("load %02x %d bytes\n", mdxFileImage[0], mdxFileImageSizeInBytes);
 
     /* MDX タイトルの取得 */
     char mdxTitle[256];
@@ -72,7 +154,6 @@ public:
             &hasPdx) == false)
     {
       printf("MdxHasPdxFileName failed.\n");
-      exit(EXIT_FAILURE);
     }
 
     /* PDX ファイルの読み込み */
@@ -87,7 +168,6 @@ public:
               pdxFileName, sizeof(pdxFileName)) == false)
       {
         printf("MdxGetPdxFileName failed.\n");
-        exit(EXIT_FAILURE);
       }
       printf("pdx filename = %s\n", pdxFileName);
 
@@ -156,31 +236,27 @@ public:
             &mdxBufferSizeInBytes, &pdxBufferSizeInBytes) == false)
     {
       printf("MdxGetRequiredBufferSize failed.\n");
-      exit(EXIT_FAILURE);
     }
     printf("mdxBufferSizeInBytes = %d\n", mdxBufferSizeInBytes);
     printf("pdxBufferSizeInBytes = %d\n", pdxBufferSizeInBytes);
 
     /* MDX PDX バッファの確保 */
-    void *mdxBuffer = NULL;
     mdxBuffer = (uint8_t *)malloc(mdxBufferSizeInBytes);
     if (mdxBuffer == NULL)
     {
       printf("malloc mdxBuffer failed.\n");
-      exit(EXIT_FAILURE);
     }
-    void *pdxBuffer = NULL;
-    printf("!!\n");
+    printf("!!1\n");
     if (hasPdx)
     {
-      printf("!!\n");
+      printf("!!2\n");
       pdxBuffer = (uint8_t *)malloc(pdxBufferSizeInBytes);
       if (pdxBuffer == NULL)
       {
         printf("malloc pdxBuffer failed.\n");
-        exit(EXIT_FAILURE);
       }
     }
+    printf("!!3\n");
 
     /* MDX PDX バッファを作成 */
     if (
@@ -191,46 +267,16 @@ public:
             pdxBuffer, pdxBufferSizeInBytes) == false)
     {
       printf("MdxUtilCreateMdxPdxBuffer failed.\n");
-      exit(EXIT_FAILURE);
     }
+      printf("!!4\n");
 
     /* この時点でファイルイメージは破棄してよい */
-    if (pdxFileImage != NULL)
+    if (pdxFileImage != NULL) {
       free(pdxFileImage);
-
-/* コンテキストの初期化 */
-#define MDX_BUFFER_SIZE 1 * 1024 * 1024
-#define PDX_BUFFER_SIZE 2 * 1024 * 1024
-#define MEMORY_POOL_SIZE 8 * 1024 * 1024
-    if (MxdrvContext_Initialize(&context, MEMORY_POOL_SIZE) == false)
-    {
-      printf("MxdrvContext_Initialize failed.\n");
-      exit(EXIT_FAILURE);
     }
 
-    /* MXDRV の初期化 */
-    //#define NUM_SAMPLES_PER_SEC 48000
-    {
-      int ret = MXDRV_Start(
-          &context,
-          sampleRate,
-          0, 0, 0,
-          MDX_BUFFER_SIZE,
-          PDX_BUFFER_SIZE,
-          0);
-      if (ret != 0)
-      {
-        printf("MXDRV_Start failed. return code = %d\n", ret);
-        exit(EXIT_FAILURE);
-      }
-    }
+      printf("!!5\n");
 
-    /* PCM8 を有効化 */
-    uint8_t *pcm8EnableFlag = (uint8_t *)MXDRV_GetWork(&context, MXDRV_WORK_PCM8);
-    *(pcm8EnableFlag) = 1;
-
-    /* 音量設定 */
-    MXDRV_TotalVolume(&context, 256);
 
     /* 再生時間を求める */
     float songDurationInSeconds = MXDRV_MeasurePlayTime(
@@ -246,24 +292,10 @@ public:
         &context,
         mdxBuffer, mdxBufferSizeInBytes,
         pdxBuffer, pdxBufferSizeInBytes);
+
+//        delete [] mdxFileImage;
   }
 
-  virtual ~SynthesizerWrapper()
-  {
-    MXDRV_End(&context);
-    MxdrvContext_Terminate(&context);
-    //	if (pdxBuffer != NULL) free(pdxBuffer);
-    //	free(mdxBuffer);
-  }
-  virtual uint8_t getReg(uint8_t addr)
-  {
-    //    MXWORK_OPM* opm = (MXWORK_OPM*)MXDRV_GetWork(&context, MXDRV_WORK_OPM);
-    //    uint8_t data = *opm[addr];
-    uint8_t data = 0;
-    bool updated = false;
-    MxdrvContext_GetOpmReg(&context, addr, &data, &updated);
-    return data;
-  }
 
   //  void render(float* leftOutput, float* rightOutput, int32_t numFrames)
   void render(uintptr_t output_ptr, int32_t numFrames)
@@ -295,10 +327,13 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .constructor<int32_t>()
       .function("noteOff", &Synthesizer::noteOff)
       .function("noteOn", &Synthesizer::noteOn)
-      .function("getReg", &Synthesizer::getReg);
+      .function("getReg", &Synthesizer::getReg)
+  ;
 
   // Then expose the overridden `render` method from the wrapper class.
   class_<SynthesizerWrapper, base<Synthesizer>>("Synthesizer")
       .constructor<int32_t>()
-      .function("render", &SynthesizerWrapper::render, allow_raw_pointers());
+      .function("render", &SynthesizerWrapper::render, allow_raw_pointers())
+      .function("load", &SynthesizerWrapper::load, allow_raw_pointers())
+  ;
 }

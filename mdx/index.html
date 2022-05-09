@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <div>WASM MDXPlayer v0.01</div>
+  <div>WASM MDXPlayer v0.02</div>
   <div id="copyright">
     X68k MXDRV music driver version 2.06+17 Rel.X5-S (c)1988-92 milk.,K.MAEKAWA, Missy.M, Yatsube<br>
     Converted for Win32 [MXDRVg] V2.00a Copyright (C) 2000-2002 GORRY.<br>
@@ -21,15 +21,17 @@
   <div id="title">
     Ｂlast Ｐower ！ 〜 from BOSCONIAN-X68<br>
   </div>
+  <!--
   <div id="mdxfile">bos14.mdx</div>
   <div id="pdxfile">bos.pdx</div>
+  !-->
   <div id="ym2151">YM2151 OPM register dump</div>
   <div id="opmreg">
     <br>Now loading...<br>
 
   </div>
   </div>
-  <div id="demo-app">
+  <div id="demo-app" draggable="false">
     <div>
       <button id="audio-toggle" class="inactive" disabled>PLAY</button>
     </div>
@@ -38,6 +40,10 @@
       </button>
     </div>
     <script src="index.js" type="module"></script>
+
+    <div id="ddarea" align="center">
+<br><br>      Drag & Drop Here<br>MDX File
+    </div>
 </body>
 
 </html>

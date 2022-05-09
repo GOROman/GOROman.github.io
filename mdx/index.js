@@ -49,10 +49,15 @@ class MDXPlayer {
       sampleRate: 48000
     });
     await this._context.audioWorklet.addModule('./SynthProcessor.js');
-    this._synthNode = new AudioWorkletNode(this._context, 'wasm-synth');
-    this._volumeNode = new GainNode(this._context, { gain: 0.5 });
-    this._synthNode.connect(this._volumeNode)
-      .connect(this._context.destination);
+    this._synthNode = new AudioWorkletNode(this._context, 'wasm-synth',
+      { 
+        outputChannelCount: [2]
+      }
+     );
+//    this._volumeNode = new GainNode(this._context, { gain: 0.5, numberOfOutputs:2 });
+//    this._synthNode.connect(this._volumeNode)
+//      .connect(this._context.destination);
+      this._synthNode.connect(this._context.destination);
 
       this._synthNode.port.onmessage = (event) => {
         // Handling data from the node.

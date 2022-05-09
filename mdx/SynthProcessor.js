@@ -27,34 +27,19 @@ class SynthProcessor extends AudioWorkletProcessor {
     // event handler for MIDI data from the main thread.
     this._synth = new Module.Synthesizer(sampleRate);
 
-    this._wasmBuffer = new WASMAudioBuffer(Module, NUM_FRAMES, 2, 2);
+    this._outputBuffer = new WASMAudioBuffer(Module, NUM_FRAMES, 2, 2);
     this.port.onmessage = this._playTone.bind(this);
-    /* 
-        const log = function(o){
-          var element = document.getElementById("opmreg");
-          var str = "";
-          for (let y=0;y<16;++y) {
-            for (let x=0;x<16;++x) {
-              str += (getReg(x+y*16).toString(16)+" ";
-            }
-            str += "<br>";
-          }
-          element.innerHTML = str;
-    //                   console.log(o._synthNode.getReg(40));
-         };
-         
-         setInterval(log, 500, this);
-    */
   }
 
   process(inputs, outputs) {
-    // The output buffer (mono) provided by Web Audio API.
-    const outputBuffer = outputs[0][0];
 
     // Call the render function to fill the WASM buffer. Then clone the
     // rendered data to process() callback's output buffer.
-    this._synth.render(this._wasmBuffer.getPointer(), NUM_FRAMES);
-    outputBuffer.set(this._wasmBuffer.getF32Array());
+    this._synth.render(this._outputBuffer.getPointer(), NUM_FRAMES);
+
+    for (let i = 0; i < outputs[0].length; i++) {
+      outputs[0][i].set(this._outputBuffer.getChannelData(i));
+    }
 
     return true;
   }
@@ -64,21 +49,21 @@ class SynthProcessor extends AudioWorkletProcessor {
   }
 
   _playTone(event) {
-//    console.log(event);
-  var str = "";
-  for (let y = 0; y < 16; ++y) {
-    for (let x = 0; x < 16; ++x) {
-      var s = this._synth.getReg(x + y * 16).toString(16).toUpperCase();  
-      if (s.length == 1 ) {
-        s = "0"+s;
+    //    console.log(event);
+    var str = "";
+    for (let y = 0; y < 16; ++y) {
+      for (let x = 0; x < 16; ++x) {
+        var s = this._synth.getReg(x + y * 16).toString(16).toUpperCase();
+        if (s.length == 1) {
+          s = "0" + s;
+        }
+        str += s + " ";
       }
-      str += s + " ";
+      str += "<br>";
     }
-    str += "<br>";
-  }
 
-//    const isDown = event.data;
-//    isDown ? this._synth.noteOn(60) : this._synth.noteOff(60);
+    //    const isDown = event.data;
+    //    isDown ? this._synth.noteOn(60) : this._synth.noteOff(60);
     this.port.postMessage(str);
   }
 }

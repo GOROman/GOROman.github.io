@@ -177,18 +177,14 @@ class MDXPlayer {
         const files = e.dataTransfer.files;
 
         console.log(files.length);
-        //          tarea.value += `${files.length}のファイルがドロップされた。`;
         for (let file of files) {
-          //            tarea.value +=  `name:${file.name} type:${file.type}`;
-          console.log(file.type);
-          console.log(file.name);
+//          console.log(file.type);
+//          console.log(file.name);
 
           const reader = new FileReader();
           reader.onload = (event) => {
 
             var data = event.target.result;
-            console.log(data.length);
-            console.log(data);
             this._synthNode.port.postMessage(data);
 
             document.getElementById("title").innerHTML = file.name;

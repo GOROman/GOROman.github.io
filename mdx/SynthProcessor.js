@@ -51,8 +51,6 @@ class SynthProcessor extends AudioWorkletProcessor {
         str += "<br>";
       }
     } else {
-      console.log("--------");
-      console.log(data);
 
       var a1 = new Uint8Array(data);
       let pointer = Module._malloc(data.byteLength);

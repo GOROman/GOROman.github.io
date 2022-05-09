@@ -134,10 +134,7 @@ public:
     uint8_t* mdxFileImage = (uint8_t*)output_ptr;
 //    uint8_t* mdxFileImage = new uint8_t[mdxFileImageSizeInBytes];
 //    memcpy(mdxFileImage, a, mdxFileImageSizeInBytes);
-    for (int i=0;i<mdxFileImageSizeInBytes;++i){
-      printf("%02x ", mdxFileImage[i]);
-    }
-    printf("load %02x %d bytes\n", mdxFileImage[0], mdxFileImageSizeInBytes);
+//    printf("load %02x %d bytes\n", mdxFileImage[0], mdxFileImageSizeInBytes);
 
     /* MDX タイトルの取得 */
     char mdxTitle[256];
@@ -246,17 +243,14 @@ public:
     {
       printf("malloc mdxBuffer failed.\n");
     }
-    printf("!!1\n");
     if (hasPdx)
     {
-      printf("!!2\n");
       pdxBuffer = (uint8_t *)malloc(pdxBufferSizeInBytes);
       if (pdxBuffer == NULL)
       {
         printf("malloc pdxBuffer failed.\n");
       }
     }
-    printf("!!3\n");
 
     /* MDX PDX バッファを作成 */
     if (
@@ -268,16 +262,14 @@ public:
     {
       printf("MdxUtilCreateMdxPdxBuffer failed.\n");
     }
-      printf("!!4\n");
 
     /* この時点でファイルイメージは破棄してよい */
     if (pdxFileImage != NULL) {
       free(pdxFileImage);
     }
 
-      printf("!!5\n");
 
-
+#if 0
     /* 再生時間を求める */
     float songDurationInSeconds = MXDRV_MeasurePlayTime(
                                       &context,
@@ -286,7 +278,7 @@ public:
                                       1, 0) /
                                   1000.0f;
     printf("song duration %.1f(sec)\n", songDurationInSeconds);
-
+#endif
     /* MDX 再生 */
     MXDRV_Play(
         &context,

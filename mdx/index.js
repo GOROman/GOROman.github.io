@@ -102,10 +102,10 @@ class MDXPlayer {
   }
 }
 
-const demoApp = new MDXPlayer();
+const mdxplayer = new MDXPlayer();
 window.addEventListener(
-  'load', () => demoApp.onWindowLoad()
+  'load', () => mdxplayer.onWindowLoad()
 );
 window.addEventListener(
-  'pageshow', () => demoApp.onWindowPageShow()
+  'pageshow', () => mdxplayer.onWindowPageShow()
 );

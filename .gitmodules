@@ -1,0 +1,3 @@
+[submodule "mdx/src/portable_mdx"]
+	path = mdx/src/portable_mdx
+	url = https://github.com/yosshin4004/portable_mdx.git

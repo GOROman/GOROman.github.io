@@ -71,7 +71,7 @@ class MDXPlayer {
     };
     setInterval(getopmreg, 16, this._synthNode);  // 16ms
 
-    if (!this._toggleState) this._context.suspend();
+//    if (!this._toggleState) this._context.suspend();
   }
 
   _handleToggle() {
@@ -79,9 +79,11 @@ class MDXPlayer {
     if (this._toggleState) {
       this._context.resume();
       this._toggleButton.classList.replace('inactive', 'active');
+      this._toggleButton.innerHTML = 'STOP';
     } else {
       this._context.suspend();
       this._toggleButton.classList.replace('active', 'inactive');
+      this._toggleButton.innerHTML = 'PLAY';
     }
   }
 
@@ -89,6 +91,10 @@ class MDXPlayer {
     this._synthNode.port.postMessage(isDown);
   }
 
+  onWindowPageShow() {
+    console.log("onWindowPageShow!");
+
+  }
   onWindowLoad() {
     console.log("onWindowLoad!");
     this._initializeAudio();
@@ -97,4 +103,9 @@ class MDXPlayer {
 }
 
 const demoApp = new MDXPlayer();
-window.addEventListener('load', () => demoApp.onWindowLoad());
+window.addEventListener(
+  'load', () => demoApp.onWindowLoad()
+);
+window.addEventListener(
+  'pageshow', () => demoApp.onWindowPageShow()
+);

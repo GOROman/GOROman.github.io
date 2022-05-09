@@ -118,14 +118,13 @@ button:active,
 button.active {
   color: #FFFFFF;
   fill: #FFFFFF;
-  background-color: #17173c;
+  background-color: #;
 }
 
 button:disabled,
 button[disabled] {
   color: #BDBDBD;
   fill: #BDBDBD;
-  border: 6px solid #BDBDBD;
 }
 
 

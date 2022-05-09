@@ -103,10 +103,38 @@ class MDXPlayer {
     console.log("onWindowPageShow!");
 
   }
+  load( filename ) {
+
+  }
+
   onWindowLoad() {
     console.log("onWindowLoad!");
     this._initializeAudio();
     this._initializeView();
+
+    const f = document.getElementById('file1');
+    f.addEventListener('change', evt => {
+      const input = evt.target;
+      for (let i = 0; i < input.files.length; i++) {
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+
+          var data = event.target.result;
+          console.log(data.length);
+          console.log(data);
+          this._synthNode.port.postMessage(data);
+
+          document.getElementById("title").innerHTML = input.files[i].name;
+
+          this.play();
+
+        }
+        console.log(input.files[i]);
+        reader.readAsArrayBuffer(input.files[i]);
+
+      }
+    });
 
 
     const ddarea = document.getElementById("ddarea");
@@ -164,15 +192,12 @@ class MDXPlayer {
             this._synthNode.port.postMessage(data);
 
             document.getElementById("title").innerHTML = file.name;
-
             this.play();
 
           }
           reader.readAsArrayBuffer(file);
-//          reader.readAsDataURL(file);
         }
 
-        //     ddarea.classList.remove("ddefect");
       }
     };
 

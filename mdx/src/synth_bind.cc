@@ -30,17 +30,57 @@
 #include "mxdrv.h"
 #include "mxdrv_context.h"
 
-static const char MDXDATA[] = {
-#include "ds02.inc"
-};
-static const char PDXDATA[] = {
-#include "bos.pdx.inc"
-};
+//static const char MDXDATA[] = {
+//#include "ds02.inc"
+//};
+
+//static const char PDXDATA[] = {
+//#include "bos.pdx.inc"
+//};
 
 #include <emscripten/bind.h>
 #include "Synthesizer.h"
 
 using namespace emscripten;
+
+static void *mallocReadFile(
+	const char *fileName,
+	uint32_t *sizeRet
+){
+#ifdef _WIN32
+	int wcharFileNameSize = MultiByteToWideChar(CP_UTF8, 0, fileName, -1, NULL, 0);
+	wchar_t *wcharFileName = calloc(wcharFileNameSize, sizeof(wchar_t));
+	if (MultiByteToWideChar(CP_UTF8, 0, fileName, -1, wcharFileName, wcharFileNameSize) == 0) {
+		free(wcharFileName);
+		return NULL;
+	}
+	FILE *fd; _wfopen_s(&fd, wcharFileName, L"rb");
+	free(wcharFileName);
+#else
+	FILE *fd = fopen(fileName, "rb");
+#endif
+	if (fd == NULL) return NULL;
+	struct stat stbuf;
+#ifdef _WIN32
+	if (fstat(_fileno(fd), &stbuf) == -1) {
+#else
+	if (fstat(fileno(fd), &stbuf) == -1) {
+#endif
+		fclose(fd);
+		return NULL;
+	}
+	assert(stbuf.st_size < 0x100000000LL);
+	uint32_t size = (uint32_t)stbuf.st_size;
+	void *buffer = malloc(size);
+	if (buffer == NULL) {
+		fclose(fd);
+		return NULL;
+	}
+	fread(buffer, 1, size, fd);
+	*sizeRet = size;
+	fclose(fd);
+	return buffer;
+}
 
 class SynthesizerWrapper : public Synthesizer
 {
@@ -56,10 +96,21 @@ public:
 
     puts("SimpleKernel::SimpleKernel()");
 
-    /* MDX ファイルの読み込み */
-    uint32_t mdxFileImageSizeInBytes = sizeof(MDXDATA);
-    void *mdxFileImage = (void *)MDXDATA;
+    char* mdxFilePath = "bos14.mdx";
+    printf("Filename:%s\n", mdxFilePath);
 
+    /* MDX ファイルの読み込み */
+#if 1
+    uint32_t mdxFileImageSizeInBytes = 0;
+    void *mdxFileImage = mallocReadFile(mdxFilePath, &mdxFileImageSizeInBytes);
+    if (mdxFileImage == NULL) {
+      printf("mallocReadFile '%s' failed.\n", mdxFilePath);
+      exit(EXIT_FAILURE);
+    }
+#else
+  void* mdxFileImage = (void*)MDXDATA;
+  uint32_t mdxFileImageSizeInBytes = sizeof(MDXDATA);
+#endif
 
     /* コンテキストの初期化 */
 #define MDX_BUFFER_SIZE 1 * 1024 * 1024
@@ -209,8 +260,8 @@ public:
         char pdxFilePath[FILENAME_MAX];
         sprintf(pdxFilePath, "%s/%s", mdxDirName, modifiedPdxFileName);
         printf("read %s ... ", pdxFilePath);
-        pdxFileImageSizeInBytes = sizeof(PDXDATA);
-        pdxFileImage = (void *)PDXDATA; // NULL; // mallocReadFile(pdxFilePath, &pdxFileImageSizeInBytes);
+//       pdxFileImageSizeInBytes = sizeof(PDXDATA);
+        pdxFileImage = (void *)mallocReadFile(pdxFilePath, &pdxFileImageSizeInBytes);
         if (pdxFileImage != NULL)
         {
           printf("succeeded.\n");
@@ -268,6 +319,7 @@ public:
       free(pdxFileImage);
     }
 
+	free(mdxFileImage);
 
 #if 0
     /* 再生時間を求める */
@@ -285,7 +337,6 @@ public:
         mdxBuffer, mdxBufferSizeInBytes,
         pdxBuffer, pdxBufferSizeInBytes);
 
-//        delete [] mdxFileImage;
   }
 
 
@@ -320,7 +371,7 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .function("noteOff", &Synthesizer::noteOff)
       .function("noteOn", &Synthesizer::noteOn)
       .function("getReg", &Synthesizer::getReg)
-      .function("loadMDX", &SynthesizerWrapper::loadMDX, allow_raw_pointers())
+//      .function("loadMDX", &SynthesizerWrapper::loadMDX, allow_raw_pointers())
   ;
 
   // Then expose the overridden `render` method from the wrapper class.

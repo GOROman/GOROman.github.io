@@ -34,9 +34,12 @@ $(TARGET) :
 		-I $(DIR_INCLUDE) \
 		-s USE_SDL=2 \
 		-Wno-tautological-constant-out-of-range-compare \
-		-O1 \
+		-O3 \
 		-o index.html \
 		--pre-js emrun_prejs.js \
-		--embed-file mdxdir@ \
+		-s ASYNCIFY=1 \
+		-s ASYNCIFY_IMPORTS=["mallocReadFile"] \
 		--shell-file shell_minimal.html \
 		$(SRCS)
+
+#		--embed-file mdxdir@ \

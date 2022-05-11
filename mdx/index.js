@@ -56,6 +56,7 @@ class MDXPlayer {
 
     this._synthNode.connect(this._context.destination);
 
+
     this._synthNode.port.onmessage = (event) => {
       // Handling data from the node.
       var element = document.getElementById("opmreg");
@@ -75,7 +76,7 @@ class MDXPlayer {
   {
     this._context.resume();
     this._toggleButton.classList.replace('inactive', 'active');
-    this._toggleButton.innerHTML = 'STOP';
+    this._toggleButton.innerHTML = 'PAUSE';
 
   }
   pause()

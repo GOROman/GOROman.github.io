@@ -28,7 +28,7 @@ DEPS = \
 	src/portable_mdx/src/mdx_util.c
 
 build: $(DEPS)
-	@emcc \
+	emcc \
 		--bind \
 		--post-js ./export-es6.js \
 		-I src/portable_mdx/include \
@@ -36,6 +36,7 @@ build: $(DEPS)
 		-Wno-tautological-constant-out-of-range-compare \
 		-s ENVIRONMENT=shell \
 		-s SINGLE_FILE=1 \
+		-sFORCE_FILESYSTEM \
 		-s WASM=1 \
 		-s WASM_ASYNC_COMPILATION=0 \
 		-o ./mdx.wasm.js \
@@ -43,3 +44,4 @@ build: $(DEPS)
 		./src/synth_bind.cc $(DEPS)
 
 #			--preload-file ./src/fs \
+#		-s MODULARIZE=1 -s EXPORT_ES6=1 \

@@ -15,6 +15,9 @@ class SynthProcessor extends AudioWorkletProcessor {
 
     this._outputBuffer = new WASMAudioBuffer(Module, NUM_FRAMES, 2, 2);
     this.port.onmessage = this.onMessage.bind(this);
+
+///    var lookup = FS.lookupPath(".", { parent: true });
+
   }
 
   process(inputs, outputs) {

@@ -39,6 +39,7 @@ build: $(DEPS)
 		-s WASM=1 \
 		-s WASM_ASYNC_COMPILATION=0 \
 		-o ./mdx.wasm.js \
+		--embed-file ./src/fs@ \
 		./src/synth_bind.cc $(DEPS)
 
-	
+#			--preload-file ./src/fs \

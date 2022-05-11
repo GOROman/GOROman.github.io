@@ -237,6 +237,7 @@ void mainloop(void *arg)
 
 		/* 画面更新 */
 		//			SDL_UpdateWindowSurface(window);
+		SDL_RenderPresent(renderer);
 		SDL_Delay(10);
 	}
 
@@ -294,7 +295,6 @@ void mainloop(void *arg)
 
 	//			SDL_UpdateWindowSurface(ctx->window);
 
-	SDL_RenderPresent(renderer);
 
 	ctx->iteration++;
 }

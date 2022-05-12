@@ -96,7 +96,7 @@ public:
 
     puts("SimpleKernel::SimpleKernel()");
 
-    char* mdxFilePath = "bos14.mdx";
+    char* mdxFilePath = "ds02.mdx";
     printf("Filename:%s\n", mdxFilePath);
 
     /* MDX ファイルの読み込み */

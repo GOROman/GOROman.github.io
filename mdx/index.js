@@ -47,7 +47,7 @@ class MDXPlayer {
       sampleRate: 48000
     });
 
-    await this._context.audioWorklet.addModule('./SynthProcessor.js');
+    await this._context.audioWorklet.addModule('./mdx.wasm.js');
     this._synthNode = new AudioWorkletNode(this._context, 'wasm-synth',
       {
         outputChannelCount: [2]

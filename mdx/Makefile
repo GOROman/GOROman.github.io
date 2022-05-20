@@ -30,7 +30,7 @@ DEPS = \
 build: $(DEPS)
 	emcc \
 		--bind \
-		--post-js ./export-es6.js \
+		--post-js ./SynthProcessor.js \
 		-I src/portable_mdx/include \
 		-Wno-c++11-narrowing \
 		-Wno-tautological-constant-out-of-range-compare \
@@ -43,5 +43,6 @@ build: $(DEPS)
 		--embed-file ./src/fs@ \
 		./src/synth_bind.cc $(DEPS)
 
+#		--post-js ./export-es6.js \
 #			--preload-file ./src/fs \
 #		-s MODULARIZE=1 -s EXPORT_ES6=1 \

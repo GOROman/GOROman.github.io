@@ -161,7 +161,8 @@ export default WASMAudioBuffer;
 
 // Web Audio API's render block size
 const NUM_FRAMES = 128;
-
+var filetype = 'MDX';
+var pdxfilename = "bos.pdx";
 class SynthProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
@@ -197,7 +198,9 @@ class SynthProcessor extends AudioWorkletProcessor {
     //    console.log(event);
     const data = event.data;
 //    console.log(data);
-    if ( data == "OPM" ) {
+  if ( data == "MDX" ) {
+    filetype = "MDX";
+  } else if ( data == "OPM" ) {
       var str = "";
       for (let y = 0; y < 16; ++y) {
         for (let x = 0; x < 16; ++x) {
@@ -209,12 +212,34 @@ class SynthProcessor extends AudioWorkletProcessor {
         }
         str += "<br>";
       }
-    } else {
+  } else if ( typeof data == 'string' ) {
+    if (data.match( /\.pdx/i )) {
+      filetype = "PDX";
+      pdxfilename = data;
+      console.log("PDX!!:"+pdxfilename);
+    }
+  } else {
 
       var a1 = new Uint8Array(data);
       let pointer = Module._malloc(data.byteLength);
       Module.HEAPU8.set(a1, pointer);
-      this._synth.loadMDX(pointer, data.byteLength);
+      if ( filetype == "MDX" ) {
+        this._synth.loadMDX(pointer, data.byteLength);
+      }
+      if ( filetype == "PDX" ) {
+        const AsciiStrToMem = function(p, s) {
+          let i = 0;
+          for (i = 0; i < s.length; i++) {
+            console.log(s.charCodeAt(i));
+            Module.HEAP8[p + i] = s.charCodeAt(i)
+          }
+          Module.HEAP8[p+i] = 0x00;
+        }
+        let p1 = Module._malloc(256);
+        AsciiStrToMem(p1, pdxfilename.toUpperCase());
+        this._synth.loadPDX(pointer, data.byteLength, p1);
+        Module._free(p1);
+      }
       Module._free(pointer);
       a1 = null;
     }

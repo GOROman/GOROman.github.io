@@ -206,6 +206,10 @@ static void stopMdxDecodeThread()
 	s_audioReadableSem = NULL;
 }
 
+EM_JS(void, pass, (), {
+	document.getElementById('mdxfile').innerHTML = "Hello, world!";
+});
+
 /* メイン */
 int main(
 	int argc,
@@ -214,6 +218,10 @@ int main(
 //	argc = 2;
 //	argv[1] = "bos14.mdx";
 	/* 引数解析 */
+	 EM_ASM({
+	document.getElementById('mdxfile').innerHTML = "Hello, world!";
+   console.log("pass");
+ });
 	if (argc == 1)
 	{
 		printf(
@@ -376,7 +384,7 @@ int main(
 
 			/* MDX ファイルの読み込み */
 			printf("mdx filepath = %s\n", mdxFilePath);
-
+pass();
 			uint32_t mdxFileImageSizeInBytes = 0;
 			void *mdxFileImage = NULL;
 			mdxFileImage =  mallocReadFile(mdxFilePath, &mdxFileImageSizeInBytes);

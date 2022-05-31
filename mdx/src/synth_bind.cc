@@ -38,10 +38,27 @@
 //#include "bos.pdx.inc"
 //};
 
+#include <emscripten.h>
 #include <emscripten/bind.h>
 #include "Synthesizer.h"
 
 using namespace emscripten;
+
+static char upper(char c){
+    if('a' <= c && c <= 'z'){
+        c = c - ('a' - 'A');
+    }
+    return c;
+}
+static void upperstring(char *out, const char *in){
+    int i;
+
+    i = 0;
+    while(in[i] != '\0'){
+        out[i] = upper(in[i]);
+        i++;
+    }
+}
 
 static void *mallocReadFile(
 	const char *fileName,
@@ -85,6 +102,7 @@ static void *mallocReadFile(
 class SynthesizerWrapper : public Synthesizer
 {
   MxdrvContext context;
+    char mdxTitle[256];
 
   void *mdxBuffer = NULL;
   void *pdxBuffer = NULL;
@@ -178,9 +196,22 @@ public:
     return data;
   }
 
+  virtual void loadPDX(uintptr_t output_ptr,int32_t pdxFileImageSizeInBytes, uintptr_t filename)
+  {
+//    printf("loadPDX()\n");
+    FILE* fp = fopen( (char*)filename, "wb" );
+    fwrite((void*)output_ptr, 1, pdxFileImageSizeInBytes, fp);
+    fclose(fp);
+  }
   virtual void loadMDX(uintptr_t output_ptr,int32_t mdxFileImageSizeInBytes)
   {
     reset();
+
+    	 EM_ASM({
+//  document.getElementById('mdxfile').innerHTML = "Hello, world!";
+  console.log("loadMDX!");
+ });
+
     
     uint8_t* mdxFileImage = (uint8_t*)output_ptr;
 //    uint8_t* mdxFileImage = new uint8_t[mdxFileImageSizeInBytes];
@@ -188,7 +219,6 @@ public:
 //    printf("load %02x %d bytes\n", mdxFileImage[0], mdxFileImageSizeInBytes);
 
     /* MDX タイトルの取得 */
-    char mdxTitle[256];
     MdxGetTitle(
         mdxFileImage, mdxFileImageSizeInBytes,
         mdxTitle, sizeof(mdxTitle));
@@ -223,40 +253,12 @@ public:
 #else
       const char *mdxDirName = dirname(NULL);
 
-      /*
-        ファイル名の大文字小文字が区別される環境では
-          大文字ファイル名 + 大文字拡張子
-          大文字ファイル名 + 小文字拡張子
-          小文字ファイル名 + 大文字拡張子
-          小文字ファイル名 + 小文字拡張子
-        の 4 通りで PDX ファイル読み込みを試す必要がある。
-      */
-      for (int retryCount = 0; retryCount < 4; retryCount++)
+      for (int retryCount = 0; retryCount < 1; retryCount++)
       {
-        char modifiedPdxFileName[FILENAME_MAX];
-        memcpy(modifiedPdxFileName, pdxFileName, FILENAME_MAX);
-        if (retryCount & 1)
-        {
-          /* ファイル名部分の大文字小文字反転 */
-          for (char *p = modifiedPdxFileName; *p != '\0' && *p != '.'; p++)
-          {
-            if ('a' <= *p && *p <= 'z' || 'A' <= *p && *p <= 'Z')
-              *p ^= 0x20;
-          }
-        }
-        if (retryCount & 2)
-        {
-          /* 拡張子部分の大文字小文字反転 */
-          char *p = modifiedPdxFileName;
-          while (strchr(p, '.') != NULL)
-            p = strchr(p, '.') + 1;
-          for (; *p != '\0'; p++)
-          {
-            if ('a' <= *p && *p <= 'z' || 'A' <= *p && *p <= 'Z')
-              *p ^= 0x20;
-          }
-        }
-
+        char modifiedPdxFileName[FILENAME_MAX] = {0};
+        upperstring(modifiedPdxFileName, pdxFileName);
+//        memcpy(modifiedPdxFileName, pdxFileName, FILENAME_MAX);
+ 
         char pdxFilePath[FILENAME_MAX];
         sprintf(pdxFilePath, "%s/%s", mdxDirName, modifiedPdxFileName);
         printf("read %s ... ", pdxFilePath);
@@ -371,7 +373,6 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .function("noteOff", &Synthesizer::noteOff)
       .function("noteOn", &Synthesizer::noteOn)
       .function("getReg", &Synthesizer::getReg)
-//      .function("loadMDX", &SynthesizerWrapper::loadMDX, allow_raw_pointers())
   ;
 
   // Then expose the overridden `render` method from the wrapper class.
@@ -379,5 +380,6 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .constructor<int32_t>()
       .function("render", &SynthesizerWrapper::render, allow_raw_pointers())
       .function("loadMDX", &SynthesizerWrapper::loadMDX, allow_raw_pointers())
+      .function("loadPDX", &SynthesizerWrapper::loadPDX, allow_raw_pointers())
   ;
 }

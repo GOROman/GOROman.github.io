@@ -104,8 +104,20 @@ class MDXPlayer {
     console.log("onWindowPageShow!");
 
   }
-  load( filename ) {
+  loadMDX( filename, data ) {
+    this._synthNode.port.postMessage("MDX");
+    this._synthNode.port.postMessage(data);
 
+    document.getElementById("title").innerHTML = filename;
+    document.getElementById("mdxfile").innerHTML = filename;
+    this.play();
+
+  }
+  loadPDX( filename, data ) {
+    this._synthNode.port.postMessage(filename);
+    this._synthNode.port.postMessage(data);
+
+    document.getElementById("pdxfile").innerHTML = filename;
   }
 
   onWindowLoad() {
@@ -113,7 +125,7 @@ class MDXPlayer {
     this._initializeAudio();
     this._initializeView();
 
-    const f = document.getElementById('file1');
+    const f = document.getElementById('mdxfile1');
     f.addEventListener('change', evt => {
       const input = evt.target;
       for (let i = 0; i < input.files.length; i++) {
@@ -124,11 +136,7 @@ class MDXPlayer {
           var data = event.target.result;
           console.log(data.length);
           console.log(data);
-          this._synthNode.port.postMessage(data);
-
-          document.getElementById("title").innerHTML = input.files[i].name;
-
-          this.play();
+          this.loadMDX(input.files[i].name, data)
 
         }
         console.log(input.files[i]);
@@ -137,6 +145,25 @@ class MDXPlayer {
       }
     });
 
+    const f2 = document.getElementById('pdxfile1');
+    f2.addEventListener('change', evt => {
+      const input = evt.target;
+      for (let i = 0; i < input.files.length; i++) {
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+
+          var data = event.target.result;
+          
+          this.loadPDX(input.files[i].name, data)
+
+
+        }
+        console.log(input.files[i]);
+        reader.readAsArrayBuffer(input.files[i]);
+
+      }
+    });
 
     const ddarea = document.getElementById("ddarea");
     // ドラッグされたデータが有効かどうかチェック
@@ -144,7 +171,6 @@ class MDXPlayer {
 
     const ddEvent = {
       "dragover": e => {
-        //      console.log("dragover!");
         e.preventDefault(); // 既定の処理をさせない
         e.stopPropagation(); // イベント伝播を止める
         if (!e.target.isEqualNode(ddarea)) {
@@ -176,23 +202,42 @@ class MDXPlayer {
         e.stopPropagation(); // イベント伝播を止める
 
         const files = e.dataTransfer.files;
-
-        console.log(files.length);
+        console.log("Count:"+files.length);
+        console.log("PDX");
         for (let file of files) {
-//          console.log(file.type);
-//          console.log(file.name);
+          
+          if ( file.name.match(/\.pdx$/i) ) {
+              console.log("File:"+file.name);
 
-          const reader = new FileReader();
-          reader.onload = (event) => {
+            const reader1 = new FileReader();
+            reader1.onload = (event) => {
 
-            var data = event.target.result;
-            this._synthNode.port.postMessage(data);
+              var data = event.target.result;
+              if ( file.name.match(/\.pdx$/i) ) {
+                this.loadPDX(file.name, data);
+              }
 
-            document.getElementById("title").innerHTML = file.name;
-            this.play();
-
+            }
+            reader1.readAsArrayBuffer(file);
           }
-          reader.readAsArrayBuffer(file);
+        }
+
+        console.log("MDX");
+        for (let file of files) {
+
+          if ( file.name.match(/\.mdx$/i) ) {
+          console.log("File:"+file.name);
+              const reader2 = new FileReader();
+            reader2.onload = (event) => {
+
+                  var data = event.target.result;
+                if ( file.name.match(/\.mdx$/i) ) {
+                  this.loadMDX(file.name, data);
+                }
+
+            }
+            reader2.readAsArrayBuffer(file);
+          }
         }
 
       }

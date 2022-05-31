@@ -94,8 +94,21 @@ body {
   z-index: 1;
 }
 
+#loader {
+  appearance: none;
+  background: #000000;
+  color: #a8a8de;
+  font-size: 8px;
+  padding: 0;
+  margin: 0px 0px;
+  border: 2px solid #17173c;
+  width: 270px;
+}
 
-#file1 {
+
+
+
+#mdxfile1 {
   appearance: none;
   background: #000000;
   color: #a8a8de;
@@ -103,7 +116,20 @@ body {
   height: 30px;
   width: 250px;
   padding: 0;
-  margin: 0 8px;
+  border: 2px solid #17173c;
+  margin: 8px 0px; 
+
+}
+
+#pdxfile1 {
+  appearance: none;
+  background: #000000;
+  color: #a8a8de;
+  font-size: 8px;
+  height: 30px;
+  width: 250px;
+  padding: 0;
+  margin: 8px 0px; 
   border: 2px solid #17173c;
 }
 
@@ -143,6 +169,3 @@ button[disabled] {
   fill: #BDBDBD;
 }
 
-#file1 {
-  margin: 8px 0px; 
-}

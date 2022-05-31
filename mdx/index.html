@@ -10,36 +10,41 @@
 </head>
 
 <body>
-  <div>WASM MDXPlayer v0.04</div>
+  <div>WASM MDXPlayer v0.05</div>
   <div id="copyright">
     X68k MXDRV music driver version 2.06+17 Rel.X5-S (c)1988-92 milk.,K.MAEKAWA, Missy.M, Yatsube<br>
     <a href="https://gorry.haun.org/mx/">Converted for Win32 [MXDRVg] V2.00a Copyright (C) 2000-2002 GORRY.</a><br>
     X68Sound_src020615 Copyright (C) m_puusan.<br>
     <a href="https://github.com/yosshin4004/portable_mdx">Ported for 64bit environments Copyright (C) 2018 Yosshin.</a><br>
-    WASM MDXPlayer 2022 GOROman.
+    WASM MDXPlayer 2022 <a href="https://twitter.com/GOROman">@GOROman</a>.
   </div>
   <div id="title">
     Ｄragon Ｓpirit (c)namco  * Ｔhe Ｐaleozoic Ｅra *  by Yatsube
-    </div>
-  <!--
-  <div id="mdxfile">bos14.mdx</div>
-  <div id="pdxfile">bos.pdx</div>
-  !-->
+  </div>
+  
+  <div id="mdxfile">-</div>
+  <div id="pdxfile">-</div>
+  
   <div id="ym2151">YM2151 OPM register dump</div>
   <div id="opmreg">
     <br>Now loading...<br>
 
   </div>
   </div>
+
   <div id="demo-app" draggable="false">
     <button id="audio-toggle" class="inactive" disabled>PLAY</button>
       <button id="play-tone" class="inactive" visibility: hidden disabled>
       </button>
-      <input type="file" id="file1">
+ <br>    
+ <div id="loader"> 
+ MDX:<input type="file" id="mdxfile1"><br>
+ PDX:<input type="file" id="pdxfile1"><br>
+</div>
       <script src="index.js" type="module"></script>
 
     <div id="ddarea" align="center">
-<br><br>      Drag & Drop Here<br>MDX File
+<br><br>      .MDX or .PDX<br> Drag & Drop Here
     </div>
 
 </body>

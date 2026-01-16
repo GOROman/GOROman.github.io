@@ -59,10 +59,10 @@ body {
 
 #mmdsp-header .title {
   color: var(--text-cyan);
-  font-family: Menlo, Monaco, 'Courier New', monospace;
-  font-size: 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
   font-weight: normal;
-  letter-spacing: 0;
+  letter-spacing: 0.5px;
   text-shadow: 0 0 8px rgba(96, 160, 255, 0.5);
 }
 
@@ -133,7 +133,7 @@ body {
 .panel-header {
   background: linear-gradient(to bottom, #181848 0%, #101030 100%);
   color: var(--text-cyan);
-  font-family: inherit;
+  font-family: Menlo, Monaco, 'Courier New', 'Liberation Mono', monospace;
   font-size: 10px;
   padding: 3px 8px;
   border-bottom: 1px solid var(--border-color);
@@ -177,6 +177,7 @@ body {
 #keyboard-canvas {
   display: block;
   width: 100%;
+  height: 360px;
   background: #000010;
   image-rendering: pixelated;
 }
@@ -191,13 +192,14 @@ body {
 
 /* Control Panel */
 #control-panel {
-  padding: 10px;
+  flex: 1;
 }
 
 .control-buttons {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
+  padding: 10px;
+  margin: 8px;
 }
 
 .ctrl-btn {
@@ -293,6 +295,7 @@ body {
 .control-info {
   display: flex;
   gap: 20px;
+  padding: 0 8px 8px 8px;
 }
 
 .info-row {
@@ -309,7 +312,7 @@ body {
 .info-row .value {
   color: #c0c0e0;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
   text-shadow: 0 0 5px rgba(192, 192, 224, 0.3);
 }
 
@@ -411,10 +414,10 @@ body {
 #copyright {
   margin-top: 20px;
   font-size: 9px;
-  color: var(--text-dim);
-  text-align: center;
+  color: var(--text-secondary);
+  text-align: right;
   line-height: 1.6;
-  max-width: 800px;
+  width: 800px;
 }
 
 #copyright a {

@@ -371,23 +371,31 @@ class LevelMeter {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    this.numChannels = 8;
+    this.numChannels = 16; // FM 0-7 + PCM 0-7
+    // simple_mdx_player style: 2-layer level meters
+    this.keyOnLevel = new Array(16).fill(0);   // 明: 高速減衰 (31/32)
+    this.keyOffLevel = new Array(16).fill(0);  // 暗: 低速減衰 (127/128)
+    // Peak hold
     this.peakHold = new Array(16).fill(0);
     this.peakDecay = new Array(16).fill(0);
-    this.currentLevel = new Array(16).fill(0);
     this.opmRegs = new Array(256).fill(0);
 
-    // MMDSP Colors
+    // Spectrum Analyzer style colors (blue gradient)
     this.colors = {
       bg: '#000010',
+      // Same as SpectrumAnalyzer
       barLow: '#2060a0',
       barMid: '#40a0ff',
       barHigh: '#80ffff',
-      barLowMuted: '#102030',    // Muted colors (dimmed)
+      barLowMuted: '#102030',
       barMidMuted: '#183050',
       barHighMuted: '#204060',
       peak: '#ffffff',
       peakMuted: '#404060',
+      // MIDI: yellow
+      barMidiLow: '#606000',
+      barMidiMid: '#c0c000',
+      barMidiHigh: '#ffff00',
       text: '#6080c0',
       textDim: '#304080',
       grid: '#101830',
@@ -414,13 +422,17 @@ class LevelMeter {
   }
 
   decay() {
-    // Decay all levels
-    for (let i = 0; i < this.currentLevel.length; i++) {
-      this.currentLevel[i] = Math.max(0, this.currentLevel[i] * 0.85 - 5);
+    // simple_mdx_player style decay
+    for (let i = 0; i < 16; i++) {
+      // keyOnLevel: fast decay (31/32)
+      this.keyOnLevel[i] = Math.floor(this.keyOnLevel[i] * 31 / 32);
+      // keyOffLevel: slow decay (127/128)
+      this.keyOffLevel[i] = Math.floor(this.keyOffLevel[i] * 127 / 128);
+      // Peak decay
       if (this.peakDecay[i] > 0) {
         this.peakDecay[i]--;
       } else {
-        this.peakHold[i] = Math.max(0, this.peakHold[i] * 0.9 - 3);
+        this.peakHold[i] = Math.max(0, this.peakHold[i] - 4);
       }
     }
     // Re-render with decayed values
@@ -428,8 +440,8 @@ class LevelMeter {
   }
 
   hasActiveLevel() {
-    for (let i = 0; i < this.currentLevel.length; i++) {
-      if (this.currentLevel[i] > 0 || this.peakHold[i] > 0) return true;
+    for (let i = 0; i < 16; i++) {
+      if (this.keyOnLevel[i] > 0 || this.keyOffLevel[i] > 0 || this.peakHold[i] > 0) return true;
     }
     return false;
   }
@@ -459,7 +471,7 @@ class LevelMeter {
       ctx.fillText(`${ch + 1}`, startX + ch * (barWidth + barGap) + barWidth / 2 - 3, 11);
     }
 
-    // Draw each channel meter
+    // Draw each channel meter (simple_mdx_player style with gradient)
     for (let ch = 0; ch < 8; ch++) {
       const x = startX + ch * (barWidth + barGap);
 
@@ -470,27 +482,32 @@ class LevelMeter {
         ctx.fillRect(x, segY, barWidth, this.segmentHeight);
       }
 
-      // Draw active segments
-      const activeSegments = Math.floor((this.currentLevel[ch] / 255) * totalSegments);
-      for (let s = 0; s < activeSegments; s++) {
+      // Layer 1: KeyOff level (dimmed gradient, slow decay)
+      const keyOffSegments = Math.floor((this.keyOffLevel[ch] / 255) * totalSegments);
+      for (let s = 0; s < keyOffSegments; s++) {
         const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
         const ratio = s / totalSegments;
-        if (ratio > 0.8) {
-          ctx.fillStyle = this.colors.barHigh;
-        } else if (ratio > 0.5) {
-          ctx.fillStyle = this.colors.barMid;
-        } else {
-          ctx.fillStyle = this.colors.barLow;
-        }
+        ctx.fillStyle = ratio > 0.8 ? '#406080' : ratio > 0.5 ? '#305060' : '#203040';
         ctx.fillRect(x, segY, barWidth, this.segmentHeight);
       }
 
-      // Draw peak
+      // Layer 2: KeyOn level (bright gradient, fast decay)
+      const keyOnSegments = Math.floor((this.keyOnLevel[ch] / 255) * totalSegments);
+      for (let s = 0; s < keyOnSegments; s++) {
+        const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
+        const ratio = s / totalSegments;
+        ctx.fillStyle = ratio > 0.8 ? this.colors.barHigh : ratio > 0.5 ? this.colors.barMid : this.colors.barLow;
+        ctx.fillRect(x, segY, barWidth, this.segmentHeight);
+      }
+
+      // Peak indicator
       if (this.peakHold[ch] > 0) {
         const peakSegment = Math.floor((this.peakHold[ch] / 255) * totalSegments);
-        const peakY = barTop + maxBarHeight - peakSegment * (this.segmentHeight + this.segmentGap);
-        ctx.fillStyle = this.colors.peak;
-        ctx.fillRect(x, peakY, barWidth, this.segmentHeight);
+        if (peakSegment > 0) {
+          const peakY = barTop + maxBarHeight - peakSegment * (this.segmentHeight + this.segmentGap);
+          ctx.fillStyle = this.colors.peak;
+          ctx.fillRect(x, peakY, barWidth, this.segmentHeight);
+        }
       }
     }
 
@@ -559,7 +576,9 @@ class LevelMeter {
       ctx.fillText(`${ch + 1}`, startX + ch * (barWidth + barGap) + barWidth / 2 - 3, 11);
     }
 
-    // Draw each channel meter
+    // ========================================
+    // FM channels (0-7) - simple_mdx_player style
+    // ========================================
     for (let ch = 0; ch < 8; ch++) {
       const x = startX + ch * (barWidth + barGap);
       const fmCh = channelData.fm[ch];
@@ -569,37 +588,37 @@ class LevelMeter {
       const isMidiActive = (midiChannelActive & (1 << ch)) !== 0;
       const midiState = midiKeyState[ch];
 
-      // Get level - MIDI takes priority (MIDI shows even when muted)
-      let level = 0;
+      // Get volume (same as simple_mdx_player)
+      let volume = 0;
       let isMidi = false;
+      let currentKeyOn = false;
+      let logicalSumOfKeyOn = false;
+
       if (isMidiActive && midiState && midiState.keyOn) {
         // MIDI key is on - full level (even when muted)
-        level = 255;
+        volume = 255;
         isMidi = true;
+        logicalSumOfKeyOn = true;
+        currentKeyOn = true;
       } else if (fmCh && !isMuted) {
-        // MDX level (only when not muted)
-        level = this.normalizeVolume(fmCh.volume);
-        if (!fmCh.keyOn) {
-          level = 0;
-        }
+        // MDX level
+        volume = this.normalizeVolume(fmCh.volume);
+        currentKeyOn = fmCh.keyOn;
+        logicalSumOfKeyOn = fmCh.logicalSumOfKeyOn;
       }
 
-      // Smooth attack/decay
-      if (level > this.currentLevel[ch]) {
-        this.currentLevel[ch] = level;
-      } else {
-        this.currentLevel[ch] = Math.max(0, this.currentLevel[ch] * 0.9 - 3);
+      // simple_mdx_player style level update
+      // キーオフ中はkeyOffLevelを減衰
+      if (!currentKeyOn) {
+        this.keyOffLevel[ch] = Math.floor(this.keyOffLevel[ch] * 127 / 128);
       }
-
-      // Peak hold
-      if (this.currentLevel[ch] > this.peakHold[ch]) {
-        this.peakHold[ch] = this.currentLevel[ch];
-        this.peakDecay[ch] = 20;
-      } else if (this.peakDecay[ch] > 0) {
-        this.peakDecay[ch]--;
-      } else {
-        this.peakHold[ch] = Math.max(0, this.peakHold[ch] - 4);
+      // logicalSumOfKeyOnで両方のレベルを更新
+      if (logicalSumOfKeyOn) {
+        this.keyOnLevel[ch] = volume;
+        this.keyOffLevel[ch] = volume;
       }
+      // keyOnLevelは常に減衰 (31/32)
+      this.keyOnLevel[ch] = Math.floor(this.keyOnLevel[ch] * 31 / 32);
 
       // Draw background grid (dimmed for muted channels)
       ctx.fillStyle = isMuted ? this.colors.gridMuted : this.colors.grid;
@@ -608,50 +627,55 @@ class LevelMeter {
         ctx.fillRect(x, segY, barWidth, this.segmentHeight);
       }
 
-      // Draw active segments (level)
-      const activeSegments = Math.floor((this.currentLevel[ch] / 255) * totalSegments);
-      for (let s = 0; s < activeSegments; s++) {
+      // Layer 1: KeyOff level (dimmed gradient, slow decay)
+      const keyOffSegments = Math.floor((this.keyOffLevel[ch] / 255) * totalSegments);
+      for (let s = 0; s < keyOffSegments; s++) {
         const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
         const ratio = s / totalSegments;
-
-        // Color based on level (yellow for MIDI, dimmed for muted)
         if (isMidi) {
-          // MIDI: yellow gradient (even when muted)
-          if (ratio > 0.8) {
-            ctx.fillStyle = '#ffff80';
-          } else if (ratio > 0.5) {
-            ctx.fillStyle = '#ffff00';
-          } else {
-            ctx.fillStyle = '#c0c000';
-          }
+          ctx.fillStyle = ratio > 0.8 ? '#606020' : ratio > 0.5 ? '#505010' : '#404000';
         } else if (isMuted) {
-          // Muted: dimmed blue gradient
-          if (ratio > 0.8) {
-            ctx.fillStyle = this.colors.barHighMuted;
-          } else if (ratio > 0.5) {
-            ctx.fillStyle = this.colors.barMidMuted;
-          } else {
-            ctx.fillStyle = this.colors.barLowMuted;
-          }
+          ctx.fillStyle = ratio > 0.8 ? this.colors.barHighMuted : ratio > 0.5 ? this.colors.barMidMuted : this.colors.barLowMuted;
         } else {
-          // MDX: blue gradient
-          if (ratio > 0.8) {
-            ctx.fillStyle = this.colors.barHigh;
-          } else if (ratio > 0.5) {
-            ctx.fillStyle = this.colors.barMid;
-          } else {
-            ctx.fillStyle = this.colors.barLow;
-          }
+          ctx.fillStyle = ratio > 0.8 ? '#406080' : ratio > 0.5 ? '#305060' : '#203040';
         }
         ctx.fillRect(x, segY, barWidth, this.segmentHeight);
+      }
+
+      // Layer 2: KeyOn level (bright gradient, fast decay)
+      const keyOnSegments = Math.floor((this.keyOnLevel[ch] / 255) * totalSegments);
+      for (let s = 0; s < keyOnSegments; s++) {
+        const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
+        const ratio = s / totalSegments;
+        if (isMidi) {
+          ctx.fillStyle = ratio > 0.8 ? this.colors.barMidiHigh : ratio > 0.5 ? this.colors.barMidiMid : this.colors.barMidiLow;
+        } else if (isMuted) {
+          ctx.fillStyle = ratio > 0.8 ? this.colors.barHighMuted : ratio > 0.5 ? this.colors.barMidMuted : this.colors.barLowMuted;
+        } else {
+          ctx.fillStyle = ratio > 0.8 ? this.colors.barHigh : ratio > 0.5 ? this.colors.barMid : this.colors.barLow;
+        }
+        ctx.fillRect(x, segY, barWidth, this.segmentHeight);
+      }
+
+      // Peak hold tracking
+      const currentMax = Math.max(this.keyOnLevel[ch], this.keyOffLevel[ch]);
+      if (currentMax > this.peakHold[ch]) {
+        this.peakHold[ch] = currentMax;
+        this.peakDecay[ch] = 30; // Hold for 30 frames
+      } else if (this.peakDecay[ch] > 0) {
+        this.peakDecay[ch]--;
+      } else {
+        this.peakHold[ch] = Math.max(0, this.peakHold[ch] - 4);
       }
 
       // Draw peak indicator
       if (this.peakHold[ch] > 0) {
         const peakSegment = Math.floor((this.peakHold[ch] / 255) * totalSegments);
-        const peakY = barTop + maxBarHeight - peakSegment * (this.segmentHeight + this.segmentGap);
-        ctx.fillStyle = isMidi ? '#ffff80' : (isMuted ? this.colors.peakMuted : this.colors.peak);
-        ctx.fillRect(x, peakY, barWidth, this.segmentHeight);
+        if (peakSegment > 0) {
+          const peakY = barTop + maxBarHeight - peakSegment * (this.segmentHeight + this.segmentGap);
+          ctx.fillStyle = isMidi ? this.colors.barMidiHigh : (isMuted ? this.colors.peakMuted : this.colors.peak);
+          ctx.fillRect(x, peakY, barWidth, this.segmentHeight);
+        }
       }
     }
 
@@ -1405,13 +1429,14 @@ class MDXPlayer {
     // Also setup drag drop on body for convenience
     this._setupDragDrop(document.body);
 
-    // Keyboard shortcut: 1-8 keys toggle FM1-8 mute
+    // Keyboard shortcut: 1-8 keys toggle FM1-8 mute, 9 toggles PCM1 mute
     document.addEventListener('keydown', (e) => {
       // Ignore if typing in an input field
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
       const key = e.key;
       if (key >= '1' && key <= '8') {
+        // FM channels 1-8
         const channel = parseInt(key) - 1; // 0-7
         if (this._keyboardVis) {
           const muted = this._keyboardVis.toggleMute('fm', channel);
@@ -1428,6 +1453,22 @@ class MDXPlayer {
               type: 'MUTE',
               channelType: 'fm',
               channel: channel,
+              muted: muted
+            }));
+          }
+        }
+      } else if (key === '9') {
+        // PCM channel 1
+        if (this._keyboardVis) {
+          const muted = this._keyboardVis.toggleMute('pcm', 0);
+          console.log(`PCM1 ${muted ? 'MUTED' : 'UNMUTED'}`);
+
+          // Send mute state to synth
+          if (this._synthNode) {
+            this._synthNode.port.postMessage(JSON.stringify({
+              type: 'MUTE',
+              channelType: 'pcm',
+              channel: 0,
               muted: muted
             }));
           }
@@ -1696,8 +1737,9 @@ class MDXPlayer {
     this._synthNode.port.postMessage("MDX");
     this._synthNode.port.postMessage(data);
 
-    document.getElementById("title").textContent = filename;
+    // Set filename in MDX file info
     document.getElementById("mdxfile").textContent = filename;
+    // Title will be updated by TITLE message from worklet
     this.play();
   }
 

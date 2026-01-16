@@ -244,6 +244,30 @@ public:
     return (pcmChannels[ch].S0016 & 0x08) != 0;
   }
 
+  // LogicalSumOfKeyOn: フレーム間の全キーオンイベントのOR（読み取り後クリア）
+  // simple_mdx_playerと同じ方式のレベルメーター用
+  virtual val getFmKeyOnEx(uint8_t ch) {
+    val result = val::object();
+    if (ch >= 8) {
+      result.set("currentKeyOn", false);
+      result.set("logicalSumOfKeyOn", false);
+      return result;
+    }
+    bool currentKeyOn = false;
+    bool logicalSumOfKeyOn = false;
+    MxdrvContext_GetFmKeyOn(&context, ch, &currentKeyOn, &logicalSumOfKeyOn);
+    result.set("currentKeyOn", currentKeyOn);
+    result.set("logicalSumOfKeyOn", logicalSumOfKeyOn);
+    return result;
+  }
+
+  virtual bool getPcmKeyOnLogicalSum(uint8_t ch) {
+    if (ch >= 8) return false;
+    bool logicalSumOfKeyOn = false;
+    MxdrvContext_GetPcmKeyOn(&context, ch, &logicalSumOfKeyOn);
+    return logicalSumOfKeyOn;
+  }
+
   virtual uint32_t getPlayTime() {
     const MXWORK_GLOBAL *global = (const MXWORK_GLOBAL *)MXDRV_GetWork(&context, MXDRV_WORK_GLOBAL);
     return global->PLAYTIME;
@@ -573,6 +597,8 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .function("getPcmNote", &SynthesizerWrapper::getPcmNote)
       .function("getPcmVolume", &SynthesizerWrapper::getPcmVolume)
       .function("getPcmKeyOn", &SynthesizerWrapper::getPcmKeyOn)
+      .function("getFmKeyOnEx", &SynthesizerWrapper::getFmKeyOnEx)
+      .function("getPcmKeyOnLogicalSum", &SynthesizerWrapper::getPcmKeyOnLogicalSum)
       .function("getPlayTime", &SynthesizerWrapper::getPlayTime)
       .function("getLoopCount", &SynthesizerWrapper::getLoopCount)
       .function("getTempo", &SynthesizerWrapper::getTempo)

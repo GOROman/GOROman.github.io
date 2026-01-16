@@ -237,18 +237,21 @@ class SynthProcessor extends AudioWorkletProcessor {
         midiKeyState: this._midiKeyState
       };
       for (let i = 0; i < 8; i++) {
+        const keyOnEx = this._synth.getFmKeyOnEx(i);
         channelData.fm.push({
           note: this._synth.getFmNote(i),
           noteBend: this._synth.getFmNoteBend(i),
           volume: this._synth.getFmVolume(i),
-          keyOn: this._synth.getFmKeyOn(i)
+          keyOn: keyOnEx.currentKeyOn,
+          logicalSumOfKeyOn: keyOnEx.logicalSumOfKeyOn
         });
       }
       for (let i = 0; i < 8; i++) {
         channelData.pcm.push({
           note: this._synth.getPcmNote(i),
           volume: this._synth.getPcmVolume(i),
-          keyOn: this._synth.getPcmKeyOn(i)
+          keyOn: this._synth.getPcmKeyOn(i),
+          logicalSumOfKeyOn: this._synth.getPcmKeyOnLogicalSum(i)
         });
       }
       // OPM Registers (0x00-0xFF)
@@ -352,6 +355,7 @@ class SynthProcessor extends AudioWorkletProcessor {
       Module.HEAPU8.set(a1, pointer);
       if ( filetype == "MDX" ) {
         this._synth.loadMDX(pointer, data.byteLength);
+        // Note: loadMDX internally frees the pointer, don't free here
         // Send title immediately after loading (before play)
         const titleData = {
           type: "TITLE",
@@ -363,7 +367,6 @@ class SynthProcessor extends AudioWorkletProcessor {
         const AsciiStrToMem = function(p, s) {
           let i = 0;
           for (i = 0; i < s.length; i++) {
-            console.log(s.charCodeAt(i));
             Module.HEAP8[p + i] = s.charCodeAt(i)
           }
           Module.HEAP8[p+i] = 0x00;
@@ -372,8 +375,9 @@ class SynthProcessor extends AudioWorkletProcessor {
         AsciiStrToMem(p1, pdxfilename.toUpperCase());
         this._synth.loadPDX(pointer, data.byteLength, p1);
         Module._free(p1);
+        // Note: loadPDX does NOT free pointer, so we need to free it here
+        Module._free(pointer);
       }
-      Module._free(pointer);
       a1 = null;
     }
 

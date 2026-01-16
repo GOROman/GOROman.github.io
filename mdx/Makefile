@@ -40,7 +40,7 @@ build: $(DEPS)
 		-s WASM=1 \
 		-s WASM_ASYNC_COMPILATION=0 \
 		-sEXPORTED_FUNCTIONS=['_malloc','_free'] \
-		-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap','HEAPF32'] \
+		-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap','HEAPF32','HEAPU8','HEAP8'] \
 		-o ./mdx.wasm.js \
 		--embed-file ./src/fs@ \
 		./src/synth_bind.cc $(DEPS)

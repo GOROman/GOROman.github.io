@@ -30,6 +30,62 @@ class KeyboardVisualizer {
 
     // OPM register cache for display
     this.opmRegs = new Array(256).fill(0);
+
+    // Mute state for each channel (FM 0-7, PCM 0-7)
+    this.muteState = {
+      fm: new Array(8).fill(false),
+      pcm: new Array(8).fill(false)
+    };
+
+    // Callback for mute toggle
+    this.onMuteToggle = null;
+
+    // Label width for click detection
+    this.labelWidth = 32;
+  }
+
+  // Get channel from click position
+  getChannelFromPosition(x, y) {
+    // Check if click is in label area (left side)
+    if (x > this.labelWidth) return null;
+
+    // Check FM channels (0-7)
+    for (let ch = 0; ch < this.numFmChannels; ch++) {
+      const chY = ch * this.channelHeight;
+      if (y >= chY && y < chY + this.channelHeight) {
+        return { type: 'fm', channel: ch };
+      }
+    }
+
+    // Check PCM channels (8-15)
+    const pcmStartY = this.numFmChannels * this.channelHeight + 4;
+    for (let ch = 0; ch < this.numPcmChannels; ch++) {
+      const chY = pcmStartY + ch * this.channelHeight;
+      if (y >= chY && y < chY + this.channelHeight) {
+        return { type: 'pcm', channel: ch };
+      }
+    }
+
+    return null;
+  }
+
+  // Toggle mute state for a channel
+  toggleMute(type, channel) {
+    if (type === 'fm' && channel >= 0 && channel < 8) {
+      this.muteState.fm[channel] = !this.muteState.fm[channel];
+      return this.muteState.fm[channel];
+    } else if (type === 'pcm' && channel >= 0 && channel < 8) {
+      this.muteState.pcm[channel] = !this.muteState.pcm[channel];
+      return this.muteState.pcm[channel];
+    }
+    return false;
+  }
+
+  // Check if a channel is muted
+  isMuted(type, channel) {
+    if (type === 'fm') return this.muteState.fm[channel] || false;
+    if (type === 'pcm') return this.muteState.pcm[channel] || false;
+    return false;
   }
 
   noteToKeyIndex(note) {
@@ -38,10 +94,15 @@ class KeyboardVisualizer {
   }
 
   // Draw piano keyboard (white and black keys)
-  drawKeyboard(x, y, width, height, activeKey, volume, isPcm = false) {
+  drawKeyboard(x, y, width, height, activeKey, volume, isPcm = false, isMuted = false) {
     const ctx = this.ctx;
     const octaveWidth = width / this.numOctaves;
     const whiteKeyWidth = octaveWidth / 7; // 7 white keys per octave
+
+    // Muted colors (much darker)
+    const mutedWhiteKey = '#181830';
+    const mutedBlackKey = '#080818';
+    const mutedBorder = '#202040';
 
     // Background
     ctx.fillStyle = this.colors.bg;
@@ -56,7 +117,7 @@ class KeyboardVisualizer {
         // Check if this white key is active
         const noteInOctave = [0, 2, 4, 5, 7, 9, 11][wk];
         const currentKeyIndex = oct * 12 + noteInOctave;
-        const isActive = activeKey === currentKeyIndex;
+        const isActive = activeKey === currentKeyIndex && !isMuted;
 
         if (isActive) {
           const brightness = Math.min(255, 180 + Math.floor((volume / 255) * 75));
@@ -66,13 +127,13 @@ class KeyboardVisualizer {
             ctx.fillStyle = `rgb(${brightness}, ${brightness}, 255)`; // Blue for FM
           }
         } else {
-          ctx.fillStyle = this.colors.whiteKey;
+          ctx.fillStyle = isMuted ? mutedWhiteKey : this.colors.whiteKey;
         }
 
         ctx.fillRect(kx, y, whiteKeyWidth - 1, height);
 
         // Key border
-        ctx.strokeStyle = this.colors.keyBorder;
+        ctx.strokeStyle = isMuted ? mutedBorder : this.colors.keyBorder;
         ctx.strokeRect(kx, y, whiteKeyWidth - 1, height);
       }
     }
@@ -94,7 +155,7 @@ class KeyboardVisualizer {
         if (noteIndex === null) continue;
 
         const currentKeyIndex = oct * 12 + noteIndex;
-        const isActive = activeKey === currentKeyIndex;
+        const isActive = activeKey === currentKeyIndex && !isMuted;
 
         if (isActive) {
           const brightness = Math.min(255, 180 + Math.floor((volume / 255) * 75));
@@ -104,7 +165,7 @@ class KeyboardVisualizer {
             ctx.fillStyle = `rgb(${brightness}, ${brightness}, 255)`; // Blue for FM
           }
         } else {
-          ctx.fillStyle = this.colors.blackKey;
+          ctx.fillStyle = isMuted ? mutedBlackKey : this.colors.blackKey;
         }
 
         ctx.fillRect(kx, y, blackKeyWidth, blackKeyHeight);
@@ -137,9 +198,10 @@ class KeyboardVisualizer {
     for (let ch = 0; ch < this.numFmChannels; ch++) {
       const y = ch * this.channelHeight;
       const kbHeight = this.channelHeight - 2;
+      const isMuted = this.muteState.fm[ch];
 
-      // Channel label
-      ctx.fillStyle = this.colors.textBright;
+      // Channel label (dimmed if muted, clickable style)
+      ctx.fillStyle = isMuted ? '#303050' : this.colors.textBright;
       ctx.font = '8px monospace';
       ctx.fillText(`FM${ch + 1}`, 2, y + 12);
 
@@ -158,8 +220,8 @@ class KeyboardVisualizer {
         }
       }
 
-      // Draw keyboard with active key
-      this.drawKeyboard(labelWidth, y + 1, kbWidth, kbHeight, activeKey, vol);
+      // Draw keyboard with active key (pass mute state)
+      this.drawKeyboard(labelWidth, y + 1, kbWidth, kbHeight, activeKey, vol, false, isMuted);
 
       // Get OPM registers for this channel
       const kc = this.opmRegs[0x28 + ch] || 0;
@@ -175,8 +237,12 @@ class KeyboardVisualizer {
       const panL = (panFlCon >> 6) & 1;
       const panStr = (panL ? 'L' : '-') + (panR ? 'R' : '-');
 
-      // Info display
-      ctx.fillStyle = fmCh && fmCh.keyOn ? '#e0e0ff' : this.colors.text;
+      // Info display (dimmed if muted)
+      if (isMuted) {
+        ctx.fillStyle = '#303050';
+      } else {
+        ctx.fillStyle = fmCh && fmCh.keyOn ? '#e0e0ff' : this.colors.text;
+      }
       ctx.font = '8px monospace';
       const volStr = fmCh ? fmCh.volume.toString().padStart(3) : '  0';
       ctx.fillText(`${noteName}${kcOct} V${volStr} ${panStr} KC${kc.toString(16).toUpperCase().padStart(2,'0')}`, infoX, y + 12);
@@ -195,9 +261,10 @@ class KeyboardVisualizer {
     for (let ch = 0; ch < this.numPcmChannels; ch++) {
       const y = pcmStartY + ch * this.channelHeight;
       const kbHeight = this.channelHeight - 2;
+      const isMuted = this.muteState.pcm[ch];
 
-      // Channel label
-      ctx.fillStyle = '#80c080';
+      // Channel label (dimmed if muted)
+      ctx.fillStyle = isMuted ? '#304030' : '#80c080';
       ctx.font = '8px monospace';
       ctx.fillText(`PC${ch + 1}`, 2, y + 12);
 
@@ -216,11 +283,15 @@ class KeyboardVisualizer {
         }
       }
 
-      // Draw keyboard with active key (green tint for PCM)
-      this.drawKeyboard(labelWidth, y + 1, kbWidth, kbHeight, activeKey, vol, true);
+      // Draw keyboard with active key (green tint for PCM, pass mute state)
+      this.drawKeyboard(labelWidth, y + 1, kbWidth, kbHeight, activeKey, vol, true, isMuted);
 
-      // Info display
-      ctx.fillStyle = pcmCh && pcmCh.keyOn ? '#c0ffc0' : '#608060';
+      // Info display (dimmed if muted)
+      if (isMuted) {
+        ctx.fillStyle = '#304030';
+      } else {
+        ctx.fillStyle = pcmCh && pcmCh.keyOn ? '#c0ffc0' : '#608060';
+      }
       ctx.font = '8px monospace';
       const volStr = pcmCh ? pcmCh.volume.toString().padStart(3) : '  0';
       const noteVal = pcmCh ? pcmCh.note : 0;
@@ -829,6 +900,33 @@ class MDXPlayer {
 
     if (keyboardCanvas) {
       this._keyboardVis = new KeyboardVisualizer(keyboardCanvas);
+
+      // Add click handler for mute toggle
+      keyboardCanvas.style.cursor = 'pointer';
+      keyboardCanvas.addEventListener('click', (e) => {
+        const rect = keyboardCanvas.getBoundingClientRect();
+        // Scale click position to canvas coordinates
+        const scaleX = keyboardCanvas.width / rect.width;
+        const scaleY = keyboardCanvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+
+        const channel = this._keyboardVis.getChannelFromPosition(x, y);
+        if (channel) {
+          const muted = this._keyboardVis.toggleMute(channel.type, channel.channel);
+          console.log(`${channel.type.toUpperCase()}${channel.channel + 1} ${muted ? 'MUTED' : 'UNMUTED'}`);
+
+          // Send mute state to synth if needed
+          if (this._synthNode) {
+            this._synthNode.port.postMessage(JSON.stringify({
+              type: 'MUTE',
+              channelType: channel.type,
+              channel: channel.channel,
+              muted: muted
+            }));
+          }
+        }
+      });
     }
     if (levelCanvas) {
       this._levelMeter = new LevelMeter(levelCanvas);
@@ -845,6 +943,31 @@ class MDXPlayer {
 
     // Also setup drag drop on body for convenience
     this._setupDragDrop(document.body);
+
+    // Keyboard shortcut: 1-8 keys toggle FM1-8 mute
+    document.addEventListener('keydown', (e) => {
+      // Ignore if typing in an input field
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      const key = e.key;
+      if (key >= '1' && key <= '8') {
+        const channel = parseInt(key) - 1; // 0-7
+        if (this._keyboardVis) {
+          const muted = this._keyboardVis.toggleMute('fm', channel);
+          console.log(`FM${channel + 1} ${muted ? 'MUTED' : 'UNMUTED'}`);
+
+          // Send mute state to synth
+          if (this._synthNode) {
+            this._synthNode.port.postMessage(JSON.stringify({
+              type: 'MUTE',
+              channelType: 'fm',
+              channel: channel,
+              muted: muted
+            }));
+          }
+        }
+      }
+    });
   }
 
   _setupDragDrop(element) {
@@ -1098,7 +1221,31 @@ class MDXPlayer {
     console.log("WASM MDX Player Loading...");
     this._initializeView();
     await this._initializeAudio();
+
+    // Initial render of visualizers (empty state)
+    this._renderInitialState();
+
     console.log("WASM MDX Player Ready!");
+  }
+
+  _renderInitialState() {
+    // Create empty channel data for initial display
+    const emptyChannelData = {
+      fm: Array(8).fill(null).map(() => ({ note: 0, volume: 0, keyOn: false })),
+      pcm: Array(8).fill(null).map(() => ({ note: 0, volume: 0, keyOn: false }))
+    };
+    const emptyOpmRegs = new Array(256).fill(0);
+
+    // Render all visualizers with empty data
+    if (this._keyboardVis) {
+      this._keyboardVis.render(emptyChannelData, emptyOpmRegs);
+    }
+    if (this._levelMeter) {
+      this._levelMeter.render(emptyChannelData, emptyOpmRegs);
+    }
+    if (this._opmRegisterVis) {
+      this._opmRegisterVis.render(emptyOpmRegs);
+    }
   }
 }
 

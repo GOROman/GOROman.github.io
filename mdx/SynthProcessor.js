@@ -173,6 +173,9 @@ class SynthProcessor extends AudioWorkletProcessor {
     this._outputBuffer = new WASMAudioBuffer(Module, NUM_FRAMES, 2, 2);
     this.port.onmessage = this.onMessage.bind(this);
 
+    // Channel mute state (bitmask: bit 0-7 = FM 1-8, bit 8-15 = PCM 1-8)
+    this._channelMask = 0;
+
 ///    var lookup = FS.lookupPath(".", { parent: true });
 
   }
@@ -253,6 +256,27 @@ class SynthProcessor extends AudioWorkletProcessor {
       return;
   } else if ( data == "FADEOUT" ) {
       this._synth.fadeout();
+      return;
+  } else if ( typeof data == 'string' && data.startsWith('{') ) {
+      // JSON message
+      try {
+        const msg = JSON.parse(data);
+        if (msg.type === 'MUTE') {
+          // Update channel mask
+          // FM: bit 0-7, PCM: bit 8-15
+          const bitPos = msg.channelType === 'fm' ? msg.channel : (msg.channel + 8);
+          if (msg.muted) {
+            this._channelMask |= (1 << bitPos);
+          } else {
+            this._channelMask &= ~(1 << bitPos);
+          }
+          // Apply to synth (MXDRV uses lower 9 bits: FM 0-7 + PCM)
+          this._synth.setChannelMask(this._channelMask & 0x1ff);
+          console.log("Channel mask set to:", this._channelMask.toString(16));
+        }
+      } catch (e) {
+        console.error("JSON parse error:", e);
+      }
       return;
   } else if ( typeof data == 'string' ) {
     if (data.match( /\.pdx/i )) {

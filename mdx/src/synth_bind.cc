@@ -272,6 +272,20 @@ public:
     MXDRV_Fadeout(&context);
   }
 
+  virtual void setChannelMask(uint16_t mask) {
+    // Channel Mask: bit 0-7 = FM ch 1-8, bit 8 = PCM
+    // 1 = muted, 0 = playing
+    X68REG reg;
+    reg.d0 = 0x0e;  // Function code for channel mask
+    reg.d1 = mask;
+    MXDRV(&context, &reg);
+  }
+
+  virtual uint16_t getChannelMask() {
+    MXWORK_GLOBAL *global = (MXWORK_GLOBAL *)MXDRV_GetWork(&context, MXDRV_WORK_GLOBAL);
+    return global->L001e1c;
+  }
+
   virtual std::string getTitle() {
     return std::string(mdxTitle);
   }
@@ -485,5 +499,7 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .function("fadeout", &SynthesizerWrapper::fadeout)
       .function("getTitle", &SynthesizerWrapper::getTitle)
       .function("getTitleBytes", &SynthesizerWrapper::getTitleBytes)
+      .function("setChannelMask", &SynthesizerWrapper::setChannelMask)
+      .function("getChannelMask", &SynthesizerWrapper::getChannelMask)
   ;
 }

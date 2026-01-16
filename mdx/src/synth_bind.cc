@@ -25,6 +25,7 @@
 #include <libgen.h> /* for dirname() */
 #endif
 #include <string.h>
+#include <string>
 
 #include "mdx_util.h"
 #include "mxdrv.h"
@@ -40,6 +41,7 @@
 
 #include <emscripten.h>
 #include <emscripten/bind.h>
+#include <emscripten/val.h>
 #include "Synthesizer.h"
 
 using namespace emscripten;
@@ -106,6 +108,8 @@ class SynthesizerWrapper : public Synthesizer
 
   void *mdxBuffer = NULL;
   void *pdxBuffer = NULL;
+  uint32_t mdxBufferSize = 0;
+  uint32_t pdxBufferSize = 0;
 
 public:
   SynthesizerWrapper(int32_t sampleRate)
@@ -194,6 +198,87 @@ public:
     bool updated = false;
     MxdrvContext_GetOpmReg(&context, addr, &data, &updated);
     return data;
+  }
+
+  // チャンネルデータ取得API
+  virtual uint16_t getFmNote(uint8_t ch) {
+    if (ch >= 8) return 0;
+    const MXWORK_CH *fmChannels = (const MXWORK_CH *)MXDRV_GetWork(&context, MXDRV_WORK_FM);
+    return fmChannels[ch].S0012;
+  }
+
+  virtual uint16_t getFmNoteBend(uint8_t ch) {
+    if (ch >= 8) return 0;
+    const MXWORK_CH *fmChannels = (const MXWORK_CH *)MXDRV_GetWork(&context, MXDRV_WORK_FM);
+    return fmChannels[ch].S0014;
+  }
+
+  virtual uint8_t getFmVolume(uint8_t ch) {
+    if (ch >= 8) return 0;
+    const MXWORK_CH *fmChannels = (const MXWORK_CH *)MXDRV_GetWork(&context, MXDRV_WORK_FM);
+    return fmChannels[ch].S0022;
+  }
+
+  virtual bool getFmKeyOn(uint8_t ch) {
+    if (ch >= 8) return false;
+    const MXWORK_CH *fmChannels = (const MXWORK_CH *)MXDRV_GetWork(&context, MXDRV_WORK_FM);
+    return (fmChannels[ch].S0016 & 0x08) != 0;
+  }
+
+  virtual uint16_t getPcmNote(uint8_t ch) {
+    if (ch >= 8) return 0;
+    const MXWORK_CH *pcmChannels = (const MXWORK_CH *)MXDRV_GetWork(&context, MXDRV_WORK_PCM);
+    return pcmChannels[ch].S0012;
+  }
+
+  virtual uint8_t getPcmVolume(uint8_t ch) {
+    if (ch >= 8) return 0;
+    const MXWORK_CH *pcmChannels = (const MXWORK_CH *)MXDRV_GetWork(&context, MXDRV_WORK_PCM);
+    return pcmChannels[ch].S0022;
+  }
+
+  virtual bool getPcmKeyOn(uint8_t ch) {
+    if (ch >= 8) return false;
+    const MXWORK_CH *pcmChannels = (const MXWORK_CH *)MXDRV_GetWork(&context, MXDRV_WORK_PCM);
+    return (pcmChannels[ch].S0016 & 0x08) != 0;
+  }
+
+  virtual uint32_t getPlayTime() {
+    const MXWORK_GLOBAL *global = (const MXWORK_GLOBAL *)MXDRV_GetWork(&context, MXDRV_WORK_GLOBAL);
+    return global->PLAYTIME;
+  }
+
+  virtual uint16_t getLoopCount() {
+    const MXWORK_GLOBAL *global = (const MXWORK_GLOBAL *)MXDRV_GetWork(&context, MXDRV_WORK_GLOBAL);
+    return global->L002246;
+  }
+
+  virtual void stop() {
+    MXDRV_Stop(&context);
+  }
+
+  virtual void replay() {
+    printf("replay() called, mdxBuffer=%p, mdxBufferSize=%d\n", mdxBuffer, mdxBufferSize);
+    if (mdxBuffer != NULL) {
+      MXDRV_Play(
+          &context,
+          mdxBuffer, mdxBufferSize,
+          pdxBuffer, pdxBufferSize);
+      printf("MXDRV_Play called\n");
+    }
+  }
+
+  virtual void fadeout() {
+    MXDRV_Fadeout(&context);
+  }
+
+  virtual std::string getTitle() {
+    return std::string(mdxTitle);
+  }
+
+  virtual val getTitleBytes() {
+    size_t len = strlen(mdxTitle);
+    return val(typed_memory_view(len, (uint8_t*)mdxTitle));
   }
 
   virtual void loadPDX(uintptr_t output_ptr,int32_t pdxFileImageSizeInBytes, uintptr_t filename)
@@ -333,11 +418,15 @@ public:
                                   1000.0f;
     printf("song duration %.1f(sec)\n", songDurationInSeconds);
 #endif
+    /* バッファサイズを保存 */
+    mdxBufferSize = mdxBufferSizeInBytes;
+    pdxBufferSize = pdxBufferSizeInBytes;
+
     /* MDX 再生 */
     MXDRV_Play(
         &context,
-        mdxBuffer, mdxBufferSizeInBytes,
-        pdxBuffer, pdxBufferSizeInBytes);
+        mdxBuffer, mdxBufferSize,
+        pdxBuffer, pdxBufferSize);
 
   }
 
@@ -381,5 +470,20 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .function("render", &SynthesizerWrapper::render, allow_raw_pointers())
       .function("loadMDX", &SynthesizerWrapper::loadMDX, allow_raw_pointers())
       .function("loadPDX", &SynthesizerWrapper::loadPDX, allow_raw_pointers())
+      // チャンネルデータ取得API
+      .function("getFmNote", &SynthesizerWrapper::getFmNote)
+      .function("getFmNoteBend", &SynthesizerWrapper::getFmNoteBend)
+      .function("getFmVolume", &SynthesizerWrapper::getFmVolume)
+      .function("getFmKeyOn", &SynthesizerWrapper::getFmKeyOn)
+      .function("getPcmNote", &SynthesizerWrapper::getPcmNote)
+      .function("getPcmVolume", &SynthesizerWrapper::getPcmVolume)
+      .function("getPcmKeyOn", &SynthesizerWrapper::getPcmKeyOn)
+      .function("getPlayTime", &SynthesizerWrapper::getPlayTime)
+      .function("getLoopCount", &SynthesizerWrapper::getLoopCount)
+      .function("stop", &SynthesizerWrapper::stop)
+      .function("replay", &SynthesizerWrapper::replay)
+      .function("fadeout", &SynthesizerWrapper::fadeout)
+      .function("getTitle", &SynthesizerWrapper::getTitle)
+      .function("getTitleBytes", &SynthesizerWrapper::getTitleBytes)
   ;
 }

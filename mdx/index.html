@@ -7,47 +7,102 @@
   <meta name="mobile-web-app-capable" content="yes">
   <link href="style.css" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <title>MDX Player - WASM</title>
+  <title>WASM MDXPlayer Powered by Claude Code</title>
 </head>
 
 <body>
-  <div>WASM MDXPlayer v0.05</div>
+  <div id="mmdsp-container">
+    <!-- Header -->
+    <header id="mmdsp-header">
+      <span class="title">WASM MDXPlayer Powered by Claude Code</span>
+      <span class="version">v0.10</span>
+    </header>
+
+    <!-- Main Content -->
+    <div id="mmdsp-main">
+      <!-- Top Panels: Keyboard + OPM Register -->
+      <div id="top-panel">
+        <div id="keyboard-panel">
+          <div class="panel-header">KEYBOARD (FM1-8 / PCM1-8)</div>
+          <canvas id="keyboard-canvas" width="500" height="360"></canvas>
+        </div>
+        <div id="opm-register-panel" class="panel">
+          <div class="panel-header">YM2151(OPM) REGISTER</div>
+          <canvas id="opm-register-canvas" width="280" height="360"></canvas>
+        </div>
+      </div>
+
+      <!-- Bottom Panel -->
+      <div id="bottom-panel">
+        <!-- Control Panel -->
+        <div id="control-panel" class="panel">
+          <div class="panel-header">CONTROL</div>
+          <div class="control-buttons">
+            <button id="btn-play" class="ctrl-btn">PLAY</button>
+            <button id="btn-pause" class="ctrl-btn">PAUSE</button>
+            <button id="btn-stop" class="ctrl-btn">STOP</button>
+            <button id="btn-fadeout" class="ctrl-btn">FADE</button>
+          </div>
+          <div class="control-info">
+            <div class="info-row">
+              <span class="label">TIME:</span>
+              <span id="time-display" class="value">00:00</span>
+            </div>
+            <div class="info-row">
+              <span class="label">LOOP:</span>
+              <span id="loop-display" class="value">00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spectrum Analyzer -->
+        <div id="spectrum-panel" class="panel">
+          <div class="panel-header">SPECTRUM</div>
+          <canvas id="spectrum-canvas" width="280" height="100"></canvas>
+        </div>
+
+        <!-- Level Meters -->
+        <div id="level-panel" class="panel">
+          <div class="panel-header">LEVEL</div>
+          <canvas id="level-canvas" width="320" height="120"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="mmdsp-footer">
+      <div id="now-playing">
+        <span class="label">NOW PLAYING:</span>
+        <span id="title" class="title-text">Dragon Spirit (c)namco - ds02.mdx</span>
+      </div>
+      <div id="file-info">
+        <span>MDX: <span id="mdxfile">ds02.mdx</span></span>
+        <span>PDX: <span id="pdxfile">-</span></span>
+      </div>
+      <div id="drop-zone">
+        .MDX / .PDX Drag & Drop
+        <input type="file" id="mdxfile1" accept=".mdx" hidden>
+        <input type="file" id="pdxfile1" accept=".pdx" hidden>
+      </div>
+    </footer>
+
+    <!-- Hidden elements for compatibility -->
+    <div id="opmreg" style="display:none;"></div>
+    <button id="audio-toggle" style="display:none;">PLAY</button>
+    <button id="play-tone" style="display:none;"></button>
+    <div id="ddarea" style="display:none;"></div>
+  </div>
+
+  <!-- Copyright -->
   <div id="copyright">
     X68k MXDRV music driver version 2.06+17 Rel.X5-S (c)1988-92 milk.,K.MAEKAWA, Missy.M, Yatsube<br>
     <a href="https://gorry.haun.org/mx/">Converted for Win32 [MXDRVg] V2.00a Copyright (C) 2000-2002 GORRY.</a><br>
     X68Sound_src020615 Copyright (C) m_puusan.<br>
     <a href="https://github.com/yosshin4004/portable_mdx">Ported for 64bit environments Copyright (C) 2018 Yosshin.</a><br>
-    WASM MDXPlayer 2022 <a href="https://twitter.com/GOROman">@GOROman</a>.
-  </div>
-  <div id="title">
-    Ｄragon Ｓpirit (c)namco  * Ｔhe Ｐaleozoic Ｅra *  by Yatsube
-  </div>
-  
-  <div id="mdxfile">-</div>
-  <div id="pdxfile">-</div>
-  
-  <div id="ym2151">YM2151 OPM register dump</div>
-  <div id="opmreg">
-    <br>Now loading...<br>
-
-  </div>
+    WASM MDXPlayer 2022-2025 <a href="https://x.com/GOROman">@GOROman</a>.
   </div>
 
-  <div id="demo-app" draggable="false">
-    <button id="audio-toggle" class="inactive" disabled>PLAY</button>
-      <button id="play-tone" class="inactive" visibility: hidden disabled>
-      </button>
- <br>    
- <div id="loader"> 
- MDX:<input type="file" id="mdxfile1"><br>
- PDX:<input type="file" id="pdxfile1"><br>
-</div>
-      <script src="index.js" type="module"></script>
-
-    <div id="ddarea" align="center">
-<br><br>      .MDX or .PDX<br> Drag & Drop Here
-    </div>
-
+  <script src="index.js" type="module"></script>
 </body>
 
 </html>

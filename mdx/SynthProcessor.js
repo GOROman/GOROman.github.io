@@ -212,6 +212,48 @@ class SynthProcessor extends AudioWorkletProcessor {
         }
         str += "<br>";
       }
+  } else if ( data == "CHANNEL" ) {
+      // チャンネルデータをJSON形式で返す
+      const channelData = {
+        type: "CHANNEL",
+        fm: [],
+        pcm: [],
+        opmRegs: [],
+        playTime: this._synth.getPlayTime(),
+        loopCount: this._synth.getLoopCount(),
+        titleBytes: Array.from(this._synth.getTitleBytes())
+      };
+      for (let i = 0; i < 8; i++) {
+        channelData.fm.push({
+          note: this._synth.getFmNote(i),
+          noteBend: this._synth.getFmNoteBend(i),
+          volume: this._synth.getFmVolume(i),
+          keyOn: this._synth.getFmKeyOn(i)
+        });
+      }
+      for (let i = 0; i < 8; i++) {
+        channelData.pcm.push({
+          note: this._synth.getPcmNote(i),
+          volume: this._synth.getPcmVolume(i),
+          keyOn: this._synth.getPcmKeyOn(i)
+        });
+      }
+      // OPM Registers (0x00-0xFF)
+      for (let i = 0; i < 256; i++) {
+        channelData.opmRegs.push(this._synth.getReg(i));
+      }
+      this.port.postMessage(JSON.stringify(channelData));
+      return;
+  } else if ( data == "STOP" ) {
+      this._synth.stop();
+      return;
+  } else if ( data == "REPLAY" ) {
+      console.log("REPLAY command received");
+      this._synth.replay();
+      return;
+  } else if ( data == "FADEOUT" ) {
+      this._synth.fadeout();
+      return;
   } else if ( typeof data == 'string' ) {
     if (data.match( /\.pdx/i )) {
       filetype = "PDX";

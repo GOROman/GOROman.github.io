@@ -1,44 +1,741 @@
 /**
- * Copyright 2021 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * WASM MDX Player - MMDSP Style UI
+ * Copyright 2022-2025 GOROman
  */
 
-class MDXPlayer {
+// ========================================
+// Keyboard Visualizer (MMDSP Style - Piano Keys)
+// ========================================
+class KeyboardVisualizer {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.numFmChannels = 8;
+    this.numPcmChannels = 8;
+    this.numOctaves = 8;
+    this.channelHeight = 22;
 
+    // MMDSP colors
+    this.colors = {
+      bg: '#000010',
+      whiteKey: '#303060',     // White keys (dark blue-gray)
+      blackKey: '#101030',     // Black keys (very dark)
+      keyBorder: '#404080',    // Key border
+      keyOn: '#e0e0ff',        // Key-on white/light blue
+      text: '#6080c0',         // Label text
+      textDim: '#304080',      // Dim text
+      textBright: '#80a0ff',   // Bright text
+      regText: '#5070b0'       // Register text
+    };
+
+    // OPM register cache for display
+    this.opmRegs = new Array(256).fill(0);
+  }
+
+  noteToKeyIndex(note) {
+    // Convert MDX note value to key index (0-95 for 8 octaves)
+    return Math.floor((note + 27) / 64);
+  }
+
+  // Draw piano keyboard (white and black keys)
+  drawKeyboard(x, y, width, height, activeKey, volume, isPcm = false) {
+    const ctx = this.ctx;
+    const octaveWidth = width / this.numOctaves;
+    const whiteKeyWidth = octaveWidth / 7; // 7 white keys per octave
+
+    // Background
+    ctx.fillStyle = this.colors.bg;
+    ctx.fillRect(x, y, width, height);
+
+    // Draw white keys first
+    let keyIndex = 0;
+    for (let oct = 0; oct < this.numOctaves; oct++) {
+      for (let wk = 0; wk < 7; wk++) {
+        const kx = x + oct * octaveWidth + wk * whiteKeyWidth;
+
+        // Check if this white key is active
+        const noteInOctave = [0, 2, 4, 5, 7, 9, 11][wk];
+        const currentKeyIndex = oct * 12 + noteInOctave;
+        const isActive = activeKey === currentKeyIndex;
+
+        if (isActive) {
+          const brightness = Math.min(255, 180 + Math.floor((volume / 255) * 75));
+          if (isPcm) {
+            ctx.fillStyle = `rgb(${brightness}, 255, ${brightness})`; // Green for PCM
+          } else {
+            ctx.fillStyle = `rgb(${brightness}, ${brightness}, 255)`; // Blue for FM
+          }
+        } else {
+          ctx.fillStyle = this.colors.whiteKey;
+        }
+
+        ctx.fillRect(kx, y, whiteKeyWidth - 1, height);
+
+        // Key border
+        ctx.strokeStyle = this.colors.keyBorder;
+        ctx.strokeRect(kx, y, whiteKeyWidth - 1, height);
+      }
+    }
+
+    // Draw black keys on top
+    const blackKeyWidth = whiteKeyWidth * 0.6;
+    const blackKeyHeight = height * 0.6;
+    const blackKeyPattern = [1, 1, 0, 1, 1, 1, 0]; // C#, D#, skip, F#, G#, A#, skip
+
+    for (let oct = 0; oct < this.numOctaves; oct++) {
+      for (let wk = 0; wk < 7; wk++) {
+        if (blackKeyPattern[wk] === 0) continue;
+
+        const kx = x + oct * octaveWidth + (wk + 1) * whiteKeyWidth - blackKeyWidth / 2;
+
+        // Black key note indices: 1, 3, 6, 8, 10
+        const blackNoteIndices = [1, 3, null, 6, 8, 10, null];
+        const noteIndex = blackNoteIndices[wk];
+        if (noteIndex === null) continue;
+
+        const currentKeyIndex = oct * 12 + noteIndex;
+        const isActive = activeKey === currentKeyIndex;
+
+        if (isActive) {
+          const brightness = Math.min(255, 180 + Math.floor((volume / 255) * 75));
+          if (isPcm) {
+            ctx.fillStyle = `rgb(${brightness}, 255, ${brightness})`; // Green for PCM
+          } else {
+            ctx.fillStyle = `rgb(${brightness}, ${brightness}, 255)`; // Blue for FM
+          }
+        } else {
+          ctx.fillStyle = this.colors.blackKey;
+        }
+
+        ctx.fillRect(kx, y, blackKeyWidth, blackKeyHeight);
+      }
+    }
+  }
+
+  render(channelData, opmRegs) {
+    const ctx = this.ctx;
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+
+    // Update OPM registers if provided
+    if (opmRegs) {
+      this.opmRegs = opmRegs;
+    }
+
+    // Clear
+    ctx.fillStyle = this.colors.bg;
+    ctx.fillRect(0, 0, width, height);
+
+    if (!channelData || !channelData.fm) return;
+
+    const labelWidth = 32;
+    const keyboardWidth = width - labelWidth - 10;
+    const kbWidth = keyboardWidth - 130;
+    const infoX = labelWidth + kbWidth + 5;
+
+    // Draw FM channels
+    for (let ch = 0; ch < this.numFmChannels; ch++) {
+      const y = ch * this.channelHeight;
+      const kbHeight = this.channelHeight - 2;
+
+      // Channel label
+      ctx.fillStyle = this.colors.textBright;
+      ctx.font = '8px monospace';
+      ctx.fillText(`FM${ch + 1}`, 2, y + 12);
+
+      // Get channel data
+      const fmCh = channelData.fm[ch];
+      let activeKey = -1;
+      let vol = 0;
+
+      if (fmCh && fmCh.keyOn) {
+        activeKey = this.noteToKeyIndex(fmCh.note);
+        vol = fmCh.volume;
+        if (vol & 0x80) {
+          vol = (0x7F - (vol & 0x7F)) * 2;
+        } else {
+          vol = (vol & 0xF) * 0x11;
+        }
+      }
+
+      // Draw keyboard with active key
+      this.drawKeyboard(labelWidth, y + 1, kbWidth, kbHeight, activeKey, vol);
+
+      // Get OPM registers for this channel
+      const kc = this.opmRegs[0x28 + ch] || 0;
+      const kf = this.opmRegs[0x30 + ch] || 0;
+      const panFlCon = this.opmRegs[0x20 + ch] || 0;
+
+      const kcOct = (kc >> 4) & 0x07;
+      const kcNote = kc & 0x0F;
+      const noteNames = ['C-', 'C#', 'D-', 'D#', 'E-', 'F-', 'F#', 'G-', 'G#', 'A-', 'A#', 'B-'];
+      const noteName = noteNames[kcNote % 12] || '??';
+
+      const panR = (panFlCon >> 7) & 1;
+      const panL = (panFlCon >> 6) & 1;
+      const panStr = (panL ? 'L' : '-') + (panR ? 'R' : '-');
+
+      // Info display
+      ctx.fillStyle = fmCh && fmCh.keyOn ? '#e0e0ff' : this.colors.text;
+      ctx.font = '8px monospace';
+      const volStr = fmCh ? fmCh.volume.toString().padStart(3) : '  0';
+      ctx.fillText(`${noteName}${kcOct} V${volStr} ${panStr} KC${kc.toString(16).toUpperCase().padStart(2,'0')}`, infoX, y + 12);
+    }
+
+    // Draw PCM/ADPCM channels
+    const pcmStartY = this.numFmChannels * this.channelHeight + 4;
+
+    // Separator line
+    ctx.strokeStyle = this.colors.keyBorder;
+    ctx.beginPath();
+    ctx.moveTo(0, pcmStartY - 2);
+    ctx.lineTo(width, pcmStartY - 2);
+    ctx.stroke();
+
+    for (let ch = 0; ch < this.numPcmChannels; ch++) {
+      const y = pcmStartY + ch * this.channelHeight;
+      const kbHeight = this.channelHeight - 2;
+
+      // Channel label
+      ctx.fillStyle = '#80c080';
+      ctx.font = '8px monospace';
+      ctx.fillText(`PC${ch + 1}`, 2, y + 12);
+
+      // Get PCM channel data
+      const pcmCh = channelData.pcm ? channelData.pcm[ch] : null;
+      let activeKey = -1;
+      let vol = 0;
+
+      if (pcmCh && pcmCh.keyOn) {
+        activeKey = this.noteToKeyIndex(pcmCh.note);
+        vol = pcmCh.volume;
+        if (vol & 0x80) {
+          vol = (0x7F - (vol & 0x7F)) * 2;
+        } else {
+          vol = (vol & 0xF) * 0x11;
+        }
+      }
+
+      // Draw keyboard with active key (green tint for PCM)
+      this.drawKeyboard(labelWidth, y + 1, kbWidth, kbHeight, activeKey, vol, true);
+
+      // Info display
+      ctx.fillStyle = pcmCh && pcmCh.keyOn ? '#c0ffc0' : '#608060';
+      ctx.font = '8px monospace';
+      const volStr = pcmCh ? pcmCh.volume.toString().padStart(3) : '  0';
+      const noteVal = pcmCh ? pcmCh.note : 0;
+      ctx.fillText(`N:${noteVal.toString().padStart(4)} V${volStr}`, infoX, y + 12);
+    }
+  }
+}
+
+// ========================================
+// Level Meter (MMDSP Style - Segmented Lines with PANPOT)
+// ========================================
+class LevelMeter {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.numChannels = 8;
+    this.peakHold = new Array(16).fill(0);
+    this.peakDecay = new Array(16).fill(0);
+    this.currentLevel = new Array(16).fill(0);
+    this.opmRegs = new Array(256).fill(0);
+
+    // MMDSP Colors
+    this.colors = {
+      bg: '#000010',
+      barLow: '#2060a0',
+      barMid: '#40a0ff',
+      barHigh: '#80ffff',
+      peak: '#ffffff',
+      text: '#6080c0',
+      textDim: '#304080',
+      grid: '#101830',
+      label: '#5080c0',
+      panL: '#80c0ff',
+      panR: '#80c0ff',
+      panOff: '#303050'
+    };
+
+    this.segmentHeight = 3;
+    this.segmentGap = 2;
+  }
+
+  normalizeVolume(volume) {
+    if (volume & 0x80) {
+      return (0x7F - (volume & 0x7F)) * 2;
+    }
+    return (volume & 0xF) * 0x11;
+  }
+
+  render(channelData, opmRegs) {
+    const ctx = this.ctx;
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+
+    // Update OPM registers if provided
+    if (opmRegs) {
+      this.opmRegs = opmRegs;
+    }
+
+    // Clear
+    ctx.fillStyle = this.colors.bg;
+    ctx.fillRect(0, 0, width, height);
+
+    if (!channelData || !channelData.fm) return;
+
+    const headerHeight = 15;
+    const footerHeight = 28;
+    const barWidth = 28;
+    const barGap = 10;
+    const startX = 20;
+    const maxBarHeight = height - headerHeight - footerHeight;
+    const barTop = headerHeight;
+
+    // Calculate number of segments
+    const totalSegments = Math.floor(maxBarHeight / (this.segmentHeight + this.segmentGap));
+
+    // Draw header labels
+    ctx.fillStyle = this.colors.label;
+    ctx.font = '9px monospace';
+    for (let ch = 0; ch < 8; ch++) {
+      ctx.fillText(`${ch + 1}`, startX + ch * (barWidth + barGap) + barWidth / 2 - 3, 11);
+    }
+
+    // Draw each channel meter
+    for (let ch = 0; ch < 8; ch++) {
+      const x = startX + ch * (barWidth + barGap);
+      const fmCh = channelData.fm[ch];
+
+      // Get level
+      let level = 0;
+      if (fmCh) {
+        level = this.normalizeVolume(fmCh.volume);
+        if (!fmCh.keyOn) {
+          level = 0;
+        }
+      }
+
+      // Smooth attack/decay
+      if (level > this.currentLevel[ch]) {
+        this.currentLevel[ch] = level;
+      } else {
+        this.currentLevel[ch] = Math.max(0, this.currentLevel[ch] * 0.9 - 3);
+      }
+
+      // Peak hold
+      if (this.currentLevel[ch] > this.peakHold[ch]) {
+        this.peakHold[ch] = this.currentLevel[ch];
+        this.peakDecay[ch] = 20;
+      } else if (this.peakDecay[ch] > 0) {
+        this.peakDecay[ch]--;
+      } else {
+        this.peakHold[ch] = Math.max(0, this.peakHold[ch] - 4);
+      }
+
+      // Draw background grid (empty segments)
+      ctx.fillStyle = this.colors.grid;
+      for (let s = 0; s < totalSegments; s++) {
+        const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
+        ctx.fillRect(x, segY, barWidth, this.segmentHeight);
+      }
+
+      // Draw active segments (level)
+      const activeSegments = Math.floor((this.currentLevel[ch] / 255) * totalSegments);
+      for (let s = 0; s < activeSegments; s++) {
+        const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
+        const ratio = s / totalSegments;
+
+        // Color based on level
+        if (ratio > 0.8) {
+          ctx.fillStyle = this.colors.barHigh;
+        } else if (ratio > 0.5) {
+          ctx.fillStyle = this.colors.barMid;
+        } else {
+          ctx.fillStyle = this.colors.barLow;
+        }
+        ctx.fillRect(x, segY, barWidth, this.segmentHeight);
+      }
+
+      // Draw peak indicator
+      if (this.peakHold[ch] > 0) {
+        const peakSegment = Math.floor((this.peakHold[ch] / 255) * totalSegments);
+        const peakY = barTop + maxBarHeight - peakSegment * (this.segmentHeight + this.segmentGap);
+        ctx.fillStyle = this.colors.peak;
+        ctx.fillRect(x, peakY, barWidth, this.segmentHeight);
+      }
+    }
+
+    // Draw PANPOT footer
+    const panY = height - footerHeight + 5;
+    ctx.fillStyle = this.colors.textDim;
+    ctx.font = '8px monospace';
+    ctx.fillText('PAN', 2, panY + 6);
+
+    for (let ch = 0; ch < 8; ch++) {
+      const x = startX + ch * (barWidth + barGap);
+      // Get PAN from OPM register 0x20+ch (bits 7-6)
+      const panFlCon = this.opmRegs[0x20 + ch] || 0;
+      const panR = (panFlCon >> 7) & 1; // Right enable
+      const panL = (panFlCon >> 6) & 1; // Left enable
+
+      // Draw L/R indicators
+      const indicatorWidth = barWidth / 2 - 1;
+
+      // Left indicator
+      ctx.fillStyle = panL ? this.colors.panL : this.colors.panOff;
+      ctx.fillRect(x, panY, indicatorWidth, 10);
+      ctx.fillStyle = panL ? '#002040' : this.colors.textDim;
+      ctx.font = '7px monospace';
+      ctx.fillText('L', x + 3, panY + 8);
+
+      // Right indicator
+      ctx.fillStyle = panR ? this.colors.panR : this.colors.panOff;
+      ctx.fillRect(x + indicatorWidth + 2, panY, indicatorWidth, 10);
+      ctx.fillStyle = panR ? '#002040' : this.colors.textDim;
+      ctx.fillText('R', x + indicatorWidth + 5, panY + 8);
+    }
+  }
+}
+
+// ========================================
+// OPM Register Visualizer
+// ========================================
+class OPMRegisterVisualizer {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.opmRegs = new Array(256).fill(0);
+
+    // Colors
+    this.colors = {
+      bg: '#000010',
+      text: '#6080c0',
+      textDim: '#304080',
+      textBright: '#80c0ff',
+      textValue: '#4070b0',      // Blue for unchanged
+      textChanged: '#e0e0ff',    // White for changed
+      header: '#5080c0',
+      grid: '#101830'
+    };
+
+    // Track changed registers
+    this.prevRegs = new Array(256).fill(0);
+    this.changedRegs = new Array(256).fill(0);
+  }
+
+  render(opmRegs) {
+    const ctx = this.ctx;
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+
+    // Update registers
+    if (opmRegs) {
+      for (let i = 0; i < 256; i++) {
+        if (opmRegs[i] !== this.prevRegs[i]) {
+          this.changedRegs[i] = 10; // Highlight for 10 frames
+          this.prevRegs[i] = opmRegs[i];
+        } else if (this.changedRegs[i] > 0) {
+          this.changedRegs[i]--;
+        }
+      }
+      this.opmRegs = opmRegs;
+    }
+
+    // Clear
+    ctx.fillStyle = this.colors.bg;
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw registers in 16x16 grid
+    const cellWidth = 15;
+    const cellHeight = 15;
+    const startX = 2;
+    const startY = 18;
+    const dataStartX = startX + 18;
+
+    // Header row - draw each column header at the same position as data
+    ctx.fillStyle = this.colors.header;
+    ctx.font = '8px monospace';
+    for (let col = 0; col < 16; col++) {
+      const x = dataStartX + col * cellWidth;
+      ctx.fillText(col.toString(16).toUpperCase().padStart(2, '0'), x, 11);
+    }
+
+    for (let row = 0; row < 16; row++) {
+      // Row header
+      ctx.fillStyle = this.colors.header;
+      ctx.font = '8px monospace';
+      ctx.fillText(row.toString(16).toUpperCase() + '0', startX, startY + row * cellHeight + 9);
+
+      for (let col = 0; col < 16; col++) {
+        const regAddr = row * 16 + col;
+        const regValue = this.opmRegs[regAddr] || 0;
+        const x = dataStartX + col * cellWidth;
+        const y = startY + row * cellHeight;
+
+        // Highlight changed registers
+        if (this.changedRegs[regAddr] > 0) {
+          ctx.fillStyle = this.colors.textChanged;
+        } else {
+          ctx.fillStyle = this.colors.textValue;
+        }
+
+        ctx.font = '8px monospace';
+        ctx.fillText(regValue.toString(16).toUpperCase().padStart(2, '0'), x, y + 9);
+      }
+    }
+
+  }
+}
+
+// ========================================
+// Spectrum Analyzer (MMDSP Style)
+// ========================================
+class SpectrumAnalyzer {
+  constructor(canvas, audioContext) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.audioContext = audioContext;
+    this.analyser = null;
+    this.dataArray = null;
+    this.peakHold = [];
+
+    // MMDSP Colors
+    this.colors = {
+      bg: '#000008',
+      barLow: '#2060a0',
+      barMid: '#40a0ff',
+      barHigh: '#80ffff',
+      peak: '#ffffff',
+      grid: '#101830'
+    };
+  }
+
+  setup(sourceNode) {
+    if (!this.audioContext || !sourceNode) return;
+
+    this.analyser = this.audioContext.createAnalyser();
+    this.analyser.fftSize = 512;
+    this.analyser.smoothingTimeConstant = 0.75;
+    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+
+    sourceNode.connect(this.analyser);
+
+    // Initialize peak hold
+    this.peakHold = new Array(64).fill(0);
+    this.peakDecay = new Array(64).fill(0);
+  }
+
+  render() {
+    const ctx = this.ctx;
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+
+    // Clear
+    ctx.fillStyle = this.colors.bg;
+    ctx.fillRect(0, 0, width, height);
+
+    if (!this.analyser || !this.dataArray) {
+      // Draw placeholder grid
+      ctx.strokeStyle = this.colors.grid;
+      for (let i = 0; i < 64; i++) {
+        const x = 5 + i * 5;
+        ctx.beginPath();
+        ctx.moveTo(x, 5);
+        ctx.lineTo(x, height - 5);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#304080';
+      ctx.font = '10px monospace';
+      ctx.fillText('CLICK PLAY TO START', width / 2 - 70, height / 2);
+      return;
+    }
+
+    this.analyser.getByteFrequencyData(this.dataArray);
+
+    const barCount = 48;
+    const barWidth = 4;
+    const barGap = 2;
+    const startX = (width - barCount * (barWidth + barGap)) / 2;
+    const maxHeight = height - 10;
+
+    for (let i = 0; i < barCount; i++) {
+      // Use logarithmic frequency distribution
+      const binStart = Math.floor(Math.pow(i / barCount, 1.5) * this.dataArray.length);
+      const binEnd = Math.floor(Math.pow((i + 1) / barCount, 1.5) * this.dataArray.length);
+      let sum = 0;
+      let count = 0;
+      for (let j = binStart; j < binEnd && j < this.dataArray.length; j++) {
+        sum += this.dataArray[j];
+        count++;
+      }
+      const value = count > 0 ? sum / count : 0;
+
+      // Peak hold
+      if (value > this.peakHold[i]) {
+        this.peakHold[i] = value;
+        this.peakDecay[i] = 30;
+      } else if (this.peakDecay[i] > 0) {
+        this.peakDecay[i]--;
+      } else {
+        this.peakHold[i] = Math.max(0, this.peakHold[i] - 3);
+      }
+
+      const barHeight = (value / 255) * maxHeight;
+      const x = startX + i * (barWidth + barGap);
+      const y = height - 5 - barHeight;
+
+      // Draw segmented bar (MMDSP style)
+      if (barHeight > 0) {
+        const segments = Math.ceil(barHeight / 4);
+        for (let s = 0; s < segments; s++) {
+          const segY = height - 5 - (s + 1) * 4;
+          const ratio = s / (maxHeight / 4);
+
+          // Color gradient based on height
+          if (ratio > 0.75) {
+            ctx.fillStyle = this.colors.barHigh;
+          } else if (ratio > 0.4) {
+            ctx.fillStyle = this.colors.barMid;
+          } else {
+            ctx.fillStyle = this.colors.barLow;
+          }
+          ctx.fillRect(x, segY, barWidth, 3);
+        }
+      }
+
+      // Draw peak indicator
+      if (this.peakHold[i] > 0) {
+        const peakY = height - 5 - (this.peakHold[i] / 255) * maxHeight;
+        ctx.fillStyle = this.colors.peak;
+        ctx.fillRect(x, peakY - 1, barWidth, 2);
+      }
+    }
+  }
+}
+
+// ========================================
+// Main MDX Player Class
+// ========================================
+class MDXPlayer {
   constructor() {
     this._container = null;
     this._toggleButton = null;
-    this._toneButton = null;
     this._context = null;
     this._synthNode = null;
-    this._volumeNode = null;
     this._toggleState = false;
+    this._isStopped = false;
+
+    // Visualizers
+    this._keyboardVis = null;
+    this._levelMeter = null;
+    this._spectrumAnalyzer = null;
+    this._opmRegisterVis = null;
+
+    // Animation
+    this._animationId = null;
   }
 
   _initializeView() {
-    this._container = document.getElementById('demo-app');
-    this._toggleButton = document.getElementById('audio-toggle');
-    this._toggleButton.addEventListener(
-      'mouseup', () => this._handleToggle());
-    this._toneButton = document.getElementById('play-tone');
-    this._toneButton.addEventListener(
-      'mousedown', () => this._handleToneButton(true));
-    this._toneButton.addEventListener(
-      'mouseup', () => this._handleToneButton(false));
+    // Get new UI elements
+    this._toggleButton = document.getElementById('btn-play');
+    const pauseBtn = document.getElementById('btn-pause');
+    const stopBtn = document.getElementById('btn-stop');
+    const fadeoutBtn = document.getElementById('btn-fadeout');
+    const dropZone = document.getElementById('drop-zone');
 
-    this._toggleButton.disabled = false;
-    this._toneButton.disabled = false;
+    // Start with blinking PLAY button
+    this._toggleButton.classList.add('blink');
+
+    // Button events
+    this._toggleButton.addEventListener('click', () => this.play());
+    pauseBtn.addEventListener('click', () => this.pause());
+    stopBtn.addEventListener('click', () => this.stop());
+    fadeoutBtn.addEventListener('click', () => this.fadeout());
+
+    // Initialize visualizers
+    const keyboardCanvas = document.getElementById('keyboard-canvas');
+    const levelCanvas = document.getElementById('level-canvas');
+    const spectrumCanvas = document.getElementById('spectrum-canvas');
+    const opmRegisterCanvas = document.getElementById('opm-register-canvas');
+
+    if (keyboardCanvas) {
+      this._keyboardVis = new KeyboardVisualizer(keyboardCanvas);
+    }
+    if (levelCanvas) {
+      this._levelMeter = new LevelMeter(levelCanvas);
+    }
+    if (spectrumCanvas) {
+      this._spectrumAnalyzer = new SpectrumAnalyzer(spectrumCanvas, null);
+    }
+    if (opmRegisterCanvas) {
+      this._opmRegisterVis = new OPMRegisterVisualizer(opmRegisterCanvas);
+    }
+
+    // Setup drag and drop on drop zone
+    this._setupDragDrop(dropZone);
+
+    // Also setup drag drop on body for convenience
+    this._setupDragDrop(document.body);
+  }
+
+  _setupDragDrop(element) {
+    if (!element) return;
+
+    const isValid = e => e.dataTransfer.types.indexOf("Files") >= 0;
+
+    element.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!isValid(e)) {
+        e.dataTransfer.dropEffect = "none";
+        return;
+      }
+      e.dataTransfer.dropEffect = "copy";
+      if (element.id === 'drop-zone') {
+        element.classList.add('drag-over');
+      }
+    });
+
+    element.addEventListener('dragleave', e => {
+      e.stopPropagation();
+      if (element.id === 'drop-zone') {
+        element.classList.remove('drag-over');
+      }
+    });
+
+    element.addEventListener('drop', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (element.id === 'drop-zone') {
+        element.classList.remove('drag-over');
+      }
+
+      const files = e.dataTransfer.files;
+
+      // Load PDX first
+      for (let file of files) {
+        if (file.name.match(/\.pdx$/i)) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            this.loadPDX(file.name, event.target.result);
+          };
+          reader.readAsArrayBuffer(file);
+        }
+      }
+
+      // Then load MDX
+      for (let file of files) {
+        if (file.name.match(/\.mdx$/i)) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            this.loadMDX(file.name, event.target.result);
+          };
+          reader.readAsArrayBuffer(file);
+        }
+      }
+    });
   }
 
   async _initializeAudio() {
@@ -48,217 +745,162 @@ class MDXPlayer {
     });
 
     await this._context.audioWorklet.addModule('./mdx.wasm.js');
-    this._synthNode = new AudioWorkletNode(this._context, 'wasm-synth',
-      {
-        outputChannelCount: [2]
-      }
-    );
+    this._synthNode = new AudioWorkletNode(this._context, 'wasm-synth', {
+      outputChannelCount: [2]
+    });
 
     this._synthNode.connect(this._context.destination);
 
+    // Setup spectrum analyzer with audio context
+    if (this._spectrumAnalyzer) {
+      this._spectrumAnalyzer.audioContext = this._context;
+      this._spectrumAnalyzer.setup(this._synthNode);
+    }
 
+    // Handle messages from worklet
     this._synthNode.port.onmessage = (event) => {
-      // Handling data from the node.
-      var element = document.getElementById("opmreg");
-      element.innerHTML = event.data;
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === "CHANNEL") {
+          // Update visualizers
+          if (this._keyboardVis) this._keyboardVis.render(data, data.opmRegs);
+          if (this._levelMeter) this._levelMeter.render(data, data.opmRegs);
+          if (this._opmRegisterVis) this._opmRegisterVis.render(data.opmRegs);
+
+          // Update time display
+          this._updateTimeDisplay(data.playTime, data.loopCount);
+
+          // Update title if available (Shift-JIS decode)
+          if (data.titleBytes && data.titleBytes.length > 0) {
+            try {
+              const decoder = new TextDecoder('shift-jis');
+              const title = decoder.decode(new Uint8Array(data.titleBytes));
+              const titleEl = document.getElementById("title");
+              if (titleEl && titleEl.textContent !== title) {
+                titleEl.textContent = title;
+              }
+            } catch (e) {
+              console.log("Title decode error:", e);
+            }
+          }
+        }
+      } catch (e) {
+        // OPM register dump (legacy)
+        const element = document.getElementById("opmreg");
+        if (element) element.innerHTML = event.data;
+      }
     };
 
-    // OPMレジスタの更新
-    const getopmreg = function (self) {
-      self.port.postMessage("OPM");
-    };
-    setInterval(getopmreg, 16, this._synthNode);  // 16ms
+    // Start render loop
+    this._startRenderLoop();
 
     if (!this._toggleState) this._context.suspend();
   }
 
-  play()
-  {
-    this._context.resume();
-    this._toggleButton.classList.replace('inactive', 'active');
-    this._toggleButton.innerHTML = 'PAUSE';
+  _startRenderLoop() {
+    const render = () => {
+      // Request channel data
+      if (this._synthNode && this._toggleState) {
+        this._synthNode.port.postMessage("CHANNEL");
+      }
 
+      // Render spectrum (uses Web Audio API directly)
+      if (this._spectrumAnalyzer && this._toggleState) {
+        this._spectrumAnalyzer.render();
+      }
+
+      this._animationId = requestAnimationFrame(render);
+    };
+    render();
   }
-  pause()
-  {
-    this._context.suspend();
-    this._toggleButton.classList.replace('active', 'inactive');
-    this._toggleButton.innerHTML = 'PLAY';
 
-  }
+  _updateTimeDisplay(playTime, loopCount) {
+    const timeDisplay = document.getElementById('time-display');
+    const loopDisplay = document.getElementById('loop-display');
 
-  _handleToggle() {
-    this._toggleState = !this._toggleState;
-    if (this._toggleState) {
-      this.play();
-    } else {
-      this.pause();
+    if (timeDisplay) {
+      // PLAYTIME to milliseconds: PLAYTIME * 1024 / 4000
+      const playTimeMs = (playTime * 1024 / 4000);
+      const seconds = Math.floor(playTimeMs / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      timeDisplay.textContent =
+        `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    if (loopDisplay) {
+      loopDisplay.textContent = String(loopCount || 0).padStart(2, '0');
     }
   }
 
-  _handleToneButton(isDown) {
-    this._synthNode.port.postMessage(isDown);
+  play() {
+    if (!this._context) return;
+
+    console.log("play() called, isStopped:", this._isStopped);
+
+    // If stopped, replay from beginning
+    if (this._isStopped) {
+      console.log("Sending REPLAY command");
+      this._synthNode.port.postMessage("REPLAY");
+      this._isStopped = false;
+    }
+
+    // Resume audio context
+    this._context.resume();
+
+    this._toggleState = true;
+    this._toggleButton.classList.remove('blink');
+    this._toggleButton.classList.add('active');
   }
 
-  onWindowPageShow() {
-    console.log("onWindowPageShow!");
-
+  pause() {
+    if (!this._context) return;
+    this._context.suspend();
+    this._toggleState = false;
+    this._toggleButton.classList.remove('active');
   }
-  loadMDX( filename, data ) {
+
+  stop() {
+    if (!this._synthNode) return;
+    console.log("stop() called");
+    this._synthNode.port.postMessage("STOP");
+    this._isStopped = true;
+    this._toggleState = false;
+    this._toggleButton.classList.remove('active');
+    console.log("isStopped set to true");
+  }
+
+  fadeout() {
+    if (!this._synthNode) return;
+    this._synthNode.port.postMessage("FADEOUT");
+  }
+
+  loadMDX(filename, data) {
     this._synthNode.port.postMessage("MDX");
     this._synthNode.port.postMessage(data);
 
-    document.getElementById("title").innerHTML = filename;
-    document.getElementById("mdxfile").innerHTML = filename;
+    document.getElementById("title").textContent = filename;
+    document.getElementById("mdxfile").textContent = filename;
     this.play();
-
   }
-  loadPDX( filename, data ) {
+
+  loadPDX(filename, data) {
     this._synthNode.port.postMessage(filename);
     this._synthNode.port.postMessage(data);
 
-    document.getElementById("pdxfile").innerHTML = filename;
+    document.getElementById("pdxfile").textContent = filename;
   }
 
-  onWindowLoad() {
-    console.log("onWindowLoad!");
-    this._initializeAudio();
+  async onWindowLoad() {
+    console.log("WASM MDX Player Loading...");
     this._initializeView();
-
-    const f = document.getElementById('mdxfile1');
-    f.addEventListener('change', evt => {
-      const input = evt.target;
-      for (let i = 0; i < input.files.length; i++) {
-
-        const reader = new FileReader();
-        reader.onload = (event) => {
-
-          var data = event.target.result;
-          console.log(data.length);
-          console.log(data);
-          this.loadMDX(input.files[i].name, data)
-
-        }
-        console.log(input.files[i]);
-        reader.readAsArrayBuffer(input.files[i]);
-
-      }
-    });
-
-    const f2 = document.getElementById('pdxfile1');
-    f2.addEventListener('change', evt => {
-      const input = evt.target;
-      for (let i = 0; i < input.files.length; i++) {
-
-        const reader = new FileReader();
-        reader.onload = (event) => {
-
-          var data = event.target.result;
-          
-          this.loadPDX(input.files[i].name, data)
-
-
-        }
-        console.log(input.files[i]);
-        reader.readAsArrayBuffer(input.files[i]);
-
-      }
-    });
-
-    const ddarea = document.getElementById("ddarea");
-    // ドラッグされたデータが有効かどうかチェック
-    const isValid = e => e.dataTransfer.types.indexOf("Files") >= 0;
-
-    const ddEvent = {
-      "dragover": e => {
-        e.preventDefault(); // 既定の処理をさせない
-        e.stopPropagation(); // イベント伝播を止める
-        if (!e.target.isEqualNode(ddarea)) {
-          // ドロップエリア外ならドロップを無効にする
-          e.dataTransfer.dropEffect = "none"; return;
-        }
-        // e.stopPropagation(); // イベント伝播を止める
-
-        if (!isValid(e)) {
-          // 無効なデータがドラッグされたらドロップを無効にする
-          e.dataTransfer.dropEffect = "none"; return;
-        }
-        // ドロップのタイプを変更
-        e.dataTransfer.dropEffect = "copy";
-        //      ddarea.classList.add("ddefect");
-      },
-      "dragleave": e => {
-        console.log("dragleave!");
-        e.stopPropagation(); // イベント伝播を止める
-        if (!e.target.isEqualNode(ddarea)) {
-          return;
-        }
-        // e.stopPropagation(); // イベント伝播を止める
-        //     ddarea.classList.remove("ddefect");
-      },
-      "drop": e => {
-        console.log("drop!");
-        e.preventDefault(); // 既定の処理をさせない
-        e.stopPropagation(); // イベント伝播を止める
-
-        const files = e.dataTransfer.files;
-        console.log("Count:"+files.length);
-        console.log("PDX");
-        for (let file of files) {
-          
-          if ( file.name.match(/\.pdx$/i) ) {
-              console.log("File:"+file.name);
-
-            const reader1 = new FileReader();
-            reader1.onload = (event) => {
-
-              var data = event.target.result;
-              if ( file.name.match(/\.pdx$/i) ) {
-                this.loadPDX(file.name, data);
-              }
-
-            }
-            reader1.readAsArrayBuffer(file);
-          }
-        }
-
-        console.log("MDX");
-        for (let file of files) {
-
-          if ( file.name.match(/\.mdx$/i) ) {
-          console.log("File:"+file.name);
-              const reader2 = new FileReader();
-            reader2.onload = (event) => {
-
-                  var data = event.target.result;
-                if ( file.name.match(/\.mdx$/i) ) {
-                  this.loadMDX(file.name, data);
-                }
-
-            }
-            reader2.readAsArrayBuffer(file);
-          }
-        }
-
-      }
-    };
-
-    Object.keys(ddEvent).forEach(e => {
-      // ddarea.addEventListener(e,ddEvent[e]);
-      document.body.addEventListener(e, ddEvent[e], true)
-    });
-
-
+    await this._initializeAudio();
+    console.log("WASM MDX Player Ready!");
   }
 }
 
+// ========================================
+// Initialize
+// ========================================
 const mdxplayer = new MDXPlayer();
-window.addEventListener(
-  'load', () => mdxplayer.onWindowLoad()
-);
-window.addEventListener(
-  'pageshow', () => mdxplayer.onWindowPageShow()
-);
-window.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded!");
-});
+window.addEventListener('load', () => mdxplayer.onWindowLoad());

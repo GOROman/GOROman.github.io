@@ -121,14 +121,17 @@ class KeyboardVisualizer {
         const kx = x + oct * octaveWidth + wk * whiteKeyWidth;
 
         // Check if this white key is active
+        // MIDI keys light up even when muted
         const noteInOctave = [0, 2, 4, 5, 7, 9, 11][wk];
         const currentKeyIndex = oct * 12 + noteInOctave;
-        const isActive = activeKey === currentKeyIndex && !isMuted;
+        const isActive = activeKey === currentKeyIndex && (!isMuted || isMidi);
 
         if (isActive) {
           const brightness = Math.min(255, 180 + Math.floor((volume / 255) * 75));
           if (isMidi) {
-            ctx.fillStyle = `rgb(255, 255, ${brightness})`; // Yellow for MIDI
+            // Yellow for MIDI - keep blue low to stay yellow (not white)
+            const yellowBlue = Math.min(80, Math.floor((volume / 255) * 80));
+            ctx.fillStyle = `rgb(255, 255, ${yellowBlue})`;
           } else if (isPcm) {
             ctx.fillStyle = `rgb(${brightness}, 255, ${brightness})`; // Green for PCM
           } else {
@@ -162,13 +165,16 @@ class KeyboardVisualizer {
         const noteIndex = blackNoteIndices[wk];
         if (noteIndex === null) continue;
 
+        // MIDI keys light up even when muted
         const currentKeyIndex = oct * 12 + noteIndex;
-        const isActive = activeKey === currentKeyIndex && !isMuted;
+        const isActive = activeKey === currentKeyIndex && (!isMuted || isMidi);
 
         if (isActive) {
           const brightness = Math.min(255, 180 + Math.floor((volume / 255) * 75));
           if (isMidi) {
-            ctx.fillStyle = `rgb(255, 255, ${brightness})`; // Yellow for MIDI
+            // Yellow for MIDI - keep blue low to stay yellow (not white)
+            const yellowBlue = Math.min(80, Math.floor((volume / 255) * 80));
+            ctx.fillStyle = `rgb(255, 255, ${yellowBlue})`;
           } else if (isPcm) {
             ctx.fillStyle = `rgb(${brightness}, 255, ${brightness})`; // Green for PCM
           } else {
@@ -239,14 +245,17 @@ class KeyboardVisualizer {
       let vol = 0;
       let isMidi = false;
 
-      if (isMidiActive && midiState && midiState.keyOn) {
-        // MIDI is active and key is on - use MIDI note
-        // Clamp to keyboard range (0-95 for 8 octaves)
-        activeKey = Math.max(0, Math.min(95, midiState.note));
-        vol = 255; // Full volume for MIDI (velocity ignored)
+      if (isMidiActive && midiState) {
+        // MIDI mode - always show in yellow when MIDI signal received
         isMidi = true;
-      } else if (!isMidiActive && fmCh && fmCh.keyOn) {
-        // MDX is playing and MIDI is not active
+        if (midiState.keyOn) {
+          // Key is pressed - show active key
+          activeKey = Math.max(0, Math.min(95, midiState.note));
+          vol = 255; // Full volume for MIDI (velocity ignored)
+        }
+        // When keyOn is false, activeKey stays -1 (no key lit) but isMidi is true
+      } else if (fmCh && fmCh.keyOn) {
+        // MDX is playing
         activeKey = this.noteToKeyIndex(fmCh.note);
         vol = fmCh.volume;
         if (vol & 0x80) {
@@ -663,6 +672,19 @@ class MIDIManager {
     this._selectElement = null;
     this._labelElement = null;
     this._labelTimeout = null;
+
+    // Direct MIDI state tracking for immediate display
+    // (not waiting for worklet roundtrip)
+    this._midiChannelActive = 0;  // Bitmask: which FM channels have received MIDI
+    this._midiKeyState = new Array(8).fill(null).map(() => ({ keyOn: false, note: 0 }));
+  }
+
+  // Get current MIDI state for direct access by visualizer
+  getMidiState() {
+    return {
+      midiChannelActive: this._midiChannelActive,
+      midiKeyState: this._midiKeyState
+    };
   }
 
   async init() {
@@ -905,10 +927,16 @@ class MIDIManager {
 
     // Process Note On/Off for sound generation
     if (status >= 0x80 && status <= 0xEF) {
+      const fmCh = channel % 8;  // Map MIDI channel to FM channel
+
       switch (command) {
         case 0x90: // Note On
           if (data2 > 0) {
             // Note On (velocity > 0) - velocity is ignored per spec
+            // Update local state immediately for display
+            this._midiChannelActive |= (1 << fmCh);
+            this._midiKeyState[fmCh] = { keyOn: true, note: data1 };
+
             this._sendToWorklet({
               type: 'MIDI_KEY_ON',
               midiChannel: channel,
@@ -916,6 +944,11 @@ class MIDIManager {
             });
           } else {
             // Note On with velocity 0 = Note Off
+            // Only update if note matches
+            if (this._midiKeyState[fmCh].note === data1) {
+              this._midiKeyState[fmCh] = { keyOn: false, note: data1 };
+            }
+
             this._sendToWorklet({
               type: 'MIDI_KEY_OFF',
               midiChannel: channel,
@@ -925,6 +958,11 @@ class MIDIManager {
           break;
 
         case 0x80: // Note Off
+          // Only update if note matches
+          if (this._midiKeyState[fmCh].note === data1) {
+            this._midiKeyState[fmCh] = { keyOn: false, note: data1 };
+          }
+
           this._sendToWorklet({
             type: 'MIDI_KEY_OFF',
             midiChannel: channel,
@@ -1443,6 +1481,14 @@ class MDXPlayer {
       try {
         const data = JSON.parse(event.data);
         if (data.type === "CHANNEL") {
+          // Merge local MIDI state from MIDIManager for immediate response
+          // (don't wait for worklet roundtrip)
+          if (this._midiManager) {
+            const localMidi = this._midiManager.getMidiState();
+            data.midiChannelActive = localMidi.midiChannelActive;
+            data.midiKeyState = localMidi.midiKeyState;
+          }
+
           // Update visualizers
           if (this._keyboardVis) this._keyboardVis.render(data, data.opmRegs);
           if (this._levelMeter) this._levelMeter.render(data, data.opmRegs);

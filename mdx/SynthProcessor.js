@@ -294,16 +294,13 @@ class SynthProcessor extends AudioWorkletProcessor {
           // Apply to synth (MXDRV uses lower 9 bits: FM 0-7 + PCM)
           // Also include MIDI active channels to mute MDX on those channels
           this._synth.setChannelMask((this._channelMask | this._midiChannelActive) & 0x1ff);
-          console.log("Channel mask set to:", this._channelMask.toString(16));
         }
         else if (msg.type === 'MIDI_KEY_ON') {
           // MIDI Key On
           const fmCh = msg.midiChannel % 8;
-          console.log(`MIDI Key On: MIDI ch=${msg.midiChannel} note=${msg.note} -> FM ch=${fmCh}`);
 
           // Mark this channel as MIDI-controlled
           this._midiChannelActive |= (1 << fmCh);
-          console.log(`MIDI active channels: 0x${this._midiChannelActive.toString(16)}`);
 
           // Update MIDI key state
           this._midiKeyState[fmCh] = { keyOn: true, note: msg.note };
@@ -312,7 +309,6 @@ class SynthProcessor extends AudioWorkletProcessor {
           this._synth.midiKeyOff(fmCh);
 
           // Send Key On to OPM
-          console.log(`Calling midiKeyOn(${fmCh}, ${msg.note})`);
           this._synth.midiKeyOn(fmCh, msg.note);
         }
         else if (msg.type === 'MIDI_KEY_OFF') {
@@ -322,21 +318,24 @@ class SynthProcessor extends AudioWorkletProcessor {
 
           // Only process key off if it matches the last key on note
           if (lastNote !== msg.note) {
-            console.log(`MIDI Key Off: MIDI ch=${msg.midiChannel} note=${msg.note} -> FM ch=${fmCh} (ignored: last note was ${lastNote})`);
             return;
           }
-
-          console.log(`MIDI Key Off: MIDI ch=${msg.midiChannel} note=${msg.note} -> FM ch=${fmCh}`);
 
           // Update MIDI key state (keep channel as MIDI-controlled)
           this._midiKeyState[fmCh] = { keyOn: false, note: msg.note };
 
           // Send Key Off to OPM
           this._synth.midiKeyOff(fmCh);
+        }
+        else if (msg.type === 'RESET_MIDI') {
+          // Reset all MIDI state and channel mask
+          this._channelMask = 0;
+          this._midiChannelActive = 0;
+          this._midiKeyState = new Array(8).fill(null).map(() => ({ keyOn: false, note: 0 }));
+          this._synth.setChannelMask(0);
 
           // NOTE: Do NOT clear _midiChannelActive - keep MDX muted on this channel
           // MDX will stay muted until page reload
-          console.log(`MIDI active channels (kept): 0x${this._midiChannelActive.toString(16)}`);
         }
       } catch (e) {
         console.error("JSON parse error:", e);

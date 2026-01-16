@@ -1,3 +1,14 @@
 .DS_Store
 mdx/.vscode
 mdx/simple_mdx_player/.vscode
+
+# Node
+node_modules/
+dist/
+
+# IDE
+.vscode/
+*.swp
+
+# Build artifacts
+*.tsbuildinfo

@@ -68,7 +68,7 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
   const animationIdRef = useRef<number | null>(null);
 
   // MIDI
-  const { midiState } = useMIDI(synthNodeRef);
+  const { midiState, resetMidiState } = useMIDI(synthNodeRef);
 
   const updatePlaybackInfo = useCallback((data: ChannelData) => {
     const playTimeMs = (data.playTime * 1024) / 4000;
@@ -172,34 +172,20 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
     if (playerState === 'stopped') {
       synthNodeRef.current.port.postMessage('REPLAY');
 
-      // Restore mute state after REPLAY
-      for (let ch = 0; ch < 8; ch++) {
-        if (muteState.fm[ch]) {
-          synthNodeRef.current.port.postMessage(
-            JSON.stringify({
-              type: 'MUTE',
-              channelType: 'fm',
-              channel: ch,
-              muted: true,
-            })
-          );
-        }
-        if (muteState.pcm[ch]) {
-          synthNodeRef.current.port.postMessage(
-            JSON.stringify({
-              type: 'MUTE',
-              channelType: 'pcm',
-              channel: ch,
-              muted: true,
-            })
-          );
-        }
-      }
+      // Reset all mute states on STOP -> PLAY
+      setMuteState({
+        fm: Array(8).fill(false),
+        pcm: Array(8).fill(false),
+      });
+
+      // Reset MIDI state in synth and UI
+      synthNodeRef.current.port.postMessage(JSON.stringify({ type: 'RESET_MIDI' }));
+      resetMidiState();
     }
 
     audioContextRef.current.resume();
     setPlayerState('playing');
-  }, [playerState, muteState]);
+  }, [playerState, resetMidiState]);
 
   const pause = useCallback(() => {
     if (!audioContextRef.current) return;

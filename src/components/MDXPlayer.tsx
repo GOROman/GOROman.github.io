@@ -83,11 +83,17 @@ export function MDXPlayer() {
             </div>
           )}
 
-          {/* Mobile: Level Panel */}
+          {/* Mobile: Spectrum + Level side by side */}
           {isMobile && (
-            <div className="mmdsp-panel" id="level-panel">
-              <div className="mmdsp-panel-header">LEVEL</div>
-              <LevelMeter />
+            <div className="flex flex-row gap-[10px]">
+              <div className="mmdsp-panel flex-1" id="spectrum-panel">
+                <div className="mmdsp-panel-header">SPECTRUM</div>
+                <SpectrumAnalyzer />
+              </div>
+              <div className="mmdsp-panel flex-1" id="level-panel">
+                <div className="mmdsp-panel-header">LEVEL</div>
+                <LevelMeter />
+              </div>
             </div>
           )}
 

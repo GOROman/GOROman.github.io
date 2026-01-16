@@ -44,6 +44,7 @@ build: $(DEPS)
 		-o ./mdx.wasm.js \
 		--embed-file ./src/fs@ \
 		./src/synth_bind.cc $(DEPS)
+	cp ./mdx.wasm.js ../public/mdx.wasm.js
 
 #		--post-js ./export-es6.js \
 #			--preload-file ./src/fs \

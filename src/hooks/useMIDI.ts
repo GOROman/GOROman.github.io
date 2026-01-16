@@ -19,6 +19,7 @@ interface UseMIDIReturn {
   selectInput: (id: string) => void;
   isActive: boolean;
   midiState: MidiState;
+  resetMidiState: () => void;
 }
 
 export function useMIDI(synthNodeRef: React.RefObject<AudioWorkletNode | null>): UseMIDIReturn {
@@ -64,6 +65,7 @@ export function useMIDI(synthNodeRef: React.RefObject<AudioWorkletNode | null>):
 
     if (command === 0x90 && data2 > 0) {
       // Note On (velocity > 0)
+
       // Update local MIDI state immediately for display
       setMidiState((prev) => {
         const newKeyState = [...prev.midiKeyState];
@@ -194,6 +196,14 @@ export function useMIDI(synthNodeRef: React.RefObject<AudioWorkletNode | null>):
     }
   }, [inputs, selectedInputId, selectInput]);
 
+  // Reset MIDI state
+  const resetMidiState = useCallback(() => {
+    setMidiState({
+      midiChannelActive: 0,
+      midiKeyState: Array(8).fill(null).map(() => ({ keyOn: false, note: 0 })),
+    });
+  }, []);
+
   return {
     isSupported,
     inputs,
@@ -201,5 +211,6 @@ export function useMIDI(synthNodeRef: React.RefObject<AudioWorkletNode | null>):
     selectInput,
     isActive,
     midiState,
+    resetMidiState,
   };
 }

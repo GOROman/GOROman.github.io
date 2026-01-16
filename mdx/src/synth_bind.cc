@@ -305,7 +305,6 @@ public:
   virtual void setChannelMask(uint16_t mask) {
     // Channel Mask: bit 0-7 = FM ch 1-8, bit 8 = PCM
     // 1 = muted, 0 = playing
-    printf("setChannelMask(0x%04x)\n", mask);
     X68REG reg;
     reg.d0 = 0x0e;  // Function code for channel mask
     reg.d1 = mask;
@@ -341,13 +340,11 @@ public:
 
   // MIDIキーオン
   virtual void midiKeyOn(uint8_t ch, uint8_t midiNote) {
-    printf("midiKeyOn(ch=%d, note=%d)\n", ch, midiNote);
     if (ch >= 8) return;
 
     // MIDIノートをOPM KeyCodeに変換 (0-95の範囲にクランプ)
     uint8_t noteIndex = (midiNote < 96) ? midiNote : 95;
     uint8_t kc = MidiToOpmKeyCode[noteIndex];
-    printf("  -> KC=0x%02x\n", kc);
 
     // KC (Key Code) 設定 - レジスタ 0x28 + ch
     _iocs_opmset(&context, 0x28 + ch, kc);
@@ -358,7 +355,6 @@ public:
     // Key On - レジスタ 0x08
     // MDXの音色で使用しているスロットマスクを取得
     uint8_t slotMask = getSlotMask(ch);
-    printf("  -> Key On: reg 0x08 = 0x%02x (slotMask=0x%02x)\n", (slotMask << 3) | ch, slotMask);
     _iocs_opmset(&context, 0x08, (slotMask << 3) | ch);
   }
 

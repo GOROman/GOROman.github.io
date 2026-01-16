@@ -383,11 +383,17 @@ class LevelMeter {
       barLow: '#2060a0',
       barMid: '#40a0ff',
       barHigh: '#80ffff',
+      barLowMuted: '#102030',    // Muted colors (dimmed)
+      barMidMuted: '#183050',
+      barHighMuted: '#204060',
       peak: '#ffffff',
+      peakMuted: '#404060',
       text: '#6080c0',
       textDim: '#304080',
       grid: '#101830',
+      gridMuted: '#080818',
       label: '#5080c0',
+      labelMuted: '#303050',
       panL: '#80c0ff',
       panR: '#80c0ff',
       panOff: '#303050'
@@ -395,6 +401,16 @@ class LevelMeter {
 
     this.segmentHeight = 3;
     this.segmentGap = 2;
+
+    // Mute state for each FM channel (synced with KeyboardVisualizer)
+    this.muteState = new Array(8).fill(false);
+  }
+
+  // Set mute state (called from outside to sync with KeyboardVisualizer)
+  setMuteState(channel, muted) {
+    if (channel >= 0 && channel < 8) {
+      this.muteState[channel] = muted;
+    }
   }
 
   decay() {
@@ -536,10 +552,10 @@ class LevelMeter {
     // Calculate number of segments
     const totalSegments = Math.floor(maxBarHeight / (this.segmentHeight + this.segmentGap));
 
-    // Draw header labels
-    ctx.fillStyle = this.colors.label;
+    // Draw header labels (dimmed for muted channels)
     ctx.font = '9px monospace';
     for (let ch = 0; ch < 8; ch++) {
+      ctx.fillStyle = this.muteState[ch] ? this.colors.labelMuted : this.colors.label;
       ctx.fillText(`${ch + 1}`, startX + ch * (barWidth + barGap) + barWidth / 2 - 3, 11);
     }
 
@@ -547,19 +563,21 @@ class LevelMeter {
     for (let ch = 0; ch < 8; ch++) {
       const x = startX + ch * (barWidth + barGap);
       const fmCh = channelData.fm[ch];
+      const isMuted = this.muteState[ch];
 
       // Check if MIDI is active on this channel
       const isMidiActive = (midiChannelActive & (1 << ch)) !== 0;
       const midiState = midiKeyState[ch];
 
-      // Get level - MIDI takes priority
+      // Get level - MIDI takes priority (MIDI shows even when muted)
       let level = 0;
       let isMidi = false;
       if (isMidiActive && midiState && midiState.keyOn) {
-        // MIDI key is on - full level
+        // MIDI key is on - full level (even when muted)
         level = 255;
         isMidi = true;
-      } else if (fmCh) {
+      } else if (fmCh && !isMuted) {
+        // MDX level (only when not muted)
         level = this.normalizeVolume(fmCh.volume);
         if (!fmCh.keyOn) {
           level = 0;
@@ -583,8 +601,8 @@ class LevelMeter {
         this.peakHold[ch] = Math.max(0, this.peakHold[ch] - 4);
       }
 
-      // Draw background grid (empty segments)
-      ctx.fillStyle = this.colors.grid;
+      // Draw background grid (dimmed for muted channels)
+      ctx.fillStyle = isMuted ? this.colors.gridMuted : this.colors.grid;
       for (let s = 0; s < totalSegments; s++) {
         const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
         ctx.fillRect(x, segY, barWidth, this.segmentHeight);
@@ -596,15 +614,24 @@ class LevelMeter {
         const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
         const ratio = s / totalSegments;
 
-        // Color based on level (yellow for MIDI)
+        // Color based on level (yellow for MIDI, dimmed for muted)
         if (isMidi) {
-          // MIDI: yellow gradient
+          // MIDI: yellow gradient (even when muted)
           if (ratio > 0.8) {
             ctx.fillStyle = '#ffff80';
           } else if (ratio > 0.5) {
             ctx.fillStyle = '#ffff00';
           } else {
             ctx.fillStyle = '#c0c000';
+          }
+        } else if (isMuted) {
+          // Muted: dimmed blue gradient
+          if (ratio > 0.8) {
+            ctx.fillStyle = this.colors.barHighMuted;
+          } else if (ratio > 0.5) {
+            ctx.fillStyle = this.colors.barMidMuted;
+          } else {
+            ctx.fillStyle = this.colors.barLowMuted;
           }
         } else {
           // MDX: blue gradient
@@ -623,7 +650,7 @@ class LevelMeter {
       if (this.peakHold[ch] > 0) {
         const peakSegment = Math.floor((this.peakHold[ch] / 255) * totalSegments);
         const peakY = barTop + maxBarHeight - peakSegment * (this.segmentHeight + this.segmentGap);
-        ctx.fillStyle = isMidi ? '#ffff80' : this.colors.peak;
+        ctx.fillStyle = isMidi ? '#ffff80' : (isMuted ? this.colors.peakMuted : this.colors.peak);
         ctx.fillRect(x, peakY, barWidth, this.segmentHeight);
       }
     }
@@ -1345,6 +1372,11 @@ class MDXPlayer {
           const muted = this._keyboardVis.toggleMute(channel.type, channel.channel);
           console.log(`${channel.type.toUpperCase()}${channel.channel + 1} ${muted ? 'MUTED' : 'UNMUTED'}`);
 
+          // Sync mute state to LevelMeter (FM only)
+          if (this._levelMeter && channel.type === 'fm') {
+            this._levelMeter.setMuteState(channel.channel, muted);
+          }
+
           // Send mute state to synth if needed
           if (this._synthNode) {
             this._synthNode.port.postMessage(JSON.stringify({
@@ -1384,6 +1416,11 @@ class MDXPlayer {
         if (this._keyboardVis) {
           const muted = this._keyboardVis.toggleMute('fm', channel);
           console.log(`FM${channel + 1} ${muted ? 'MUTED' : 'UNMUTED'}`);
+
+          // Sync mute state to LevelMeter
+          if (this._levelMeter) {
+            this._levelMeter.setMuteState(channel, muted);
+          }
 
           // Send mute state to synth
           if (this._synthNode) {
@@ -1480,7 +1517,13 @@ class MDXPlayer {
     this._synthNode.port.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        if (data.type === "CHANNEL") {
+
+        // Handle TITLE message (sent immediately after loadMDX)
+        if (data.type === "TITLE") {
+          this._updateTitle(data.titleBytes);
+        }
+        // Handle CHANNEL message (sent during playback)
+        else if (data.type === "CHANNEL") {
           // Merge local MIDI state from MIDIManager for immediate response
           // (don't wait for worklet roundtrip)
           if (this._midiManager) {
@@ -1494,22 +1537,11 @@ class MDXPlayer {
           if (this._levelMeter) this._levelMeter.render(data, data.opmRegs);
           if (this._opmRegisterVis) this._opmRegisterVis.render(data.opmRegs);
 
-          // Update time display
-          this._updateTimeDisplay(data.playTime, data.loopCount);
+          // Update time/loop/tempo display
+          this._updateTimeDisplay(data.playTime, data.loopCount, data.tempo);
 
           // Update title if available (Shift-JIS decode)
-          if (data.titleBytes && data.titleBytes.length > 0) {
-            try {
-              const decoder = new TextDecoder('shift-jis');
-              const title = decoder.decode(new Uint8Array(data.titleBytes));
-              const titleEl = document.getElementById("title");
-              if (titleEl && titleEl.textContent !== title) {
-                titleEl.textContent = title;
-              }
-            } catch (e) {
-              console.log("Title decode error:", e);
-            }
-          }
+          this._updateTitle(data.titleBytes);
         }
       } catch (e) {
         // OPM register dump (legacy)
@@ -1520,6 +1552,9 @@ class MDXPlayer {
 
     // Start render loop
     this._startRenderLoop();
+
+    // Request initial title (for embedded default MDX)
+    this._synthNode.port.postMessage("GET_TITLE");
 
     if (!this._toggleState) this._context.suspend();
   }
@@ -1541,9 +1576,10 @@ class MDXPlayer {
     render();
   }
 
-  _updateTimeDisplay(playTime, loopCount) {
+  _updateTimeDisplay(playTime, loopCount, tempo) {
     const timeDisplay = document.getElementById('time-display');
     const loopDisplay = document.getElementById('loop-display');
+    const tempoDisplay = document.getElementById('tempo-display');
 
     if (timeDisplay) {
       // PLAYTIME to milliseconds: PLAYTIME * 1024 / 4000
@@ -1557,6 +1593,24 @@ class MDXPlayer {
 
     if (loopDisplay) {
       loopDisplay.textContent = String(loopCount || 0).padStart(2, '0');
+    }
+
+    if (tempoDisplay) {
+      tempoDisplay.textContent = String(tempo || 0).padStart(3, '0');
+    }
+  }
+
+  _updateTitle(titleBytes) {
+    if (!titleBytes || titleBytes.length === 0) return;
+    try {
+      const decoder = new TextDecoder('shift-jis');
+      const title = decoder.decode(new Uint8Array(titleBytes));
+      const titleEl = document.getElementById("title");
+      if (titleEl && titleEl.textContent !== title) {
+        titleEl.textContent = title;
+      }
+    } catch (e) {
+      console.log("Title decode error:", e);
     }
   }
 

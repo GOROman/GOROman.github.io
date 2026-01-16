@@ -359,6 +359,7 @@ body {
 #now-playing .title-text,
 #title {
   color: #a0a0d0;
+  font-family: 'MS Gothic', 'Osaka-Mono', 'Source Han Code JP', 'Noto Sans Mono CJK JP', 'Hiragino Kaku Gothic ProN', monospace;
   font-size: 12px;
   text-shadow: 0 0 5px rgba(160, 160, 208, 0.3);
   overflow: hidden;

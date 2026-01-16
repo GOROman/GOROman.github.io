@@ -254,6 +254,11 @@ public:
     return global->L002246;
   }
 
+  virtual uint8_t getTempo() {
+    const MXWORK_GLOBAL *global = (const MXWORK_GLOBAL *)MXDRV_GetWork(&context, MXDRV_WORK_GLOBAL);
+    return global->L001e0c;  // @t tempo value
+  }
+
   virtual void stop() {
     MXDRV_Stop(&context);
   }
@@ -570,6 +575,7 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .function("getPcmKeyOn", &SynthesizerWrapper::getPcmKeyOn)
       .function("getPlayTime", &SynthesizerWrapper::getPlayTime)
       .function("getLoopCount", &SynthesizerWrapper::getLoopCount)
+      .function("getTempo", &SynthesizerWrapper::getTempo)
       .function("stop", &SynthesizerWrapper::stop)
       .function("replay", &SynthesizerWrapper::replay)
       .function("fadeout", &SynthesizerWrapper::fadeout)

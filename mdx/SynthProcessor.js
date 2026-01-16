@@ -230,6 +230,7 @@ class SynthProcessor extends AudioWorkletProcessor {
         opmRegs: [],
         playTime: this._synth.getPlayTime(),
         loopCount: this._synth.getLoopCount(),
+        tempo: this._synth.getTempo(),
         titleBytes: Array.from(this._synth.getTitleBytes()),
         // MIDI state
         midiChannelActive: this._midiChannelActive,
@@ -255,6 +256,14 @@ class SynthProcessor extends AudioWorkletProcessor {
         channelData.opmRegs.push(this._synth.getReg(i));
       }
       this.port.postMessage(JSON.stringify(channelData));
+      return;
+  } else if ( data == "GET_TITLE" ) {
+      // Return title immediately
+      const titleData = {
+        type: "TITLE",
+        titleBytes: Array.from(this._synth.getTitleBytes())
+      };
+      this.port.postMessage(JSON.stringify(titleData));
       return;
   } else if ( data == "STOP" ) {
       this._synth.stop();
@@ -343,6 +352,12 @@ class SynthProcessor extends AudioWorkletProcessor {
       Module.HEAPU8.set(a1, pointer);
       if ( filetype == "MDX" ) {
         this._synth.loadMDX(pointer, data.byteLength);
+        // Send title immediately after loading (before play)
+        const titleData = {
+          type: "TITLE",
+          titleBytes: Array.from(this._synth.getTitleBytes())
+        };
+        this.port.postMessage(JSON.stringify(titleData));
       }
       if ( filetype == "PDX" ) {
         const AsciiStrToMem = function(p, s) {

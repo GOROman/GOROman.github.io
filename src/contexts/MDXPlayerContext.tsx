@@ -104,7 +104,7 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
     });
     audioContextRef.current = context;
 
-    await context.audioWorklet.addModule('./mdx.wasm.js');
+    await context.audioWorklet.addModule(`${import.meta.env.BASE_URL}mdx.wasm.js`);
     const synthNode = new AudioWorkletNode(context, 'wasm-synth', {
       outputChannelCount: [2],
     });

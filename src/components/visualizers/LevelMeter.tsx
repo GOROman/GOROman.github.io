@@ -32,7 +32,7 @@ const SEGMENT_GAP = 2;
 
 export function LevelMeter() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { channelData, muteState } = useMDXPlayer();
+  const { channelData, muteState, midiState } = useMDXPlayer();
 
   // Level state refs for decay animation
   const keyOnLevelRef = useRef<number[]>(Array(8).fill(0));
@@ -73,7 +73,14 @@ export function LevelMeter() {
     // Header labels
     ctx.font = "9px 'Share Tech Mono', monospace";
     for (let ch = 0; ch < 8; ch++) {
-      ctx.fillStyle = muteState.fm[ch] ? COLORS.labelMuted : COLORS.label;
+      const isMidiActive = (midiState.midiChannelActive & (1 << ch)) !== 0;
+      if (isMidiActive) {
+        ctx.fillStyle = '#ffff00'; // Yellow for MIDI
+      } else if (muteState.fm[ch]) {
+        ctx.fillStyle = COLORS.labelMuted;
+      } else {
+        ctx.fillStyle = COLORS.label;
+      }
       ctx.fillText(`${ch + 1}`, startX + ch * (barWidth + barGap) + barWidth / 2 - 3, 11);
     }
 
@@ -82,11 +89,22 @@ export function LevelMeter() {
       const x = startX + ch * (barWidth + barGap);
       const isMuted = muteState.fm[ch];
 
+      // Check if MIDI is active on this channel
+      const isMidiActive = (midiState.midiChannelActive & (1 << ch)) !== 0;
+      const midiKeyState = midiState.midiKeyState[ch];
+
       let volume = 0;
       let currentKeyOn = false;
       let logicalSumOfKeyOn = false;
+      let isMidi = false;
 
-      if (channelData?.fm[ch] && !isMuted) {
+      if (isMidiActive && midiKeyState && midiKeyState.keyOn) {
+        // MIDI key is on - full level (even when muted)
+        volume = 255;
+        isMidi = true;
+        logicalSumOfKeyOn = true;
+        currentKeyOn = true;
+      } else if (channelData?.fm[ch] && !isMuted) {
         const fmCh = channelData.fm[ch];
         volume = normalizeVolume(fmCh.volume);
         currentKeyOn = fmCh.keyOn;
@@ -115,8 +133,11 @@ export function LevelMeter() {
       for (let s = 0; s < keyOffSegments; s++) {
         const segY = barTop + maxBarHeight - (s + 1) * (SEGMENT_HEIGHT + SEGMENT_GAP);
         const ratio = s / totalSegments;
-        if (isMuted) {
+        if (isMuted && !isMidi) {
           ctx.fillStyle = ratio > 0.8 ? COLORS.barHighMuted : ratio > 0.5 ? COLORS.barMidMuted : COLORS.barLowMuted;
+        } else if (isMidi) {
+          // Yellow for MIDI (dimmed)
+          ctx.fillStyle = ratio > 0.8 ? '#606000' : ratio > 0.5 ? '#505000' : '#404000';
         } else {
           // Dimmed version for keyOff layer
           ctx.fillStyle = ratio > 0.8 ? '#406080' : ratio > 0.5 ? '#305060' : '#203040';
@@ -129,8 +150,11 @@ export function LevelMeter() {
       for (let s = 0; s < keyOnSegments; s++) {
         const segY = barTop + maxBarHeight - (s + 1) * (SEGMENT_HEIGHT + SEGMENT_GAP);
         const ratio = s / totalSegments;
-        if (isMuted) {
+        if (isMuted && !isMidi) {
           ctx.fillStyle = ratio > 0.8 ? COLORS.barHighMuted : ratio > 0.5 ? COLORS.barMidMuted : COLORS.barLowMuted;
+        } else if (isMidi) {
+          // Yellow for MIDI
+          ctx.fillStyle = ratio > 0.8 ? COLORS.barMidiHigh : ratio > 0.5 ? COLORS.barMidiMid : COLORS.barMidiLow;
         } else {
           ctx.fillStyle = ratio > 0.8 ? COLORS.barHigh : ratio > 0.5 ? COLORS.barMid : COLORS.barLow;
         }
@@ -184,7 +208,7 @@ export function LevelMeter() {
       ctx.fillText('L', x + 3, panY + 8);
       ctx.fillText('R', x + indicatorWidth + 5, panY + 8);
     }
-  }, [channelData, muteState, normalizeVolume]);
+  }, [channelData, muteState, midiState, normalizeVolume]);
 
   useEffect(() => {
     render();

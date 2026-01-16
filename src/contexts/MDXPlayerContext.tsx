@@ -12,8 +12,15 @@ import type {
   ChannelData,
   MuteState,
   PlaybackInfo,
+  MidiKeyState,
 } from '@/lib/types';
 import { SAMPLE_RATE } from '@/lib/constants';
+import { useMIDI } from '@/hooks/useMIDI';
+
+interface MidiState {
+  midiChannelActive: number;
+  midiKeyState: MidiKeyState[];
+}
 
 interface MDXPlayerContextValue {
   // State
@@ -22,6 +29,7 @@ interface MDXPlayerContextValue {
   muteState: MuteState;
   playbackInfo: PlaybackInfo;
   isReady: boolean;
+  midiState: MidiState;
 
   // Actions
   initialize: () => Promise<void>;
@@ -58,6 +66,9 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
   const audioContextRef = useRef<AudioContext | null>(null);
   const synthNodeRef = useRef<AudioWorkletNode | null>(null);
   const animationIdRef = useRef<number | null>(null);
+
+  // MIDI
+  const { midiState } = useMIDI(synthNodeRef);
 
   const updatePlaybackInfo = useCallback((data: ChannelData) => {
     const playTimeMs = (data.playTime * 1024) / 4000;
@@ -160,11 +171,35 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
 
     if (playerState === 'stopped') {
       synthNodeRef.current.port.postMessage('REPLAY');
+
+      // Restore mute state after REPLAY
+      for (let ch = 0; ch < 8; ch++) {
+        if (muteState.fm[ch]) {
+          synthNodeRef.current.port.postMessage(
+            JSON.stringify({
+              type: 'MUTE',
+              channelType: 'fm',
+              channel: ch,
+              muted: true,
+            })
+          );
+        }
+        if (muteState.pcm[ch]) {
+          synthNodeRef.current.port.postMessage(
+            JSON.stringify({
+              type: 'MUTE',
+              channelType: 'pcm',
+              channel: ch,
+              muted: true,
+            })
+          );
+        }
+      }
     }
 
     audioContextRef.current.resume();
     setPlayerState('playing');
-  }, [playerState]);
+  }, [playerState, muteState]);
 
   const pause = useCallback(() => {
     if (!audioContextRef.current) return;
@@ -277,6 +312,7 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
         muteState,
         playbackInfo,
         isReady,
+        midiState,
         initialize,
         play,
         pause,

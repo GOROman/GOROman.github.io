@@ -262,6 +262,105 @@ class LevelMeter {
     this.segmentGap = 2;
   }
 
+  decay() {
+    // Decay all levels
+    for (let i = 0; i < this.currentLevel.length; i++) {
+      this.currentLevel[i] = Math.max(0, this.currentLevel[i] * 0.85 - 5);
+      if (this.peakDecay[i] > 0) {
+        this.peakDecay[i]--;
+      } else {
+        this.peakHold[i] = Math.max(0, this.peakHold[i] * 0.9 - 3);
+      }
+    }
+    // Re-render with decayed values
+    this.renderDecay();
+  }
+
+  hasActiveLevel() {
+    for (let i = 0; i < this.currentLevel.length; i++) {
+      if (this.currentLevel[i] > 0 || this.peakHold[i] > 0) return true;
+    }
+    return false;
+  }
+
+  renderDecay() {
+    const ctx = this.ctx;
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+
+    // Clear
+    ctx.fillStyle = this.colors.bg;
+    ctx.fillRect(0, 0, width, height);
+
+    const headerHeight = 15;
+    const footerHeight = 28;
+    const barWidth = 28;
+    const barGap = 10;
+    const startX = 20;
+    const maxBarHeight = height - headerHeight - footerHeight;
+    const barTop = headerHeight;
+    const totalSegments = Math.floor(maxBarHeight / (this.segmentHeight + this.segmentGap));
+
+    // Draw header labels
+    ctx.fillStyle = this.colors.label;
+    ctx.font = '9px monospace';
+    for (let ch = 0; ch < 8; ch++) {
+      ctx.fillText(`${ch + 1}`, startX + ch * (barWidth + barGap) + barWidth / 2 - 3, 11);
+    }
+
+    // Draw each channel meter
+    for (let ch = 0; ch < 8; ch++) {
+      const x = startX + ch * (barWidth + barGap);
+
+      // Draw background grid
+      ctx.fillStyle = this.colors.grid;
+      for (let s = 0; s < totalSegments; s++) {
+        const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
+        ctx.fillRect(x, segY, barWidth, this.segmentHeight);
+      }
+
+      // Draw active segments
+      const activeSegments = Math.floor((this.currentLevel[ch] / 255) * totalSegments);
+      for (let s = 0; s < activeSegments; s++) {
+        const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
+        const ratio = s / totalSegments;
+        if (ratio > 0.8) {
+          ctx.fillStyle = this.colors.barHigh;
+        } else if (ratio > 0.5) {
+          ctx.fillStyle = this.colors.barMid;
+        } else {
+          ctx.fillStyle = this.colors.barLow;
+        }
+        ctx.fillRect(x, segY, barWidth, this.segmentHeight);
+      }
+
+      // Draw peak
+      if (this.peakHold[ch] > 0) {
+        const peakSegment = Math.floor((this.peakHold[ch] / 255) * totalSegments);
+        const peakY = barTop + maxBarHeight - peakSegment * (this.segmentHeight + this.segmentGap);
+        ctx.fillStyle = this.colors.peak;
+        ctx.fillRect(x, peakY, barWidth, this.segmentHeight);
+      }
+    }
+
+    // Draw PANPOT footer (dimmed)
+    const panY = height - footerHeight + 5;
+    ctx.fillStyle = this.colors.textDim;
+    ctx.font = '8px monospace';
+    ctx.fillText('PAN', 2, panY + 6);
+    for (let ch = 0; ch < 8; ch++) {
+      const x = startX + ch * (barWidth + barGap);
+      const indicatorWidth = barWidth / 2 - 1;
+      ctx.fillStyle = this.colors.panOff;
+      ctx.fillRect(x, panY, indicatorWidth, 10);
+      ctx.fillRect(x + indicatorWidth + 2, panY, indicatorWidth, 10);
+      ctx.fillStyle = this.colors.textDim;
+      ctx.font = '7px monospace';
+      ctx.fillText('L', x + 3, panY + 8);
+      ctx.fillText('R', x + indicatorWidth + 5, panY + 8);
+    }
+  }
+
   normalizeVolume(volume) {
     if (volume & 0x80) {
       return (0x7F - (volume & 0x7F)) * 2;
@@ -522,9 +621,72 @@ class SpectrumAnalyzer {
 
     sourceNode.connect(this.analyser);
 
-    // Initialize peak hold
+    // Initialize peak hold and decay values
     this.peakHold = new Array(64).fill(0);
     this.peakDecay = new Array(64).fill(0);
+    this.decayValues = new Array(64).fill(0);
+  }
+
+  hasActiveLevel() {
+    if (!this.decayValues || !this.peakHold) return false;
+    for (let i = 0; i < this.decayValues.length; i++) {
+      if (this.decayValues[i] > 0 || this.peakHold[i] > 0) return true;
+    }
+    return false;
+  }
+
+  decay() {
+    if (!this.decayValues) return;
+
+    const ctx = this.ctx;
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+
+    // Clear
+    ctx.fillStyle = this.colors.bg;
+    ctx.fillRect(0, 0, width, height);
+
+    const barCount = 48;
+    const barWidth = 4;
+    const barGap = 2;
+    const startX = (width - barCount * (barWidth + barGap)) / 2;
+    const maxHeight = height - 10;
+
+    for (let i = 0; i < barCount; i++) {
+      // Decay the values
+      this.decayValues[i] = Math.max(0, this.decayValues[i] * 0.85 - 3);
+
+      // Force decay peak hold immediately on stop
+      this.peakDecay[i] = 0;
+      this.peakHold[i] = Math.max(0, this.peakHold[i] * 0.9 - 4);
+
+      const barHeight = (this.decayValues[i] / 255) * maxHeight;
+      const x = startX + i * (barWidth + barGap);
+
+      // Draw segmented bar
+      if (barHeight > 0) {
+        const segments = Math.ceil(barHeight / 4);
+        for (let s = 0; s < segments; s++) {
+          const segY = height - 5 - (s + 1) * 4;
+          const ratio = s / (maxHeight / 4);
+          if (ratio > 0.75) {
+            ctx.fillStyle = this.colors.barHigh;
+          } else if (ratio > 0.4) {
+            ctx.fillStyle = this.colors.barMid;
+          } else {
+            ctx.fillStyle = this.colors.barLow;
+          }
+          ctx.fillRect(x, segY, barWidth, 3);
+        }
+      }
+
+      // Draw peak
+      if (this.peakHold[i] > 0) {
+        const peakY = height - 5 - (this.peakHold[i] / 255) * maxHeight;
+        ctx.fillStyle = this.colors.peak;
+        ctx.fillRect(x, peakY - 1, barWidth, 2);
+      }
+    }
   }
 
   render() {
@@ -571,6 +733,11 @@ class SpectrumAnalyzer {
         count++;
       }
       const value = count > 0 ? sum / count : 0;
+
+      // Store for decay
+      if (this.decayValues) {
+        this.decayValues[i] = value;
+      }
 
       // Peak hold
       if (value > this.peakHold[i]) {
@@ -855,9 +1022,17 @@ class MDXPlayer {
 
   pause() {
     if (!this._context) return;
-    this._context.suspend();
-    this._toggleState = false;
-    this._toggleButton.classList.remove('active');
+
+    // Toggle pause/resume
+    if (this._context.state === 'running') {
+      this._context.suspend();
+      this._toggleState = false;
+      this._toggleButton.classList.remove('active');
+    } else if (this._context.state === 'suspended' && !this._isStopped) {
+      this._context.resume();
+      this._toggleState = true;
+      this._toggleButton.classList.add('active');
+    }
   }
 
   stop() {
@@ -868,6 +1043,34 @@ class MDXPlayer {
     this._toggleState = false;
     this._toggleButton.classList.remove('active');
     console.log("isStopped set to true");
+
+    // Start decay animation for visualizers
+    this._startDecayAnimation();
+  }
+
+  _startDecayAnimation() {
+    const decayLoop = () => {
+      if (!this._isStopped) return;
+
+      // Decay level meter
+      if (this._levelMeter) {
+        this._levelMeter.decay();
+      }
+
+      // Decay spectrum analyzer
+      if (this._spectrumAnalyzer) {
+        this._spectrumAnalyzer.decay();
+      }
+
+      // Continue until fully decayed
+      const levelActive = this._levelMeter && this._levelMeter.hasActiveLevel();
+      const spectrumActive = this._spectrumAnalyzer && this._spectrumAnalyzer.hasActiveLevel();
+
+      if (levelActive || spectrumActive) {
+        requestAnimationFrame(decayLoop);
+      }
+    };
+    requestAnimationFrame(decayLoop);
   }
 
   fadeout() {

@@ -300,6 +300,16 @@ public:
   // MIDIノート → OPM KeyCode 変換テーブル (8オクターブ×12音)
   static const uint8_t MidiToOpmKeyCode[96];
 
+  // 各チャンネルのスロットマスクを取得
+  // OPM Key On register 0x08: bits 3-6 = slot enable (4 bits)
+  // Key Onでは全オペレーターを同時にトリガーする必要がある
+  // S0019はキャリアスロット（TL調整用）であり、Key On用ではない
+  virtual uint8_t getSlotMask(uint8_t ch) {
+    (void)ch; // unused
+    // 常に全スロット (0x0F) を使用
+    return 0x0F;
+  }
+
   // MIDIキーオン
   virtual void midiKeyOn(uint8_t ch, uint8_t midiNote) {
     printf("midiKeyOn(ch=%d, note=%d)\n", ch, midiNote);
@@ -317,9 +327,10 @@ public:
     _iocs_opmset(&context, 0x30 + ch, 0);
 
     // Key On - レジスタ 0x08
-    // 全スロットオン: 0x78 (OP1-4全て)
-    printf("  -> Key On: reg 0x08 = 0x%02x\n", 0x78 | ch);
-    _iocs_opmset(&context, 0x08, 0x78 | ch);
+    // MDXの音色で使用しているスロットマスクを取得
+    uint8_t slotMask = getSlotMask(ch);
+    printf("  -> Key On: reg 0x08 = 0x%02x (slotMask=0x%02x)\n", (slotMask << 3) | ch, slotMask);
+    _iocs_opmset(&context, 0x08, (slotMask << 3) | ch);
   }
 
   // MIDIキーオフ

@@ -22,11 +22,17 @@ class KeyboardVisualizer {
       blackKey: '#101030',     // Black keys (very dark)
       keyBorder: '#404080',    // Key border
       keyOn: '#e0e0ff',        // Key-on white/light blue
+      keyOnMidi: '#ffff80',    // MIDI key-on yellow
       text: '#6080c0',         // Label text
       textDim: '#304080',      // Dim text
       textBright: '#80a0ff',   // Bright text
+      textMidi: '#ffff00',     // MIDI label yellow
       regText: '#5070b0'       // Register text
     };
+
+    // MIDI state (received from worklet)
+    this.midiChannelActive = 0;
+    this.midiKeyState = new Array(8).fill(null).map(() => ({ keyOn: false, note: 0 }));
 
     // OPM register cache for display
     this.opmRegs = new Array(256).fill(0);
@@ -94,7 +100,7 @@ class KeyboardVisualizer {
   }
 
   // Draw piano keyboard (white and black keys)
-  drawKeyboard(x, y, width, height, activeKey, volume, isPcm = false, isMuted = false) {
+  drawKeyboard(x, y, width, height, activeKey, volume, isPcm = false, isMuted = false, isMidi = false) {
     const ctx = this.ctx;
     const octaveWidth = width / this.numOctaves;
     const whiteKeyWidth = octaveWidth / 7; // 7 white keys per octave
@@ -121,7 +127,9 @@ class KeyboardVisualizer {
 
         if (isActive) {
           const brightness = Math.min(255, 180 + Math.floor((volume / 255) * 75));
-          if (isPcm) {
+          if (isMidi) {
+            ctx.fillStyle = `rgb(255, 255, ${brightness})`; // Yellow for MIDI
+          } else if (isPcm) {
             ctx.fillStyle = `rgb(${brightness}, 255, ${brightness})`; // Green for PCM
           } else {
             ctx.fillStyle = `rgb(${brightness}, ${brightness}, 255)`; // Blue for FM
@@ -159,7 +167,9 @@ class KeyboardVisualizer {
 
         if (isActive) {
           const brightness = Math.min(255, 180 + Math.floor((volume / 255) * 75));
-          if (isPcm) {
+          if (isMidi) {
+            ctx.fillStyle = `rgb(255, 255, ${brightness})`; // Yellow for MIDI
+          } else if (isPcm) {
             ctx.fillStyle = `rgb(${brightness}, 255, ${brightness})`; // Green for PCM
           } else {
             ctx.fillStyle = `rgb(${brightness}, ${brightness}, 255)`; // Blue for FM
@@ -183,6 +193,14 @@ class KeyboardVisualizer {
       this.opmRegs = opmRegs;
     }
 
+    // Update MIDI state if provided
+    if (channelData && channelData.midiChannelActive !== undefined) {
+      this.midiChannelActive = channelData.midiChannelActive;
+    }
+    if (channelData && channelData.midiKeyState) {
+      this.midiKeyState = channelData.midiKeyState;
+    }
+
     // Clear
     ctx.fillStyle = this.colors.bg;
     ctx.fillRect(0, 0, width, height);
@@ -200,17 +218,35 @@ class KeyboardVisualizer {
       const kbHeight = this.channelHeight - 2;
       const isMuted = this.muteState.fm[ch];
 
-      // Channel label (dimmed if muted, clickable style)
-      ctx.fillStyle = isMuted ? '#303050' : this.colors.textBright;
+      // Check if this channel is MIDI-controlled
+      const isMidiActive = (this.midiChannelActive & (1 << ch)) !== 0;
+      const midiState = this.midiKeyState[ch];
+
+      // Channel label (yellow if MIDI, dimmed if muted)
+      if (isMidiActive) {
+        ctx.fillStyle = this.colors.textMidi; // Yellow for MIDI
+      } else if (isMuted) {
+        ctx.fillStyle = '#303050';
+      } else {
+        ctx.fillStyle = this.colors.textBright;
+      }
       ctx.font = '8px monospace';
       ctx.fillText(`FM${ch + 1}`, 2, y + 12);
 
-      // Get channel data
+      // Get channel data - MIDI takes priority
       const fmCh = channelData.fm[ch];
       let activeKey = -1;
       let vol = 0;
+      let isMidi = false;
 
-      if (fmCh && fmCh.keyOn) {
+      if (isMidiActive && midiState && midiState.keyOn) {
+        // MIDI is active and key is on - use MIDI note
+        // Clamp to keyboard range (0-95 for 8 octaves)
+        activeKey = Math.max(0, Math.min(95, midiState.note));
+        vol = 255; // Full volume for MIDI (velocity ignored)
+        isMidi = true;
+      } else if (!isMidiActive && fmCh && fmCh.keyOn) {
+        // MDX is playing and MIDI is not active
         activeKey = this.noteToKeyIndex(fmCh.note);
         vol = fmCh.volume;
         if (vol & 0x80) {
@@ -220,32 +256,51 @@ class KeyboardVisualizer {
         }
       }
 
-      // Draw keyboard with active key (pass mute state)
-      this.drawKeyboard(labelWidth, y + 1, kbWidth, kbHeight, activeKey, vol, false, isMuted);
+      // Draw keyboard with active key (pass mute state and MIDI flag)
+      this.drawKeyboard(labelWidth, y + 1, kbWidth, kbHeight, activeKey, vol, false, isMuted, isMidi);
 
       // Get OPM registers for this channel
       const kc = this.opmRegs[0x28 + ch] || 0;
       const kf = this.opmRegs[0x30 + ch] || 0;
       const panFlCon = this.opmRegs[0x20 + ch] || 0;
 
-      const kcOct = (kc >> 4) & 0x07;
-      const kcNote = kc & 0x0F;
       const noteNames = ['C-', 'C#', 'D-', 'D#', 'E-', 'F-', 'F#', 'G-', 'G#', 'A-', 'A#', 'B-'];
-      const noteName = noteNames[kcNote % 12] || '??';
+
+      let noteName, noteOct, volStr, displayKc;
+
+      if (isMidiActive && midiState) {
+        // MIDI mode - show MIDI note info
+        const midiNote = midiState.note;
+        noteOct = Math.floor(midiNote / 12) - 1; // MIDI octave (C4 = note 60 = oct 4)
+        noteName = noteNames[midiNote % 12] || '??';
+        volStr = midiState.keyOn ? '255' : '  0';
+        displayKc = kc; // Still show current OPM KC
+      } else {
+        // MDX mode - show OPM register info
+        const kcOct = (kc >> 4) & 0x07;
+        const kcNote = kc & 0x0F;
+        // OPM note mapping: 0,1,2,4,5,6,8,9,10,12,13,14 -> C,C#,D,D#,E,F,F#,G,G#,A,A#,B
+        const opmNoteMap = [0, 1, 2, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 10, 10, 11];
+        noteName = noteNames[opmNoteMap[kcNote] || 0] || '??';
+        noteOct = kcOct;
+        volStr = fmCh ? fmCh.volume.toString().padStart(3) : '  0';
+        displayKc = kc;
+      }
 
       const panR = (panFlCon >> 7) & 1;
       const panL = (panFlCon >> 6) & 1;
       const panStr = (panL ? 'L' : '-') + (panR ? 'R' : '-');
 
-      // Info display (dimmed if muted)
+      // Info display (yellow if MIDI, dimmed if muted)
       if (isMuted) {
         ctx.fillStyle = '#303050';
+      } else if (isMidiActive) {
+        ctx.fillStyle = midiState && midiState.keyOn ? '#ffff80' : '#808000'; // Yellow for MIDI
       } else {
         ctx.fillStyle = fmCh && fmCh.keyOn ? '#e0e0ff' : this.colors.text;
       }
       ctx.font = '8px monospace';
-      const volStr = fmCh ? fmCh.volume.toString().padStart(3) : '  0';
-      ctx.fillText(`${noteName}${kcOct} V${volStr} ${panStr} KC${kc.toString(16).toUpperCase().padStart(2,'0')}`, infoX, y + 12);
+      ctx.fillText(`${noteName}${noteOct} V${volStr} ${panStr} KC${displayKc.toString(16).toUpperCase().padStart(2,'0')}`, infoX, y + 12);
     }
 
     // Draw PCM/ADPCM channels
@@ -449,6 +504,12 @@ class LevelMeter {
       this.opmRegs = opmRegs;
     }
 
+    // Update MIDI state if provided
+    const midiChannelActive = channelData && channelData.midiChannelActive !== undefined
+      ? channelData.midiChannelActive : 0;
+    const midiKeyState = channelData && channelData.midiKeyState
+      ? channelData.midiKeyState : [];
+
     // Clear
     ctx.fillStyle = this.colors.bg;
     ctx.fillRect(0, 0, width, height);
@@ -478,9 +539,18 @@ class LevelMeter {
       const x = startX + ch * (barWidth + barGap);
       const fmCh = channelData.fm[ch];
 
-      // Get level
+      // Check if MIDI is active on this channel
+      const isMidiActive = (midiChannelActive & (1 << ch)) !== 0;
+      const midiState = midiKeyState[ch];
+
+      // Get level - MIDI takes priority
       let level = 0;
-      if (fmCh) {
+      let isMidi = false;
+      if (isMidiActive && midiState && midiState.keyOn) {
+        // MIDI key is on - full level
+        level = 255;
+        isMidi = true;
+      } else if (fmCh) {
         level = this.normalizeVolume(fmCh.volume);
         if (!fmCh.keyOn) {
           level = 0;
@@ -517,13 +587,25 @@ class LevelMeter {
         const segY = barTop + maxBarHeight - (s + 1) * (this.segmentHeight + this.segmentGap);
         const ratio = s / totalSegments;
 
-        // Color based on level
-        if (ratio > 0.8) {
-          ctx.fillStyle = this.colors.barHigh;
-        } else if (ratio > 0.5) {
-          ctx.fillStyle = this.colors.barMid;
+        // Color based on level (yellow for MIDI)
+        if (isMidi) {
+          // MIDI: yellow gradient
+          if (ratio > 0.8) {
+            ctx.fillStyle = '#ffff80';
+          } else if (ratio > 0.5) {
+            ctx.fillStyle = '#ffff00';
+          } else {
+            ctx.fillStyle = '#c0c000';
+          }
         } else {
-          ctx.fillStyle = this.colors.barLow;
+          // MDX: blue gradient
+          if (ratio > 0.8) {
+            ctx.fillStyle = this.colors.barHigh;
+          } else if (ratio > 0.5) {
+            ctx.fillStyle = this.colors.barMid;
+          } else {
+            ctx.fillStyle = this.colors.barLow;
+          }
         }
         ctx.fillRect(x, segY, barWidth, this.segmentHeight);
       }
@@ -532,7 +614,7 @@ class LevelMeter {
       if (this.peakHold[ch] > 0) {
         const peakSegment = Math.floor((this.peakHold[ch] / 255) * totalSegments);
         const peakY = barTop + maxBarHeight - peakSegment * (this.segmentHeight + this.segmentGap);
-        ctx.fillStyle = this.colors.peak;
+        ctx.fillStyle = isMidi ? '#ffff80' : this.colors.peak;
         ctx.fillRect(x, peakY, barWidth, this.segmentHeight);
       }
     }
@@ -566,6 +648,312 @@ class LevelMeter {
       ctx.fillStyle = panR ? '#002040' : this.colors.textDim;
       ctx.fillText('R', x + indicatorWidth + 5, panY + 8);
     }
+  }
+}
+
+// ========================================
+// Web MIDI Manager
+// ========================================
+class MIDIManager {
+  constructor(mdxPlayer) {
+    this._mdxPlayer = mdxPlayer;
+    this._midiAccess = null;
+    this._selectedInput = null;
+    this._isEnabled = true;
+    this._selectElement = null;
+    this._labelElement = null;
+    this._labelTimeout = null;
+  }
+
+  async init() {
+    console.log('MIDIManager.init() called');
+
+    // Get UI elements
+    this._selectElement = document.getElementById('midi-input-select');
+    if (this._selectElement) {
+      this._selectElement.addEventListener('change', (e) => this._onSelectChange(e));
+    }
+    this._labelElement = document.querySelector('#midi-control .midi-label');
+
+    if (!navigator.requestMIDIAccess) {
+      console.warn('Web MIDI API not supported in this browser');
+      this._updateSelectDisabled('Web MIDI not supported');
+      return false;
+    }
+
+    try {
+      console.log('Requesting MIDI access...');
+      this._midiAccess = await navigator.requestMIDIAccess({ sysex: false });
+      console.log('MIDI Access granted:', this._midiAccess);
+      console.log('MIDI inputs:', this._midiAccess.inputs);
+      console.log('MIDI inputs size:', this._midiAccess.inputs.size);
+
+      // Log available inputs
+      this._logInputs();
+
+      // Auto-select first input device
+      const inputs = Array.from(this._midiAccess.inputs.values());
+      console.log('Input devices array:', inputs);
+
+      if (inputs.length > 0) {
+        // Select first device
+        this.selectInput(inputs[0]);
+        console.log('Auto-selected first MIDI device:', inputs[0].name);
+      } else {
+        console.log('No MIDI input devices found. Connect a device and it will be auto-selected.');
+      }
+
+      // Update select box with available devices (will show selected device)
+      this._updateSelectOptions();
+
+      // Monitor device connection/disconnection
+      this._midiAccess.onstatechange = (e) => this._onStateChange(e);
+
+      return true;
+    } catch (err) {
+      console.error('MIDI Access denied:', err);
+      this._updateSelectDisabled('MIDI access denied');
+      return false;
+    }
+  }
+
+  _updateSelectOptions() {
+    if (!this._selectElement || !this._midiAccess) return;
+
+    // Remember current selection
+    const currentValue = this._selectedInput ? this._selectedInput.id : '';
+
+    // Clear existing options
+    this._selectElement.innerHTML = '';
+
+    // Add "No Device" option
+    const noDeviceOption = document.createElement('option');
+    noDeviceOption.value = '';
+    noDeviceOption.textContent = '-- No Device --';
+    this._selectElement.appendChild(noDeviceOption);
+
+    // Add available input devices
+    let firstDeviceId = null;
+    this._midiAccess.inputs.forEach((input, id) => {
+      if (!firstDeviceId) firstDeviceId = id;
+      const option = document.createElement('option');
+      option.value = id;
+      option.textContent = `${input.name} (${input.manufacturer || 'Unknown'})`;
+      this._selectElement.appendChild(option);
+    });
+
+    // Restore selection or select first device
+    if (currentValue && this._midiAccess.inputs.has(currentValue)) {
+      this._selectElement.value = currentValue;
+    } else if (firstDeviceId) {
+      this._selectElement.value = firstDeviceId;
+    }
+  }
+
+  _updateSelectDisabled(message) {
+    if (!this._selectElement) return;
+    this._selectElement.innerHTML = '';
+    const option = document.createElement('option');
+    option.value = '';
+    option.textContent = message;
+    this._selectElement.appendChild(option);
+    this._selectElement.disabled = true;
+  }
+
+  _onSelectChange(event) {
+    const selectedId = event.target.value;
+    console.log('MIDI device selection changed:', selectedId);
+
+    if (!selectedId) {
+      // "No Device" selected - disconnect current input
+      if (this._selectedInput) {
+        this._selectedInput.onmidimessage = null;
+        this._selectedInput = null;
+        console.log('MIDI input disconnected');
+      }
+      return;
+    }
+
+    // Find and select the device
+    const input = this._midiAccess.inputs.get(selectedId);
+    if (input) {
+      this.selectInput(input);
+    }
+  }
+
+  _logInputs() {
+    console.log('MIDI Input Devices:');
+    if (this._midiAccess.inputs.size === 0) {
+      console.log('  (No MIDI input devices found)');
+    } else {
+      this._midiAccess.inputs.forEach((input, id) => {
+        console.log(`  [${id}] ${input.name} (${input.manufacturer})`);
+      });
+    }
+  }
+
+  selectInput(input) {
+    console.log('selectInput called with:', input);
+
+    // Remove listener from previous input
+    if (this._selectedInput) {
+      this._selectedInput.onmidimessage = null;
+      console.log('Removed listener from previous input');
+    }
+
+    this._selectedInput = input;
+    if (input) {
+      console.log(`Setting onmidimessage handler for: ${input.name} (id: ${input.id})`);
+      console.log('Input state:', input.state, 'connection:', input.connection);
+
+      input.onmidimessage = (e) => this._onMIDIMessage(e);
+
+      console.log(`MIDI Input selected: ${input.name}`);
+      console.log('Handler set:', input.onmidimessage !== null);
+    }
+  }
+
+  _onStateChange(e) {
+    console.log(`MIDI Device ${e.port.type} "${e.port.name}": ${e.port.state}`);
+
+    // Update select box when devices change
+    this._updateSelectOptions();
+
+    if (e.port.type === 'input') {
+      if (e.port.state === 'connected') {
+        // Auto-select if no device is currently selected
+        if (!this._selectedInput) {
+          this.selectInput(e.port);
+          if (this._selectElement) {
+            this._selectElement.value = e.port.id;
+          }
+        }
+        this._logInputs();
+      } else if (e.port.state === 'disconnected') {
+        // If the disconnected device was selected, clear selection
+        if (this._selectedInput && this._selectedInput.id === e.port.id) {
+          this._selectedInput = null;
+          if (this._selectElement) {
+            this._selectElement.value = '';
+          }
+          console.log('Selected MIDI device disconnected');
+        }
+      }
+    }
+  }
+
+  _onMIDIMessage(event) {
+    if (!this._isEnabled) return;
+
+    // Flash MIDI IN label
+    if (this._labelElement) {
+      this._labelElement.classList.add('active');
+      if (this._labelTimeout) {
+        clearTimeout(this._labelTimeout);
+      }
+      this._labelTimeout = setTimeout(() => {
+        this._labelElement.classList.remove('active');
+      }, 100);
+    }
+
+    const data = event.data;
+    const status = data[0];
+    const data1 = data[1];
+    const data2 = data[2];
+
+    // Build hex string for raw data
+    const hexData = Array.from(data).map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
+
+    // Decode message type for readable log
+    let msgType = '';
+    const channel = status & 0x0F;
+    const command = status & 0xF0;
+
+    // Channel messages (0x80-0xEF)
+    if (status >= 0x80 && status <= 0xEF) {
+      switch (command) {
+        case 0x80: msgType = `Note Off ch=${channel} note=${data1} vel=${data2}`; break;
+        case 0x90: msgType = `Note On ch=${channel} note=${data1} vel=${data2}`; break;
+        case 0xA0: msgType = `Poly Aftertouch ch=${channel} note=${data1} pressure=${data2}`; break;
+        case 0xB0: msgType = `CC ch=${channel} cc#${data1}=${data2}`; break;
+        case 0xC0: msgType = `Program Change ch=${channel} prog=${data1}`; break;
+        case 0xD0: msgType = `Channel Aftertouch ch=${channel} pressure=${data1}`; break;
+        case 0xE0: msgType = `Pitch Bend ch=${channel} value=${(data2 << 7) | data1}`; break;
+      }
+    }
+    // System messages (0xF0-0xFF)
+    else if (status >= 0xF0) {
+      switch (status) {
+        case 0xF0: msgType = `SysEx Start (${data.length} bytes)`; break;
+        case 0xF1: msgType = `MTC Quarter Frame`; break;
+        case 0xF2: msgType = `Song Position ${(data2 << 7) | data1}`; break;
+        case 0xF3: msgType = `Song Select ${data1}`; break;
+        case 0xF6: msgType = `Tune Request`; break;
+        case 0xF7: msgType = `SysEx End`; break;
+        case 0xF8: msgType = `Timing Clock`; break;
+        case 0xFA: msgType = `Start`; break;
+        case 0xFB: msgType = `Continue`; break;
+        case 0xFC: msgType = `Stop`; break;
+        case 0xFE: msgType = `Active Sensing`; break;
+        case 0xFF: msgType = `System Reset`; break;
+        default: msgType = `System (${status.toString(16).toUpperCase()})`; break;
+      }
+    }
+
+    // Console log output - all MIDI messages
+    console.log(`MIDI In: [${hexData}] ${msgType}`);
+
+    // Process Note On/Off for sound generation
+    if (status >= 0x80 && status <= 0xEF) {
+      switch (command) {
+        case 0x90: // Note On
+          if (data2 > 0) {
+            // Note On (velocity > 0) - velocity is ignored per spec
+            this._sendToWorklet({
+              type: 'MIDI_KEY_ON',
+              midiChannel: channel,
+              note: data1
+            });
+          } else {
+            // Note On with velocity 0 = Note Off
+            this._sendToWorklet({
+              type: 'MIDI_KEY_OFF',
+              midiChannel: channel,
+              note: data1
+            });
+          }
+          break;
+
+        case 0x80: // Note Off
+          this._sendToWorklet({
+            type: 'MIDI_KEY_OFF',
+            midiChannel: channel,
+            note: data1
+          });
+          break;
+      }
+    }
+  }
+
+  _sendToWorklet(msg) {
+    if (this._mdxPlayer._synthNode) {
+      this._mdxPlayer._synthNode.port.postMessage(JSON.stringify(msg));
+    }
+  }
+
+  enable() {
+    this._isEnabled = true;
+    console.log('MIDI input enabled');
+  }
+
+  disable() {
+    this._isEnabled = false;
+    console.log('MIDI input disabled');
+  }
+
+  getInputs() {
+    if (!this._midiAccess) return [];
+    return Array.from(this._midiAccess.inputs.values());
   }
 }
 
@@ -870,6 +1258,9 @@ class MDXPlayer {
     this._levelMeter = null;
     this._spectrumAnalyzer = null;
     this._opmRegisterVis = null;
+
+    // MIDI
+    this._midiManager = null;
 
     // Animation
     this._animationId = null;
@@ -1221,6 +1612,15 @@ class MDXPlayer {
     console.log("WASM MDX Player Loading...");
     this._initializeView();
     await this._initializeAudio();
+
+    // Initialize MIDI
+    this._midiManager = new MIDIManager(this);
+    const midiSupported = await this._midiManager.init();
+    if (midiSupported) {
+      console.log('Web MIDI initialized successfully');
+    } else {
+      console.log('Web MIDI not available');
+    }
 
     // Initial render of visualizers (empty state)
     this._renderInitialState();

@@ -30,6 +30,7 @@
 #include "mdx_util.h"
 #include "mxdrv.h"
 #include "mxdrv_context.h"
+#include "portable_mdx/src/mxdrv/sound_iocs.h"
 
 //static const char MDXDATA[] = {
 //#include "ds02.inc"
@@ -275,6 +276,7 @@ public:
   virtual void setChannelMask(uint16_t mask) {
     // Channel Mask: bit 0-7 = FM ch 1-8, bit 8 = PCM
     // 1 = muted, 0 = playing
+    printf("setChannelMask(0x%04x)\n", mask);
     X68REG reg;
     reg.d0 = 0x0e;  // Function code for channel mask
     reg.d1 = mask;
@@ -284,6 +286,47 @@ public:
   virtual uint16_t getChannelMask() {
     MXWORK_GLOBAL *global = (MXWORK_GLOBAL *)MXDRV_GetWork(&context, MXDRV_WORK_GLOBAL);
     return global->L001e1c;
+  }
+
+  // ========================================
+  // MIDI Support Functions
+  // ========================================
+
+  // OPMレジスタ直接書き込み
+  virtual void setOpmReg(uint8_t addr, uint8_t data) {
+    _iocs_opmset(&context, addr, data);
+  }
+
+  // MIDIノート → OPM KeyCode 変換テーブル (8オクターブ×12音)
+  static const uint8_t MidiToOpmKeyCode[96];
+
+  // MIDIキーオン
+  virtual void midiKeyOn(uint8_t ch, uint8_t midiNote) {
+    printf("midiKeyOn(ch=%d, note=%d)\n", ch, midiNote);
+    if (ch >= 8) return;
+
+    // MIDIノートをOPM KeyCodeに変換 (0-95の範囲にクランプ)
+    uint8_t noteIndex = (midiNote < 96) ? midiNote : 95;
+    uint8_t kc = MidiToOpmKeyCode[noteIndex];
+    printf("  -> KC=0x%02x\n", kc);
+
+    // KC (Key Code) 設定 - レジスタ 0x28 + ch
+    _iocs_opmset(&context, 0x28 + ch, kc);
+
+    // KF (Key Fraction) = 0 - レジスタ 0x30 + ch
+    _iocs_opmset(&context, 0x30 + ch, 0);
+
+    // Key On - レジスタ 0x08
+    // 全スロットオン: 0x78 (OP1-4全て)
+    printf("  -> Key On: reg 0x08 = 0x%02x\n", 0x78 | ch);
+    _iocs_opmset(&context, 0x08, 0x78 | ch);
+  }
+
+  // MIDIキーオフ
+  virtual void midiKeyOff(uint8_t ch) {
+    if (ch >= 8) return;
+    // Key Off - スロットマスク = 0, チャンネル番号のみ
+    _iocs_opmset(&context, 0x08, ch);
   }
 
   virtual std::string getTitle() {
@@ -468,6 +511,28 @@ public:
   }
 };
 
+// MIDIノート → OPM KeyCode 変換テーブル (8オクターブ×12音 = 96エントリ)
+// OPM KeyCode: 上位3ビット=オクターブ、下位4ビット=ノート (C,C#,D...B)
+// ノートは 0,1,2,4,5,6,8,9,10,12,13,14 の順 (3,7,11,15は未使用)
+const uint8_t SynthesizerWrapper::MidiToOpmKeyCode[96] = {
+  // Octave 0 (MIDI note 0-11)
+  0x00, 0x01, 0x02, 0x04, 0x05, 0x06, 0x08, 0x09, 0x0a, 0x0c, 0x0d, 0x0e,
+  // Octave 1 (MIDI note 12-23)
+  0x10, 0x11, 0x12, 0x14, 0x15, 0x16, 0x18, 0x19, 0x1a, 0x1c, 0x1d, 0x1e,
+  // Octave 2 (MIDI note 24-35)
+  0x20, 0x21, 0x22, 0x24, 0x25, 0x26, 0x28, 0x29, 0x2a, 0x2c, 0x2d, 0x2e,
+  // Octave 3 (MIDI note 36-47)
+  0x30, 0x31, 0x32, 0x34, 0x35, 0x36, 0x38, 0x39, 0x3a, 0x3c, 0x3d, 0x3e,
+  // Octave 4 (MIDI note 48-59)
+  0x40, 0x41, 0x42, 0x44, 0x45, 0x46, 0x48, 0x49, 0x4a, 0x4c, 0x4d, 0x4e,
+  // Octave 5 (MIDI note 60-71) - Middle C (C4) is MIDI note 60
+  0x50, 0x51, 0x52, 0x54, 0x55, 0x56, 0x58, 0x59, 0x5a, 0x5c, 0x5d, 0x5e,
+  // Octave 6 (MIDI note 72-83)
+  0x60, 0x61, 0x62, 0x64, 0x65, 0x66, 0x68, 0x69, 0x6a, 0x6c, 0x6d, 0x6e,
+  // Octave 7 (MIDI note 84-95)
+  0x70, 0x71, 0x72, 0x74, 0x75, 0x76, 0x78, 0x79, 0x7a, 0x7c, 0x7d, 0x7e,
+};
+
 EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
 {
   // First, bind the original Synthesizer class.
@@ -501,5 +566,9 @@ EMSCRIPTEN_BINDINGS(CLASS_Synthesizer)
       .function("getTitleBytes", &SynthesizerWrapper::getTitleBytes)
       .function("setChannelMask", &SynthesizerWrapper::setChannelMask)
       .function("getChannelMask", &SynthesizerWrapper::getChannelMask)
+      // MIDI support
+      .function("setOpmReg", &SynthesizerWrapper::setOpmReg)
+      .function("midiKeyOn", &SynthesizerWrapper::midiKeyOn)
+      .function("midiKeyOff", &SynthesizerWrapper::midiKeyOff)
   ;
 }

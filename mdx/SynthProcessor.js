@@ -176,6 +176,12 @@ class SynthProcessor extends AudioWorkletProcessor {
     // Channel mute state (bitmask: bit 0-7 = FM 1-8, bit 8-15 = PCM 1-8)
     this._channelMask = 0;
 
+    // MIDI state
+    // Bitmask of channels currently controlled by MIDI (bit 0-7 = FM 1-8)
+    this._midiChannelActive = 0;
+    // MIDI key state for each FM channel
+    this._midiKeyState = new Array(8).fill(null).map(() => ({ keyOn: false, note: 0 }));
+
 ///    var lookup = FS.lookupPath(".", { parent: true });
 
   }
@@ -224,7 +230,10 @@ class SynthProcessor extends AudioWorkletProcessor {
         opmRegs: [],
         playTime: this._synth.getPlayTime(),
         loopCount: this._synth.getLoopCount(),
-        titleBytes: Array.from(this._synth.getTitleBytes())
+        titleBytes: Array.from(this._synth.getTitleBytes()),
+        // MIDI state
+        midiChannelActive: this._midiChannelActive,
+        midiKeyState: this._midiKeyState
       };
       for (let i = 0; i < 8; i++) {
         channelData.fm.push({
@@ -271,8 +280,51 @@ class SynthProcessor extends AudioWorkletProcessor {
             this._channelMask &= ~(1 << bitPos);
           }
           // Apply to synth (MXDRV uses lower 9 bits: FM 0-7 + PCM)
-          this._synth.setChannelMask(this._channelMask & 0x1ff);
+          // Also include MIDI active channels to mute MDX on those channels
+          this._synth.setChannelMask((this._channelMask | this._midiChannelActive) & 0x1ff);
           console.log("Channel mask set to:", this._channelMask.toString(16));
+        }
+        else if (msg.type === 'MIDI_KEY_ON') {
+          // MIDI Key On
+          const fmCh = msg.midiChannel % 8;
+          console.log(`MIDI Key On: MIDI ch=${msg.midiChannel} note=${msg.note} -> FM ch=${fmCh}`);
+
+          // Mark this channel as MIDI-controlled
+          this._midiChannelActive |= (1 << fmCh);
+          console.log(`MIDI active channels: 0x${this._midiChannelActive.toString(16)}`);
+
+          // Update MIDI key state
+          this._midiKeyState[fmCh] = { keyOn: true, note: msg.note };
+
+          // First, send Key Off to stop any MDX sound on this channel
+          this._synth.midiKeyOff(fmCh);
+
+          // Send Key On to OPM
+          console.log(`Calling midiKeyOn(${fmCh}, ${msg.note})`);
+          this._synth.midiKeyOn(fmCh, msg.note);
+        }
+        else if (msg.type === 'MIDI_KEY_OFF') {
+          // MIDI Key Off
+          const fmCh = msg.midiChannel % 8;
+          const lastNote = this._midiKeyState[fmCh] ? this._midiKeyState[fmCh].note : -1;
+
+          // Only process key off if it matches the last key on note
+          if (lastNote !== msg.note) {
+            console.log(`MIDI Key Off: MIDI ch=${msg.midiChannel} note=${msg.note} -> FM ch=${fmCh} (ignored: last note was ${lastNote})`);
+            return;
+          }
+
+          console.log(`MIDI Key Off: MIDI ch=${msg.midiChannel} note=${msg.note} -> FM ch=${fmCh}`);
+
+          // Update MIDI key state (keep channel as MIDI-controlled)
+          this._midiKeyState[fmCh] = { keyOn: false, note: msg.note };
+
+          // Send Key Off to OPM
+          this._synth.midiKeyOff(fmCh);
+
+          // NOTE: Do NOT clear _midiChannelActive - keep MDX muted on this channel
+          // MDX will stay muted until page reload
+          console.log(`MIDI active channels (kept): 0x${this._midiChannelActive.toString(16)}`);
         }
       } catch (e) {
         console.error("JSON parse error:", e);

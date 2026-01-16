@@ -1,0 +1,279 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: Menlo, Monaco, 'Courier New', 'Liberation Mono', monospace;
+    font-size: 12px;
+    background: #000004;
+    color: #6060c0;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  canvas {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  /* Scrollbar Style */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #000008;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #202048;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3030a0;
+  }
+}
+
+@layer components {
+  /* Main Container */
+  .mmdsp-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #000008;
+    border: 2px solid #3030a0;
+    box-shadow:
+      inset 1px 1px 0 #3030a0,
+      inset -1px -1px 0 #202048,
+      0 0 20px rgba(0, 100, 255, 0.2);
+  }
+
+  /* Header */
+  .mmdsp-header {
+    background: linear-gradient(to bottom, #101040 0%, #080820 100%);
+    border-bottom: 1px solid #202048;
+    padding: 8px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mmdsp-title {
+    color: #60a0ff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    font-weight: normal;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(96, 160, 255, 0.8), 0 0 20px rgba(96, 160, 255, 0.4);
+  }
+
+  .mmdsp-version {
+    color: #303080;
+    font-size: 9px;
+  }
+
+  /* Panel */
+  .mmdsp-panel {
+    background: #000010;
+    border: 1px solid #202048;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+  }
+
+  .mmdsp-panel-header {
+    background: linear-gradient(to bottom, #181848 0%, #101030 100%);
+    color: #60a0ff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-bottom: 1px solid #202048;
+  }
+
+  /* Keyboard Panel Header */
+  .mmdsp-keyboard-header {
+    background: linear-gradient(to bottom, #303060 0%, #202040 100%);
+    color: #60a0ff;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-bottom: 1px solid #202048;
+  }
+
+  /* Control Button */
+  .mmdsp-btn {
+    background: linear-gradient(to bottom, #202060 0%, #101040 100%);
+    border: 1px solid #202048;
+    border-radius: 2px;
+    color: #60a0ff;
+    font-family: inherit;
+    font-size: 11px;
+    padding: 6px 12px;
+    cursor: pointer;
+    text-shadow: 0 0 5px rgba(96, 160, 255, 0.5);
+    transition: all 0.1s;
+  }
+
+  .mmdsp-btn:hover {
+    background: linear-gradient(to bottom, #303080 0%, #202060 100%);
+    box-shadow: 0 0 8px rgba(96, 160, 255, 0.3);
+  }
+
+  .mmdsp-btn:active {
+    background: linear-gradient(to bottom, #101040 0%, #080820 100%);
+    border-style: inset;
+  }
+
+  .mmdsp-btn.active {
+    background: linear-gradient(to bottom, #204080 0%, #103060 100%);
+    box-shadow: 0 0 8px rgba(96, 160, 255, 0.5);
+    color: #80c0ff;
+  }
+
+  .mmdsp-btn.blink {
+    animation: btnPulse 2.5s ease-in-out infinite;
+    position: relative;
+  }
+
+  .mmdsp-btn.blink::after {
+    content: 'Touch Me!';
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffff80;
+    color: #000;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: bold;
+    white-space: nowrap;
+    animation: bubblePulse 2.5s ease-in-out infinite;
+    box-shadow: 0 2px 8px rgba(255, 255, 128, 0.4);
+  }
+
+  .mmdsp-btn.blink::before {
+    content: '';
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: #ffff80;
+    animation: bubblePulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes btnPulse {
+    0%, 100% {
+      background: linear-gradient(to bottom, #202060 0%, #101040 100%);
+      color: #60a0ff;
+      box-shadow: none;
+      text-shadow: none;
+    }
+    50% {
+      background: linear-gradient(to bottom, #305030 0%, #203020 100%);
+      color: #80ff80;
+      box-shadow: 0 0 20px rgba(100, 255, 100, 0.3), inset 0 0 10px rgba(100, 255, 100, 0.1);
+      text-shadow: 0 0 8px rgba(100, 255, 100, 0.6);
+    }
+  }
+
+  @keyframes bubblePulse {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* Info Display */
+  .mmdsp-info-label {
+    color: #303080;
+    font-size: 11px;
+  }
+
+  .mmdsp-info-value {
+    color: #c0c0e0;
+    font-size: 14px;
+    font-weight: normal;
+    text-shadow: 0 0 5px rgba(192, 192, 224, 0.3);
+  }
+
+  /* Footer */
+  .mmdsp-footer {
+    background: linear-gradient(to bottom, #101030 0%, #080820 100%);
+    border-top: 1px solid #202048;
+    padding: 10px 15px;
+  }
+
+  .mmdsp-now-playing-label {
+    color: #303080;
+    font-size: 10px;
+  }
+
+  .mmdsp-title-text {
+    color: #a0a0d0;
+    font-family: 'MS Gothic', 'Osaka-Mono', 'Source Han Code JP', 'Noto Sans Mono CJK JP', 'Hiragino Kaku Gothic ProN', monospace;
+    font-size: 12px;
+    text-shadow: 0 0 5px rgba(160, 160, 208, 0.3);
+  }
+
+  /* Drop Zone */
+  .mmdsp-dropzone {
+    background: linear-gradient(to bottom, #202050 0%, #101030 100%);
+    border: 2px dashed #202048;
+    border-radius: 4px;
+    padding: 15px;
+    text-align: center;
+    color: #303080;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mmdsp-dropzone:hover {
+    border-color: #40ff40;
+    color: #40ff40;
+    background: linear-gradient(to bottom, #303070 0%, #202050 100%);
+  }
+
+  .mmdsp-dropzone.drag-over {
+    border-color: #40ff40;
+    background: linear-gradient(to bottom, #004400 0%, #002200 100%);
+    color: #40ff40;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .mmdsp-container {
+    border-width: 1px;
+  }
+
+  .mmdsp-header {
+    padding: 6px 10px;
+  }
+
+  .mmdsp-title {
+    font-size: 14px;
+  }
+
+  .mmdsp-footer {
+    padding: 8px 10px;
+  }
+}

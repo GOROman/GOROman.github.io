@@ -59,16 +59,22 @@ body {
 
 #mmdsp-header .title {
   color: var(--text-cyan);
-  font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;
   font-weight: normal;
-  letter-spacing: 0.5px;
-  text-shadow: 0 0 8px rgba(96, 160, 255, 0.5);
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(96, 160, 255, 0.8), 0 0 20px rgba(96, 160, 255, 0.4);
+}
+
+#mmdsp-header .subtitle {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-shadow: none;
 }
 
 #mmdsp-header .version {
   color: var(--text-dim);
-  font-size: 12px;
+  font-size: 9px;
 }
 
 /* MIDI Control */
@@ -133,8 +139,8 @@ body {
 .panel-header {
   background: linear-gradient(to bottom, #181848 0%, #101030 100%);
   color: var(--text-cyan);
-  font-family: Menlo, Monaco, 'Courier New', 'Liberation Mono', monospace;
-  font-size: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
   padding: 3px 8px;
   border-bottom: 1px solid var(--border-color);
 }

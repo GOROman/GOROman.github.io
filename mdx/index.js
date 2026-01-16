@@ -236,7 +236,7 @@ class KeyboardVisualizer {
       } else {
         ctx.fillStyle = this.colors.textBright;
       }
-      ctx.font = '8px monospace';
+      ctx.font = "8px 'Share Tech Mono', monospace";
       ctx.fillText(`FM${ch + 1}`, 2, y + 12);
 
       // Get channel data - MIDI takes priority
@@ -308,7 +308,7 @@ class KeyboardVisualizer {
       } else {
         ctx.fillStyle = fmCh && fmCh.keyOn ? '#e0e0ff' : this.colors.text;
       }
-      ctx.font = '8px monospace';
+      ctx.font = "8px 'Share Tech Mono', monospace";
       ctx.fillText(`${noteName}${noteOct} V${volStr} ${panStr} KC${displayKc.toString(16).toUpperCase().padStart(2,'0')}`, infoX, y + 12);
     }
 
@@ -329,8 +329,8 @@ class KeyboardVisualizer {
 
       // Channel label (dimmed if muted)
       ctx.fillStyle = isMuted ? '#304030' : '#80c080';
-      ctx.font = '8px monospace';
-      ctx.fillText(`PC${ch + 1}`, 2, y + 12);
+      ctx.font = "8px 'Share Tech Mono', monospace";
+      ctx.fillText(`PCM${ch + 1}`, 2, y + 12);
 
       // Get PCM channel data
       const pcmCh = channelData.pcm ? channelData.pcm[ch] : null;
@@ -356,7 +356,7 @@ class KeyboardVisualizer {
       } else {
         ctx.fillStyle = pcmCh && pcmCh.keyOn ? '#c0ffc0' : '#608060';
       }
-      ctx.font = '8px monospace';
+      ctx.font = "8px 'Share Tech Mono', monospace";
       const volStr = pcmCh ? pcmCh.volume.toString().padStart(3) : '  0';
       const noteVal = pcmCh ? pcmCh.note : 0;
       ctx.fillText(`N:${noteVal.toString().padStart(4)} V${volStr}`, infoX, y + 12);
@@ -466,7 +466,7 @@ class LevelMeter {
 
     // Draw header labels
     ctx.fillStyle = this.colors.label;
-    ctx.font = '9px monospace';
+    ctx.font = "9px 'Share Tech Mono', monospace";
     for (let ch = 0; ch < 8; ch++) {
       ctx.fillText(`${ch + 1}`, startX + ch * (barWidth + barGap) + barWidth / 2 - 3, 11);
     }
@@ -514,7 +514,7 @@ class LevelMeter {
     // Draw PANPOT footer (dimmed)
     const panY = height - footerHeight + 5;
     ctx.fillStyle = this.colors.textDim;
-    ctx.font = '8px monospace';
+    ctx.font = "8px 'Share Tech Mono', monospace";
     ctx.fillText('PAN', 2, panY + 6);
     for (let ch = 0; ch < 8; ch++) {
       const x = startX + ch * (barWidth + barGap);
@@ -523,7 +523,7 @@ class LevelMeter {
       ctx.fillRect(x, panY, indicatorWidth, 10);
       ctx.fillRect(x + indicatorWidth + 2, panY, indicatorWidth, 10);
       ctx.fillStyle = this.colors.textDim;
-      ctx.font = '7px monospace';
+      ctx.font = "7px 'Share Tech Mono', monospace";
       ctx.fillText('L', x + 3, panY + 8);
       ctx.fillText('R', x + indicatorWidth + 5, panY + 8);
     }
@@ -570,7 +570,7 @@ class LevelMeter {
     const totalSegments = Math.floor(maxBarHeight / (this.segmentHeight + this.segmentGap));
 
     // Draw header labels (dimmed for muted channels)
-    ctx.font = '9px monospace';
+    ctx.font = "9px 'Share Tech Mono', monospace";
     for (let ch = 0; ch < 8; ch++) {
       ctx.fillStyle = this.muteState[ch] ? this.colors.labelMuted : this.colors.label;
       ctx.fillText(`${ch + 1}`, startX + ch * (barWidth + barGap) + barWidth / 2 - 3, 11);
@@ -682,7 +682,7 @@ class LevelMeter {
     // Draw PANPOT footer
     const panY = height - footerHeight + 5;
     ctx.fillStyle = this.colors.textDim;
-    ctx.font = '8px monospace';
+    ctx.font = "8px 'Share Tech Mono', monospace";
     ctx.fillText('PAN', 2, panY + 6);
 
     for (let ch = 0; ch < 8; ch++) {
@@ -699,7 +699,7 @@ class LevelMeter {
       ctx.fillStyle = panL ? this.colors.panL : this.colors.panOff;
       ctx.fillRect(x, panY, indicatorWidth, 10);
       ctx.fillStyle = panL ? '#002040' : this.colors.textDim;
-      ctx.font = '7px monospace';
+      ctx.font = "7px 'Share Tech Mono', monospace";
       ctx.fillText('L', x + 3, panY + 8);
 
       // Right indicator
@@ -1063,7 +1063,8 @@ class OPMRegisterVisualizer {
       textBright: '#80c0ff',
       textValue: '#4070b0',      // Blue for unchanged
       textChanged: '#e0e0ff',    // White for changed
-      header: '#5080c0',
+      headerCol: '#4060a0',      // Dark blue for column header (横)
+      headerRow: '#4060a0',      // Dark blue for row header (縦)
       grid: '#101830'
     };
 
@@ -1101,18 +1102,18 @@ class OPMRegisterVisualizer {
     const startY = 18;
     const dataStartX = startX + 18;
 
-    // Header row - draw each column header at the same position as data
-    ctx.fillStyle = this.colors.header;
-    ctx.font = '8px monospace';
+    // Header row - draw each column header at the same position as data (横)
+    ctx.fillStyle = this.colors.headerCol;
+    ctx.font = "10px 'Share Tech Mono', monospace";
     for (let col = 0; col < 16; col++) {
       const x = dataStartX + col * cellWidth;
       ctx.fillText(col.toString(16).toUpperCase().padStart(2, '0'), x, 11);
     }
 
     for (let row = 0; row < 16; row++) {
-      // Row header
-      ctx.fillStyle = this.colors.header;
-      ctx.font = '8px monospace';
+      // Row header (縦)
+      ctx.fillStyle = this.colors.headerRow;
+      ctx.font = "10px 'Share Tech Mono', monospace";
       ctx.fillText(row.toString(16).toUpperCase() + '0', startX, startY + row * cellHeight + 9);
 
       for (let col = 0; col < 16; col++) {
@@ -1128,7 +1129,7 @@ class OPMRegisterVisualizer {
           ctx.fillStyle = this.colors.textValue;
         }
 
-        ctx.font = '8px monospace';
+        ctx.font = "10px 'Share Tech Mono', monospace";
         ctx.fillText(regValue.toString(16).toUpperCase().padStart(2, '0'), x, y + 9);
       }
     }
@@ -1257,7 +1258,7 @@ class SpectrumAnalyzer {
         ctx.stroke();
       }
       ctx.fillStyle = '#304080';
-      ctx.font = '10px monospace';
+      ctx.font = "10px 'Share Tech Mono', monospace";
       ctx.fillText('CLICK PLAY TO START', width / 2 - 70, height / 2);
       return;
     }

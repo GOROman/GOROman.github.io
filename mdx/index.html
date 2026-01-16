@@ -7,7 +7,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <title>WASM MDXPlayer Powered by Claude Code</title>
@@ -17,7 +17,7 @@
   <div id="mmdsp-container">
     <!-- Header -->
     <header id="mmdsp-header">
-      <span class="title">WASM MDXPlayer Powered by Claude Code</span>
+      <span class="title">WASM MDXPlayer <span class="subtitle">Powered by Claude Code</span></span>
       <div id="midi-control">
         <span class="midi-label">MIDI IN:</span>
         <select id="midi-input-select">
@@ -32,7 +32,7 @@
       <!-- Top Panels: Keyboard + OPM Register -->
       <div id="top-panel">
         <div id="keyboard-panel">
-          <div class="panel-header">KEYBOARD (FM1-8 / PCM1-8)</div>
+          <div class="panel-header">KEYBOARD (FM1-8 / ADPCM1-8)</div>
           <canvas id="keyboard-canvas" width="500" height="360"></canvas>
         </div>
         <div id="opm-register-panel" class="panel">

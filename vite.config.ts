@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: command === 'serve' ? '/' : './',
+  base: command === 'serve' ? '/' : '/mdx/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

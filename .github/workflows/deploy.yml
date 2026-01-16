@@ -33,8 +33,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build Vite app
         run: npm run build
+
+      - name: Prepare deploy directory
+        run: |
+          mkdir -p deploy
+          # Copy original static files
+          cp index.old.html deploy/index.html
+          cp irc.html deploy/ 2>/dev/null || true
+          # Copy Vite build output to mdx/
+          mkdir -p deploy/mdx
+          cp -r dist/* deploy/mdx/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -42,7 +52,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: './deploy'
 
   deploy:
     environment:

@@ -493,6 +493,53 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [toggleMute]);
 
+  // Load MDX/PDX from URL parameters
+  useEffect(() => {
+    const loadFromURLParams = async () => {
+      const params = new URLSearchParams(window.location.search);
+      // Default to ds02.mdx (relative to base URL)
+      const mdxUrl = params.get('mdx') || `${import.meta.env.BASE_URL}ds02.mdx`;
+      const pdxUrl = params.get('pdx');
+
+      console.log('Loading MDX:', { mdx: mdxUrl, pdx: pdxUrl });
+
+      // Initialize audio context first
+      await initialize();
+
+      if (!synthNodeRef.current) return;
+
+      try {
+        // Load PDX first if specified
+        if (pdxUrl) {
+          const pdxResponse = await fetch(pdxUrl);
+          if (pdxResponse.ok) {
+            const pdxData = await pdxResponse.arrayBuffer();
+            const pdxFilename = pdxUrl.split('/').pop() || 'unknown.pdx';
+            console.log('Loaded PDX:', pdxFilename, 'size:', pdxData.byteLength);
+            loadPDX(pdxFilename, pdxData);
+          } else {
+            console.warn('Failed to load PDX:', pdxUrl, pdxResponse.status);
+          }
+        }
+
+        // Load MDX
+        const mdxResponse = await fetch(mdxUrl);
+        if (mdxResponse.ok) {
+          const mdxData = await mdxResponse.arrayBuffer();
+          const mdxFilename = mdxUrl.split('/').pop() || 'unknown.mdx';
+          console.log('Loaded MDX:', mdxFilename, 'size:', mdxData.byteLength);
+          loadMDX(mdxFilename, mdxData);
+        } else {
+          console.error('Failed to load MDX:', mdxUrl, mdxResponse.status);
+        }
+      } catch (e) {
+        console.error('Error loading from URL params:', e);
+      }
+    };
+
+    loadFromURLParams();
+  }, [initialize, loadMDX, loadPDX]);
+
   return (
     <MDXPlayerContext.Provider
       value={{

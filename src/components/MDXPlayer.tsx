@@ -22,9 +22,40 @@ export function MDXPlayer() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
+  const [error, setError] = useState<string | null>(null);
+  const [needsUserAction, setNeedsUserAction] = useState(true);
+
+  const handleInitialize = async () => {
+    try {
+      setNeedsUserAction(false);
+      await initialize();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    }
+  };
+
+  if (needsUserAction) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <button
+          onClick={handleInitialize}
+          className="px-6 py-3 bg-[#2040a0] text-[#80c0ff] border border-[#4060c0] rounded hover:bg-[#3050b0] active:bg-[#1030a0] text-sm"
+        >
+          TAP TO START
+        </button>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-500 text-sm p-4 max-w-md">
+          Error: {error}
+        </div>
+      </div>
+    );
+  }
 
   if (!isReady) {
     return (

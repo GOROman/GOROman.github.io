@@ -217,38 +217,11 @@
     padding: 10px 15px;
   }
 
-  /* Title Container with Marquee */
-  .mmdsp-title-container {
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-  }
-
   .mmdsp-title-text {
     color: #a0a0d0;
     font-family: 'MS Gothic', 'Osaka-Mono', 'Source Han Code JP', 'Noto Sans Mono CJK JP', 'Hiragino Kaku Gothic ProN', monospace;
     font-size: 12px;
     text-shadow: 0 0 5px rgba(160, 160, 208, 0.3);
-    display: inline-block;
-    white-space: nowrap;
-  }
-
-  .mmdsp-marquee {
-    animation: marquee 10s linear infinite alternate;
-    animation-play-state: running;
-  }
-
-  @keyframes marquee {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(calc(-100% + 100cqw));
-    }
-  }
-
-  .mmdsp-title-container {
-    container-type: inline-size;
   }
 
   /* Drop Zone */

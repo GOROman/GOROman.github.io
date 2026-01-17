@@ -95,9 +95,9 @@ export function MDXPlayer() {
 
         {/* Footer */}
         <div className="mmdsp-footer" id="mmdsp-footer">
-          {/* Title with marquee */}
-          <div className="mmdsp-title-container mb-2" id="now-playing">
-            <span className="mmdsp-title-text mmdsp-marquee" id="title">
+          {/* Title */}
+          <div className="mb-2 overflow-hidden" id="now-playing">
+            <span className="mmdsp-title-text block truncate" id="title">
               {playbackInfo.title || '---'}
             </span>
           </div>

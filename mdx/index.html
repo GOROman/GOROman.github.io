@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <title>WASM MDXPlayer Powered by Claude Code</title>
 </head>
 
@@ -80,6 +81,21 @@
           <canvas id="level-canvas" width="320" height="120"></canvas>
         </div>
       </div>
+
+      <!-- Playlist Panel -->
+      <div id="playlist-panel" class="panel">
+        <div class="panel-header">
+          <span>PLAYLIST</span>
+          <span id="playlist-count">[00/00]</span>
+          <div class="playlist-controls">
+            <button id="btn-autoplay" class="playlist-btn active" title="Auto Play">AUTO</button>
+            <button id="btn-clear-playlist" class="playlist-btn" title="Clear Playlist">CLR</button>
+          </div>
+        </div>
+        <div id="playlist-container" tabindex="0">
+          <ul id="playlist-list"></ul>
+        </div>
+      </div>
     </div>
 
     <!-- Footer -->
@@ -93,9 +109,8 @@
         <span>PDX: <span id="pdxfile">-</span></span>
       </div>
       <div id="drop-zone">
-        .MDX / .PDX Drag & Drop
-        <input type="file" id="mdxfile1" accept=".mdx" hidden>
-        <input type="file" id="pdxfile1" accept=".pdx" hidden>
+        .MDX / .PDX / .ZIP Drag & Drop
+        <input type="file" id="mdxfile1" accept=".mdx,.pdx,.zip" hidden multiple>
       </div>
     </footer>
 

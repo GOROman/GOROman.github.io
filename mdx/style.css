@@ -346,6 +346,138 @@ body {
   image-rendering: pixelated;
 }
 
+/* Playlist Panel */
+#playlist-panel {
+  margin: 0 10px 10px 10px;
+}
+
+#playlist-panel .panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#playlist-panel .panel-header span:first-child {
+  flex: 0 0 auto;
+}
+
+#playlist-count {
+  color: var(--text-dim);
+  font-size: 10px;
+  flex: 1;
+}
+
+.playlist-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.playlist-btn {
+  background: linear-gradient(to bottom, #202050 0%, #101030 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 9px;
+  padding: 2px 6px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.playlist-btn:hover {
+  background: linear-gradient(to bottom, #303070 0%, #202050 100%);
+  color: var(--text-cyan);
+}
+
+.playlist-btn.active {
+  background: linear-gradient(to bottom, #204060 0%, #103050 100%);
+  color: var(--text-primary);
+  border-color: #306080;
+}
+
+#playlist-container {
+  max-height: 150px;
+  overflow-y: auto;
+  background: #000008;
+  outline: none;
+}
+
+#playlist-container:focus {
+  outline: 1px solid var(--border-light);
+}
+
+#playlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.playlist-item {
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: 'MS Gothic', 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid #101020;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.1s;
+}
+
+.playlist-item:hover {
+  background: #181840;
+}
+
+.playlist-item.selected {
+  background: linear-gradient(to bottom, #202060 0%, #101040 100%);
+  color: #a0a0ff;
+}
+
+.playlist-item.playing {
+  color: var(--text-primary);
+}
+
+.playlist-item.playing::before {
+  content: '\25B6';
+  color: var(--text-primary);
+  font-size: 8px;
+  margin-right: 4px;
+}
+
+.playlist-item .item-number {
+  width: 24px;
+  color: var(--text-dim);
+  font-size: 10px;
+  text-align: right;
+}
+
+.playlist-item .item-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.playlist-item .item-filename {
+  color: var(--text-dim);
+  font-size: 9px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Playlist empty state */
+#playlist-list:empty::after {
+  content: 'Drop MDX/PDX/ZIP files here';
+  display: block;
+  padding: 20px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
 /* Footer */
 #mmdsp-footer {
   background: linear-gradient(to bottom, #101030 0%, #080820 100%);

@@ -248,6 +248,30 @@
     background: linear-gradient(to bottom, #004400 0%, #002200 100%);
     color: #40ff40;
   }
+
+  /* Playlist Button */
+  .mmdsp-playlist-btn {
+    background: linear-gradient(to bottom, #202050 0%, #101030 100%);
+    border: 1px solid #202048;
+    border-radius: 2px;
+    color: #303080;
+    font-family: inherit;
+    font-size: 9px;
+    padding: 2px 6px;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+
+  .mmdsp-playlist-btn:hover {
+    background: linear-gradient(to bottom, #303070 0%, #202050 100%);
+    color: #60a0ff;
+  }
+
+  .mmdsp-playlist-btn.active {
+    background: linear-gradient(to bottom, #204060 0%, #103050 100%);
+    color: #40ff40;
+    border-color: #306080;
+  }
 }
 
 /* Mobile Responsive */

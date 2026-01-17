@@ -97,3 +97,20 @@ export interface LevelMeterColors {
 }
 
 export type VisualizerTab = 'keyboard' | 'level' | 'opm';
+
+// Playlist Types
+export interface PlaylistItem {
+  id: string;
+  mdxFilename: string;
+  mdxData: ArrayBuffer;
+  pdxFilename: string | null;
+  pdxData: ArrayBuffer | null;
+  title: string | null;
+}
+
+export interface PlaylistState {
+  items: PlaylistItem[];
+  currentIndex: number;    // Selected index
+  playingIndex: number;    // Currently playing index
+  isAutoPlay: boolean;     // Auto-play next song
+}

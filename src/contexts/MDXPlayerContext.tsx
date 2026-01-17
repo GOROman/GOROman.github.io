@@ -166,7 +166,12 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
     return () => stopRenderLoop();
   }, [playerState, startRenderLoop, stopRenderLoop]);
 
-  const play = useCallback(() => {
+  const play = useCallback(async () => {
+    // Initialize if not ready (for iOS)
+    if (!audioContextRef.current || !synthNodeRef.current) {
+      await initialize();
+    }
+
     if (!audioContextRef.current || !synthNodeRef.current) return;
 
     if (playerState === 'stopped') {
@@ -185,7 +190,7 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
 
     audioContextRef.current.resume();
     setPlayerState('playing');
-  }, [playerState, resetMidiState]);
+  }, [playerState, resetMidiState, initialize]);
 
   const pause = useCallback(() => {
     if (!audioContextRef.current) return;

@@ -10,7 +10,7 @@ import { SpectrumAnalyzer } from './visualizers/SpectrumAnalyzer';
 import { OPMRegisterDisplay } from './visualizers/OPMRegisterDisplay';
 
 export function MDXPlayer() {
-  const { initialize, isReady, playbackInfo } = useMDXPlayer();
+  const { playbackInfo } = useMDXPlayer();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -22,50 +22,6 @@ export function MDXPlayer() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const [error, setError] = useState<string | null>(null);
-  const [needsUserAction, setNeedsUserAction] = useState(true);
-
-  const handleInitialize = async () => {
-    try {
-      setNeedsUserAction(false);
-      await initialize();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    }
-  };
-
-  if (needsUserAction) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <button
-          onClick={handleInitialize}
-          className="px-6 py-3 bg-[#2040a0] text-[#80c0ff] border border-[#4060c0] rounded hover:bg-[#3050b0] active:bg-[#1030a0] text-sm"
-        >
-          TAP TO START
-        </button>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-500 text-sm p-4 max-w-md">
-          Error: {error}
-        </div>
-      </div>
-    );
-  }
-
-  if (!isReady) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-[#60a0ff] text-sm animate-pulse">
-          Loading WASM Module...
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col items-center">
@@ -139,10 +95,9 @@ export function MDXPlayer() {
 
         {/* Footer */}
         <div className="mmdsp-footer" id="mmdsp-footer">
-          {/* Now Playing */}
-          <div className="flex items-center gap-[10px] mb-2" id="now-playing">
-            <span className="mmdsp-now-playing-label">NOW PLAYING:</span>
-            <span className="mmdsp-title-text truncate max-w-[600px]" id="title">
+          {/* Title */}
+          <div className="mb-2 overflow-hidden" id="now-playing">
+            <span className="mmdsp-title-text block truncate" id="title">
               {playbackInfo.title || '---'}
             </span>
           </div>

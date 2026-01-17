@@ -1745,12 +1745,7 @@ class MDXPlayer {
   _playItem(item) {
     if (!item) return;
 
-    // Load PDX first if available
-    if (item.pdxData && item.pdxFilename) {
-      this.loadPDX(item.pdxFilename, item.pdxData);
-    }
-
-    // Load and play MDX
+    // Load and play MDX (PDX should already be loaded in WASM from drop time)
     this.loadMDX(item.mdxFilename, item.mdxData);
     this._updatePlaylistUI();
   }
@@ -1811,26 +1806,22 @@ class MDXPlayer {
       await this._processZipFile(zipFile);
     }
 
-    // Process standalone files
-    // Read PDX files into cache
-    const pdxCache = {};
+    // Load PDX files directly to WASM (not by filename matching)
     for (const pdxFile of pdxFiles) {
       const data = await this._readFileAsync(pdxFile);
-      pdxCache[pdxFile.name.toUpperCase()] = { filename: pdxFile.name, data };
+      console.log('PDX -> WASM:', pdxFile.name, 'size:', data.byteLength);
+      this.loadPDX(pdxFile.name, data);
     }
 
-    // Process MDX files
+    // Process MDX files (PDX is already in WASM)
     for (const mdxFile of mdxFiles) {
       const mdxData = await this._readFileAsync(mdxFile);
-
-      // Try to find matching PDX
-      const pdxInfo = pdxCache[mdxFile.name.replace(/\.mdx$/i, '.PDX').toUpperCase()];
 
       const item = new PlaylistItem(
         mdxFile.name,
         mdxData,
-        pdxInfo?.filename || null,
-        pdxInfo?.data || null
+        null,  // PDX is managed by WASM, not playlist
+        null
       );
 
       this._playlist.add(item);
@@ -1854,9 +1845,8 @@ class MDXPlayer {
     try {
       const zip = await JSZip.loadAsync(zipFile);
       const mdxEntries = [];
-      const pdxCache = {};
 
-      // First pass: collect all files
+      // First pass: collect MDX and load PDX directly to WASM
       for (const [path, zipEntry] of Object.entries(zip.files)) {
         if (zipEntry.dir) continue;
 
@@ -1865,23 +1855,20 @@ class MDXPlayer {
           mdxEntries.push({ path, filename, zipEntry });
         } else if (filename.match(/\.pdx$/i)) {
           const data = await zipEntry.async('arraybuffer');
-          pdxCache[filename.toUpperCase()] = { filename, data };
+          console.log('ZIP PDX -> WASM:', filename, 'size:', data.byteLength);
+          this.loadPDX(filename, data);
         }
       }
 
-      // Second pass: create playlist items
+      // Second pass: create playlist items (MDX only, PDX is in WASM)
       for (const mdx of mdxEntries) {
         const mdxData = await mdx.zipEntry.async('arraybuffer');
-
-        // Try to find matching PDX (same name)
-        const pdxName = mdx.filename.replace(/\.mdx$/i, '.PDX').toUpperCase();
-        const pdxInfo = pdxCache[pdxName];
 
         const item = new PlaylistItem(
           mdx.filename,
           mdxData,
-          pdxInfo?.filename || null,
-          pdxInfo?.data || null
+          null,  // PDX is managed by WASM
+          null
         );
 
         this._playlist.add(item);

@@ -8,7 +8,7 @@ export function ControlPanel() {
   return (
     <div>
       {/* Control Buttons */}
-      <div className="flex gap-2 p-[10px] m-2">
+      <div className="flex flex-wrap gap-2 p-2">
         <button
           onClick={play}
           className={`mmdsp-btn ${playerState === 'playing' ? 'active' : ''} ${isInitial ? 'blink' : ''}`}

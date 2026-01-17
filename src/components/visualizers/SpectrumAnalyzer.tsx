@@ -17,13 +17,14 @@ export function SpectrumAnalyzer() {
   const animationIdRef = useRef<number | null>(null);
   const peakHoldRef = useRef<number[]>(Array(64).fill(0));
   const peakDecayRef = useRef<number[]>(Array(64).fill(0));
-  const { audioContextRef, synthNodeRef, playerState } = useMDXPlayer();
+  const { audioContextRef, synthNodeRef, playerState, isReady } = useMDXPlayer();
 
   useEffect(() => {
     const audioContext = audioContextRef.current;
     const synthNode = synthNodeRef.current;
 
     if (!audioContext || !synthNode) return;
+    if (analyserRef.current) return; // Already initialized
 
     // Create analyser node
     const analyser = audioContext.createAnalyser();
@@ -42,9 +43,10 @@ export function SpectrumAnalyzer() {
       if (analyserRef.current) {
         synthNode.disconnect();
         synthNode.connect(audioContext.destination);
+        analyserRef.current = null;
       }
     };
-  }, [audioContextRef, synthNodeRef]);
+  }, [audioContextRef, synthNodeRef, isReady]);
 
   const render = useCallback(() => {
     const canvas = canvasRef.current;

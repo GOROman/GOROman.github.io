@@ -1332,6 +1332,120 @@ class SpectrumAnalyzer {
 }
 
 // ========================================
+// Playlist Item
+// ========================================
+class PlaylistItem {
+  constructor(mdxFilename, mdxData, pdxFilename = null, pdxData = null) {
+    this.id = crypto.randomUUID();
+    this.mdxFilename = mdxFilename;
+    this.mdxData = mdxData;         // ArrayBuffer
+    this.pdxFilename = pdxFilename;
+    this.pdxData = pdxData;         // ArrayBuffer (optional)
+    this.title = null;              // Loaded after playing
+  }
+}
+
+// ========================================
+// Playlist Manager
+// ========================================
+class Playlist {
+  constructor() {
+    this.items = [];
+    this.currentIndex = -1;    // Selected index
+    this.playingIndex = -1;    // Currently playing index
+    this.isAutoPlay = true;    // Auto-play next song
+  }
+
+  add(item) {
+    this.items.push(item);
+    if (this.currentIndex === -1) {
+      this.currentIndex = 0;
+    }
+    return this.items.length - 1;
+  }
+
+  remove(index) {
+    if (index < 0 || index >= this.items.length) return;
+    this.items.splice(index, 1);
+    // Adjust indices
+    if (this.currentIndex >= this.items.length) {
+      this.currentIndex = this.items.length - 1;
+    }
+    if (this.playingIndex >= this.items.length) {
+      this.playingIndex = -1;
+    } else if (this.playingIndex > index) {
+      this.playingIndex--;
+    }
+  }
+
+  clear() {
+    this.items = [];
+    this.currentIndex = -1;
+    this.playingIndex = -1;
+  }
+
+  select(index) {
+    if (index >= 0 && index < this.items.length) {
+      this.currentIndex = index;
+      return this.items[index];
+    }
+    return null;
+  }
+
+  selectNext() {
+    if (this.items.length === 0) return null;
+    this.currentIndex = (this.currentIndex + 1) % this.items.length;
+    return this.items[this.currentIndex];
+  }
+
+  selectPrev() {
+    if (this.items.length === 0) return null;
+    this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+    return this.items[this.currentIndex];
+  }
+
+  next() {
+    if (this.playingIndex < this.items.length - 1) {
+      this.playingIndex++;
+      this.currentIndex = this.playingIndex;
+      return this.items[this.playingIndex];
+    }
+    return null;
+  }
+
+  prev() {
+    if (this.playingIndex > 0) {
+      this.playingIndex--;
+      this.currentIndex = this.playingIndex;
+      return this.items[this.playingIndex];
+    }
+    return null;
+  }
+
+  getCurrent() {
+    if (this.currentIndex >= 0 && this.currentIndex < this.items.length) {
+      return this.items[this.currentIndex];
+    }
+    return null;
+  }
+
+  getPlaying() {
+    if (this.playingIndex >= 0 && this.playingIndex < this.items.length) {
+      return this.items[this.playingIndex];
+    }
+    return null;
+  }
+
+  hasNext() {
+    return this.playingIndex < this.items.length - 1;
+  }
+
+  getCount() {
+    return this.items.length;
+  }
+}
+
+// ========================================
 // Main MDX Player Class
 // ========================================
 class MDXPlayer {
@@ -1354,6 +1468,11 @@ class MDXPlayer {
 
     // Animation
     this._animationId = null;
+
+    // Playlist
+    this._playlist = new Playlist();
+    this._lastLoopCount = 0;
+    this._autoPlayLoopLimit = 2;  // Auto-play next after N loops
   }
 
   _initializeView() {
@@ -1476,6 +1595,309 @@ class MDXPlayer {
         }
       }
     });
+
+    // Initialize playlist UI
+    this._initializePlaylist();
+  }
+
+  _initializePlaylist() {
+    const playlistContainer = document.getElementById('playlist-container');
+    const playlistList = document.getElementById('playlist-list');
+    const autoplayBtn = document.getElementById('btn-autoplay');
+    const clearBtn = document.getElementById('btn-clear-playlist');
+
+    if (!playlistContainer || !playlistList) return;
+
+    // Auto-play toggle
+    if (autoplayBtn) {
+      autoplayBtn.addEventListener('click', () => {
+        this._playlist.isAutoPlay = !this._playlist.isAutoPlay;
+        autoplayBtn.classList.toggle('active', this._playlist.isAutoPlay);
+      });
+    }
+
+    // Clear playlist
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        this._playlist.clear();
+        this._updatePlaylistUI();
+      });
+    }
+
+    // Click to select
+    playlistList.addEventListener('click', (e) => {
+      const item = e.target.closest('.playlist-item');
+      if (item) {
+        const index = parseInt(item.dataset.index, 10);
+        this._playlist.select(index);
+        this._updatePlaylistUI();
+      }
+    });
+
+    // Double-click to play
+    playlistList.addEventListener('dblclick', (e) => {
+      const item = e.target.closest('.playlist-item');
+      if (item) {
+        const index = parseInt(item.dataset.index, 10);
+        this._playlist.select(index);
+        this._playSelectedItem();
+      }
+    });
+
+    // Keyboard navigation
+    playlistContainer.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          this._playlist.selectPrev();
+          this._updatePlaylistUI();
+          this._scrollToSelected();
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          this._playlist.selectNext();
+          this._updatePlaylistUI();
+          this._scrollToSelected();
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          this._playSelectedItem();
+          break;
+        case 'Delete':
+        case 'Backspace':
+          e.preventDefault();
+          this._removeSelectedItem();
+          break;
+      }
+    });
+  }
+
+  _updatePlaylistUI() {
+    const playlistList = document.getElementById('playlist-list');
+    const playlistCount = document.getElementById('playlist-count');
+
+    if (!playlistList) return;
+
+    // Update count
+    if (playlistCount) {
+      const current = this._playlist.playingIndex >= 0 ? this._playlist.playingIndex + 1 : 0;
+      const total = this._playlist.getCount();
+      playlistCount.textContent = `[${String(current).padStart(2, '0')}/${String(total).padStart(2, '0')}]`;
+    }
+
+    // Clear and rebuild list
+    playlistList.innerHTML = '';
+
+    this._playlist.items.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.className = 'playlist-item';
+      li.dataset.index = index;
+
+      if (index === this._playlist.currentIndex) {
+        li.classList.add('selected');
+      }
+      if (index === this._playlist.playingIndex) {
+        li.classList.add('playing');
+      }
+
+      const numberSpan = document.createElement('span');
+      numberSpan.className = 'item-number';
+      numberSpan.textContent = String(index + 1).padStart(2, '0');
+
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'item-title';
+      titleSpan.textContent = item.title || item.mdxFilename;
+
+      const filenameSpan = document.createElement('span');
+      filenameSpan.className = 'item-filename';
+      filenameSpan.textContent = item.mdxFilename;
+
+      li.appendChild(numberSpan);
+      li.appendChild(titleSpan);
+      if (!item.title) {
+        // Only show filename if no title yet
+      } else {
+        li.appendChild(filenameSpan);
+      }
+
+      playlistList.appendChild(li);
+    });
+  }
+
+  _scrollToSelected() {
+    const playlistContainer = document.getElementById('playlist-container');
+    const selected = playlistContainer?.querySelector('.playlist-item.selected');
+    if (selected) {
+      selected.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
+  _playSelectedItem() {
+    const item = this._playlist.getCurrent();
+    if (!item) return;
+
+    this._playlist.playingIndex = this._playlist.currentIndex;
+    this._lastLoopCount = 0;
+    this._playItem(item);
+  }
+
+  _playItem(item) {
+    if (!item) return;
+
+    // Load PDX first if available
+    if (item.pdxData && item.pdxFilename) {
+      this.loadPDX(item.pdxFilename, item.pdxData);
+    }
+
+    // Load and play MDX
+    this.loadMDX(item.mdxFilename, item.mdxData);
+    this._updatePlaylistUI();
+  }
+
+  _updatePlayingItemTitle(titleBytes) {
+    if (!titleBytes || titleBytes.length === 0) return;
+
+    const playingItem = this._playlist.getPlaying();
+    if (!playingItem || playingItem.title) return;  // Already has title
+
+    try {
+      const decoder = new TextDecoder('shift-jis');
+      const title = decoder.decode(new Uint8Array(titleBytes));
+      if (title) {
+        playingItem.title = title;
+        this._updatePlaylistUI();
+      }
+    } catch (e) {
+      // Ignore decode errors
+    }
+  }
+
+  _removeSelectedItem() {
+    if (this._playlist.currentIndex >= 0) {
+      this._playlist.remove(this._playlist.currentIndex);
+      this._updatePlaylistUI();
+    }
+  }
+
+  _onPlaybackEnd() {
+    if (this._playlist.isAutoPlay && this._playlist.hasNext()) {
+      const nextItem = this._playlist.next();
+      if (nextItem) {
+        this._lastLoopCount = 0;
+        this._playItem(nextItem);
+      }
+    }
+  }
+
+  _checkAutoPlay(loopCount) {
+    // Check if we should auto-play next song
+    if (loopCount >= this._autoPlayLoopLimit && this._lastLoopCount < this._autoPlayLoopLimit) {
+      this._onPlaybackEnd();
+    }
+    this._lastLoopCount = loopCount;
+  }
+
+  async _processDroppedFiles(files) {
+    const fileArray = Array.from(files);
+
+    // Separate files by type
+    const zipFiles = fileArray.filter(f => f.name.match(/\.zip$/i));
+    const mdxFiles = fileArray.filter(f => f.name.match(/\.mdx$/i));
+    const pdxFiles = fileArray.filter(f => f.name.match(/\.pdx$/i));
+
+    // Process ZIP files
+    for (const zipFile of zipFiles) {
+      await this._processZipFile(zipFile);
+    }
+
+    // Process standalone files
+    // Read PDX files into cache
+    const pdxCache = {};
+    for (const pdxFile of pdxFiles) {
+      const data = await this._readFileAsync(pdxFile);
+      pdxCache[pdxFile.name.toUpperCase()] = { filename: pdxFile.name, data };
+    }
+
+    // Process MDX files
+    for (const mdxFile of mdxFiles) {
+      const mdxData = await this._readFileAsync(mdxFile);
+
+      // Try to find matching PDX
+      const pdxInfo = pdxCache[mdxFile.name.replace(/\.mdx$/i, '.PDX').toUpperCase()];
+
+      const item = new PlaylistItem(
+        mdxFile.name,
+        mdxData,
+        pdxInfo?.filename || null,
+        pdxInfo?.data || null
+      );
+
+      this._playlist.add(item);
+    }
+
+    this._updatePlaylistUI();
+
+    // Auto-play first item if this is the first drop
+    if (this._playlist.playingIndex === -1 && this._playlist.getCount() > 0) {
+      this._playlist.select(0);
+      this._playSelectedItem();
+    }
+  }
+
+  async _processZipFile(zipFile) {
+    if (typeof JSZip === 'undefined') {
+      console.error('JSZip not loaded');
+      return;
+    }
+
+    try {
+      const zip = await JSZip.loadAsync(zipFile);
+      const mdxEntries = [];
+      const pdxCache = {};
+
+      // First pass: collect all files
+      for (const [path, zipEntry] of Object.entries(zip.files)) {
+        if (zipEntry.dir) continue;
+
+        const filename = path.split('/').pop();
+        if (filename.match(/\.mdx$/i)) {
+          mdxEntries.push({ path, filename, zipEntry });
+        } else if (filename.match(/\.pdx$/i)) {
+          const data = await zipEntry.async('arraybuffer');
+          pdxCache[filename.toUpperCase()] = { filename, data };
+        }
+      }
+
+      // Second pass: create playlist items
+      for (const mdx of mdxEntries) {
+        const mdxData = await mdx.zipEntry.async('arraybuffer');
+
+        // Try to find matching PDX (same name)
+        const pdxName = mdx.filename.replace(/\.mdx$/i, '.PDX').toUpperCase();
+        const pdxInfo = pdxCache[pdxName];
+
+        const item = new PlaylistItem(
+          mdx.filename,
+          mdxData,
+          pdxInfo?.filename || null,
+          pdxInfo?.data || null
+        );
+
+        this._playlist.add(item);
+      }
+    } catch (err) {
+      console.error('ZIP processing error:', err);
+    }
+  }
+
+  _readFileAsync(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    });
   }
 
   _setupDragDrop(element) {
@@ -1511,28 +1933,7 @@ class MDXPlayer {
       }
 
       const files = e.dataTransfer.files;
-
-      // Load PDX first
-      for (let file of files) {
-        if (file.name.match(/\.pdx$/i)) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            this.loadPDX(file.name, event.target.result);
-          };
-          reader.readAsArrayBuffer(file);
-        }
-      }
-
-      // Then load MDX
-      for (let file of files) {
-        if (file.name.match(/\.mdx$/i)) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            this.loadMDX(file.name, event.target.result);
-          };
-          reader.readAsArrayBuffer(file);
-        }
-      }
+      this._processDroppedFiles(files);
     });
   }
 
@@ -1584,6 +1985,12 @@ class MDXPlayer {
 
           // Update title if available (Shift-JIS decode)
           this._updateTitle(data.titleBytes);
+
+          // Update playlist item title
+          this._updatePlayingItemTitle(data.titleBytes);
+
+          // Check for auto-play next song
+          this._checkAutoPlay(data.loopCount);
         }
       } catch (e) {
         // OPM register dump (legacy)

@@ -4,6 +4,7 @@ import { Header } from './Header';
 import { ControlPanel } from './ControlPanel';
 import { DropZone } from './DropZone';
 import { Credit } from './Credit';
+import { Playlist } from './Playlist';
 import { KeyboardVisualizer } from './visualizers/KeyboardVisualizer';
 import { LevelMeter } from './visualizers/LevelMeter';
 import { SpectrumAnalyzer } from './visualizers/SpectrumAnalyzer';
@@ -91,6 +92,9 @@ export function MDXPlayer() {
               <ControlPanel />
             </div>
           )}
+
+          {/* Playlist */}
+          <Playlist />
         </div>
 
         {/* Footer */}

@@ -13,6 +13,8 @@ import type {
   MuteState,
   PlaybackInfo,
   MidiKeyState,
+  PlaylistItem,
+  PlaylistState,
 } from '@/lib/types';
 import { SAMPLE_RATE } from '@/lib/constants';
 import { useMIDI } from '@/hooks/useMIDI';
@@ -30,6 +32,7 @@ interface MDXPlayerContextValue {
   playbackInfo: PlaybackInfo;
   isReady: boolean;
   midiState: MidiState;
+  playlist: PlaylistState;
 
   // Actions
   initialize: () => Promise<void>;
@@ -41,12 +44,22 @@ interface MDXPlayerContextValue {
   loadPDX: (filename: string, data: ArrayBuffer) => void;
   toggleMute: (type: 'fm' | 'pcm', channel: number) => void;
 
+  // Playlist Actions
+  addToPlaylist: (item: PlaylistItem) => void;
+  removeFromPlaylist: (index: number) => void;
+  clearPlaylist: () => void;
+  selectPlaylistItem: (index: number) => void;
+  playSelectedItem: () => void;
+  toggleAutoPlay: () => void;
+
   // Refs for visualizers
   synthNodeRef: React.RefObject<AudioWorkletNode | null>;
   audioContextRef: React.RefObject<AudioContext | null>;
 }
 
 const MDXPlayerContext = createContext<MDXPlayerContextValue | null>(null);
+
+const AUTO_PLAY_LOOP_LIMIT = 2;
 
 export function MDXPlayerProvider({ children }: { children: ReactNode }) {
   const [playerState, setPlayerState] = useState<PlayerState>('stopped');
@@ -62,38 +75,98 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
     tempo: 0,
     title: '',
   });
+  const [playlist, setPlaylist] = useState<PlaylistState>({
+    items: [],
+    currentIndex: -1,
+    playingIndex: -1,
+    isAutoPlay: true,
+  });
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const synthNodeRef = useRef<AudioWorkletNode | null>(null);
   const animationIdRef = useRef<number | null>(null);
+  const lastLoopCountRef = useRef<number>(0);
+  const currentPlayingItemIdRef = useRef<string | null>(null);
+  const titleIgnoreUntilRef = useRef<number>(0);
+
+  // Refs for callback functions to avoid circular dependencies
+  const playNextItemRef = useRef<() => void>(() => {});
 
   // MIDI
   const { midiState, resetMidiState } = useMIDI(synthNodeRef);
 
-  const updatePlaybackInfo = useCallback((data: ChannelData) => {
-    const playTimeMs = (data.playTime * 1024) / 4000;
-    const seconds = Math.floor(playTimeMs / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    const time = `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  // Update playlist item title when received
+  const updatePlayingItemTitle = useCallback((title: string) => {
+    // Ignore title updates for a short period after song change
+    // to avoid stale title from previous song
+    if (Date.now() < titleIgnoreUntilRef.current) return;
 
-    let title = '';
-    if (data.titleBytes && data.titleBytes.length > 0) {
-      try {
-        const decoder = new TextDecoder('shift-jis');
-        title = decoder.decode(new Uint8Array(data.titleBytes));
-      } catch {
-        // ignore decode errors
-      }
-    }
+    const currentItemId = currentPlayingItemIdRef.current;
+    if (!currentItemId) return;
 
-    setPlaybackInfo({
-      time,
-      loopCount: data.loopCount || 0,
-      tempo: data.tempo || 0,
-      title,
+    setPlaylist((prev) => {
+      // Find item by ID to avoid index mismatch issues
+      const index = prev.items.findIndex(item => item.id === currentItemId);
+      if (index === -1) return prev;
+
+      const item = prev.items[index];
+      if (item.title) return prev; // Already has title
+
+      const newItems = [...prev.items];
+      newItems[index] = { ...item, title };
+      return { ...prev, items: newItems };
     });
   }, []);
+
+  // Check for auto-play on loop count change
+  const checkAutoPlay = useCallback(
+    (loopCount: number) => {
+      if (
+        loopCount >= AUTO_PLAY_LOOP_LIMIT &&
+        lastLoopCountRef.current < AUTO_PLAY_LOOP_LIMIT
+      ) {
+        playNextItemRef.current();
+      }
+      lastLoopCountRef.current = loopCount;
+    },
+    []
+  );
+
+  const updatePlaybackInfo = useCallback(
+    (data: ChannelData) => {
+      const playTimeMs = (data.playTime * 1024) / 4000;
+      const seconds = Math.floor(playTimeMs / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      const time = `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+      let title = '';
+      if (data.titleBytes && data.titleBytes.length > 0) {
+        try {
+          const decoder = new TextDecoder('shift-jis');
+          title = decoder.decode(new Uint8Array(data.titleBytes));
+        } catch {
+          // ignore decode errors
+        }
+      }
+
+      setPlaybackInfo({
+        time,
+        loopCount: data.loopCount || 0,
+        tempo: data.tempo || 0,
+        title,
+      });
+
+      // Update playlist item title
+      if (title) {
+        updatePlayingItemTitle(title);
+      }
+
+      // Check for auto-play
+      checkAutoPlay(data.loopCount || 0);
+    },
+    [updatePlayingItemTitle, checkAutoPlay]
+  );
 
   const initialize = useCallback(async () => {
     if (audioContextRef.current) return;
@@ -237,6 +310,134 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
     synthNodeRef.current.port.postMessage(data);
   }, []);
 
+  // Playlist Actions
+  const addToPlaylist = useCallback((item: PlaylistItem) => {
+    setPlaylist((prev) => {
+      const newItems = [...prev.items, item];
+      return {
+        ...prev,
+        items: newItems,
+        currentIndex: prev.currentIndex === -1 ? 0 : prev.currentIndex,
+      };
+    });
+  }, []);
+
+  const removeFromPlaylist = useCallback((index: number) => {
+    setPlaylist((prev) => {
+      const newItems = prev.items.filter((_, i) => i !== index);
+      let newCurrentIndex = prev.currentIndex;
+      let newPlayingIndex = prev.playingIndex;
+
+      if (newCurrentIndex >= newItems.length) {
+        newCurrentIndex = newItems.length - 1;
+      }
+      if (newPlayingIndex >= newItems.length) {
+        newPlayingIndex = -1;
+      } else if (newPlayingIndex > index) {
+        newPlayingIndex--;
+      }
+
+      return {
+        ...prev,
+        items: newItems,
+        currentIndex: newCurrentIndex,
+        playingIndex: newPlayingIndex,
+      };
+    });
+  }, []);
+
+  const clearPlaylist = useCallback(() => {
+    setPlaylist((prev) => ({
+      ...prev,
+      items: [],
+      currentIndex: -1,
+      playingIndex: -1,
+    }));
+  }, []);
+
+  const selectPlaylistItem = useCallback((index: number) => {
+    setPlaylist((prev) => ({
+      ...prev,
+      currentIndex: index >= 0 && index < prev.items.length ? index : prev.currentIndex,
+    }));
+  }, []);
+
+  const playItem = useCallback(
+    async (item: PlaylistItem, index: number) => {
+      // Initialize if not ready
+      if (!audioContextRef.current || !synthNodeRef.current) {
+        await initialize();
+      }
+
+      if (!synthNodeRef.current) return;
+
+      // Track current item ID for title validation
+      currentPlayingItemIdRef.current = item.id;
+
+      // Ignore stale title updates for 500ms after song change
+      titleIgnoreUntilRef.current = Date.now() + 500;
+
+      // Load PDX first if available
+      if (item.pdxData && item.pdxFilename) {
+        loadPDX(item.pdxFilename, item.pdxData);
+      }
+
+      // Load and play MDX
+      loadMDX(item.mdxFilename, item.mdxData);
+
+      // Reset loop counter
+      lastLoopCountRef.current = 0;
+
+      // Update playlist state
+      setPlaylist((prev) => ({
+        ...prev,
+        currentIndex: index,
+        playingIndex: index,
+      }));
+
+      // Start playing
+      if (audioContextRef.current) {
+        audioContextRef.current.resume();
+        setPlayerState('playing');
+      }
+    },
+    [initialize, loadMDX, loadPDX]
+  );
+
+  const playSelectedItem = useCallback(async () => {
+    setPlaylist((prev) => {
+      if (prev.currentIndex >= 0 && prev.currentIndex < prev.items.length) {
+        const item = prev.items[prev.currentIndex];
+        // Use setTimeout to avoid state update during render
+        setTimeout(() => playItem(item, prev.currentIndex), 0);
+      }
+      return prev;
+    });
+  }, [playItem]);
+
+  const toggleAutoPlay = useCallback(() => {
+    setPlaylist((prev) => ({
+      ...prev,
+      isAutoPlay: !prev.isAutoPlay,
+    }));
+  }, []);
+
+  const playNextItem = useCallback(() => {
+    setPlaylist((prev) => {
+      if (prev.isAutoPlay && prev.playingIndex < prev.items.length - 1) {
+        const nextIndex = prev.playingIndex + 1;
+        const nextItem = prev.items[nextIndex];
+        setTimeout(() => playItem(nextItem, nextIndex), 0);
+      }
+      return prev;
+    });
+  }, [playItem]);
+
+  // Update playNextItemRef when playNextItem changes
+  useEffect(() => {
+    playNextItemRef.current = playNextItem;
+  }, [playNextItem]);
+
   const toggleMute = useCallback(
     (type: 'fm' | 'pcm', channel: number) => {
       setMuteState((prev) => {
@@ -304,6 +505,7 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
         playbackInfo,
         isReady,
         midiState,
+        playlist,
         initialize,
         play,
         pause,
@@ -312,6 +514,12 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
         loadMDX,
         loadPDX,
         toggleMute,
+        addToPlaylist,
+        removeFromPlaylist,
+        clearPlaylist,
+        selectPlaylistItem,
+        playSelectedItem,
+        toggleAutoPlay,
         synthNodeRef,
         audioContextRef,
       }}

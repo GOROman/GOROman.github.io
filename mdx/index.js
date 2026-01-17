@@ -2138,14 +2138,19 @@ class MDXPlayer {
     this._synthNode.port.postMessage("FADEOUT");
   }
 
-  loadMDX(filename, data) {
+  loadMDX(filename, data, autoPlay = true) {
     this._synthNode.port.postMessage("MDX");
     this._synthNode.port.postMessage(data);
 
     // Set filename in MDX file info
     document.getElementById("mdxfile").textContent = filename;
     // Title will be updated by TITLE message from worklet
-    this.play();
+    if (autoPlay) {
+      this.play();
+    } else {
+      // Mark as stopped so PLAY button will send REPLAY command
+      this._isStopped = true;
+    }
   }
 
   loadPDX(filename, data) {
@@ -2172,7 +2177,47 @@ class MDXPlayer {
     // Initial render of visualizers (empty state)
     this._renderInitialState();
 
+    // Load MDX/PDX from URL parameters if specified
+    await this._loadFromURLParams();
+
     console.log("WASM MDX Player Ready!");
+  }
+
+  async _loadFromURLParams() {
+    const params = new URLSearchParams(window.location.search);
+    const mdxUrl = params.get('mdx') || 'ds02.mdx';  // Default to ds02.mdx
+    const pdxUrl = params.get('pdx');
+
+    console.log('Loading MDX:', { mdx: mdxUrl, pdx: pdxUrl });
+
+    try {
+      // Load PDX first if specified
+      if (pdxUrl) {
+        const pdxResponse = await fetch(pdxUrl);
+        if (pdxResponse.ok) {
+          const pdxData = await pdxResponse.arrayBuffer();
+          const pdxFilename = pdxUrl.split('/').pop() || 'unknown.pdx';
+          console.log('Loaded PDX:', pdxFilename, 'size:', pdxData.byteLength);
+          this.loadPDX(pdxFilename, pdxData);
+        } else {
+          console.warn('Failed to load PDX:', pdxUrl, pdxResponse.status);
+        }
+      }
+
+      // Load MDX
+      const mdxResponse = await fetch(mdxUrl);
+      if (mdxResponse.ok) {
+        const mdxData = await mdxResponse.arrayBuffer();
+        const mdxFilename = mdxUrl.split('/').pop() || 'unknown.mdx';
+        console.log('Loaded MDX:', mdxFilename, 'size:', mdxData.byteLength);
+        // Don't auto-play (browser autoplay policy requires user gesture)
+        this.loadMDX(mdxFilename, mdxData, false);
+      } else {
+        console.error('Failed to load MDX:', mdxUrl, mdxResponse.status);
+      }
+    } catch (e) {
+      console.error('Error loading from URL params:', e);
+    }
   }
 
   _renderInitialState() {

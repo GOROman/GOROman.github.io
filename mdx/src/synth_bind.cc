@@ -32,14 +32,6 @@
 #include "mxdrv_context.h"
 #include "portable_mdx/src/mxdrv/sound_iocs.h"
 
-//static const char MDXDATA[] = {
-//#include "ds02.inc"
-//};
-
-//static const char PDXDATA[] = {
-//#include "bos.pdx.inc"
-//};
-
 #include <emscripten.h>
 #include <emscripten/bind.h>
 #include <emscripten/val.h>
@@ -119,21 +111,9 @@ public:
 
     puts("SimpleKernel::SimpleKernel()");
 
-    char* mdxFilePath = "ds02.mdx";
-    printf("Filename:%s\n", mdxFilePath);
-
-    /* MDX ファイルの読み込み */
-#if 1
+    /* No default MDX file - will be loaded via JavaScript */
+    void *mdxFileImage = NULL;
     uint32_t mdxFileImageSizeInBytes = 0;
-    void *mdxFileImage = mallocReadFile(mdxFilePath, &mdxFileImageSizeInBytes);
-    if (mdxFileImage == NULL) {
-      printf("mallocReadFile '%s' failed.\n", mdxFilePath);
-      exit(EXIT_FAILURE);
-    }
-#else
-  void* mdxFileImage = (void*)MDXDATA;
-  uint32_t mdxFileImageSizeInBytes = sizeof(MDXDATA);
-#endif
 
     /* コンテキストの初期化 */
 #define MDX_BUFFER_SIZE 1 * 1024 * 1024
@@ -168,8 +148,8 @@ public:
     /* 音量設定 */
     MXDRV_TotalVolume(&context, 256);
 
-
-    loadMDX((uintptr_t)mdxFileImage, mdxFileImageSizeInBytes);
+    /* Skip initial MDX load - will be loaded via JavaScript */
+    // loadMDX((uintptr_t)mdxFileImage, mdxFileImageSizeInBytes);
   }
 
   virtual ~SynthesizerWrapper()

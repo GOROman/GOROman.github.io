@@ -4,7 +4,7 @@ import type { PlaylistItem } from '@/lib/types';
 import JSZip from 'jszip';
 
 export function DropZone() {
-  const { addToPlaylist, playSelectedItem, playlist } = useMDXPlayer();
+  const { addToPlaylist, playSelectedItem, playlist, loadPDX, initialize } = useMDXPlayer();
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -20,11 +20,13 @@ export function DropZone() {
   const processZipFile = useCallback(
     async (zipFile: File) => {
       try {
+        // Initialize audio context first
+        await initialize();
+
         const zip = await JSZip.loadAsync(zipFile);
         const mdxEntries: { path: string; filename: string; zipEntry: JSZip.JSZipObject }[] = [];
-        const pdxCache: Record<string, { filename: string; data: ArrayBuffer }> = {};
 
-        // First pass: collect all files
+        // First pass: collect MDX files and load PDX files directly to WASM
         for (const [path, zipEntry] of Object.entries(zip.files)) {
           if (zipEntry.dir) continue;
 
@@ -33,34 +35,33 @@ export function DropZone() {
             mdxEntries.push({ path, filename, zipEntry });
           } else if (filename.match(/\.pdx$/i)) {
             const data = await zipEntry.async('arraybuffer');
-            pdxCache[filename.toUpperCase()] = { filename, data };
+            console.log('ZIP PDX -> WASM:', filename, 'size:', data.byteLength);
+            // Load PDX directly to WASM
+            loadPDX(filename, data);
           }
         }
 
-        // Second pass: create playlist items
+        // Second pass: create playlist items (MDX only, PDX is already in WASM)
         for (const mdx of mdxEntries) {
           const mdxData = await mdx.zipEntry.async('arraybuffer');
-
-          // Try to find matching PDX (same name)
-          const pdxName = mdx.filename.replace(/\.mdx$/i, '.PDX').toUpperCase();
-          const pdxInfo = pdxCache[pdxName];
 
           const item: PlaylistItem = {
             id: crypto.randomUUID(),
             mdxFilename: mdx.filename,
             mdxData,
-            pdxFilename: pdxInfo?.filename || null,
-            pdxData: pdxInfo?.data || null,
+            pdxFilename: null,
+            pdxData: null,
             title: null,
           };
 
+          console.log('ZIP Adding:', mdx.filename);
           addToPlaylist(item);
         }
       } catch (err) {
         console.error('ZIP processing error:', err);
       }
     },
-    [addToPlaylist]
+    [addToPlaylist, initialize, loadPDX]
   );
 
   const handleFiles = useCallback(
@@ -77,30 +78,32 @@ export function DropZone() {
         await processZipFile(zipFile);
       }
 
-      // Read PDX files into cache
-      const pdxCache: Record<string, { filename: string; data: ArrayBuffer }> = {};
-      for (const pdxFile of pdxFiles) {
-        const data = await readFileAsync(pdxFile);
-        pdxCache[pdxFile.name.toUpperCase()] = { filename: pdxFile.name, data };
+      // Initialize if we have PDX or MDX files
+      if (pdxFiles.length > 0 || mdxFiles.length > 0) {
+        await initialize();
       }
 
-      // Process MDX files
+      // Load PDX files directly to WASM
+      for (const pdxFile of pdxFiles) {
+        const data = await readFileAsync(pdxFile);
+        console.log('PDX -> WASM:', pdxFile.name, 'size:', data.byteLength);
+        loadPDX(pdxFile.name, data);
+      }
+
+      // Process MDX files (PDX is already in WASM)
       for (const mdxFile of mdxFiles) {
         const mdxData = await readFileAsync(mdxFile);
-
-        // Try to find matching PDX
-        const pdxName = mdxFile.name.replace(/\.mdx$/i, '.PDX').toUpperCase();
-        const pdxInfo = pdxCache[pdxName];
 
         const item: PlaylistItem = {
           id: crypto.randomUUID(),
           mdxFilename: mdxFile.name,
           mdxData,
-          pdxFilename: pdxInfo?.filename || null,
-          pdxData: pdxInfo?.data || null,
+          pdxFilename: null,
+          pdxData: null,
           title: null,
         };
 
+        console.log('Adding to playlist:', mdxFile.name);
         addToPlaylist(item);
       }
 
@@ -110,7 +113,7 @@ export function DropZone() {
         setTimeout(() => playSelectedItem(), 100);
       }
     },
-    [addToPlaylist, processZipFile, readFileAsync, playlist.playingIndex, playlist.items.length, playSelectedItem]
+    [addToPlaylist, processZipFile, readFileAsync, playlist.playingIndex, playlist.items.length, playSelectedItem, initialize, loadPDX]
   );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {

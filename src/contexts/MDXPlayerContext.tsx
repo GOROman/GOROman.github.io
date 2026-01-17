@@ -306,6 +306,8 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
   const loadPDX = useCallback((filename: string, data: ArrayBuffer) => {
     if (!synthNodeRef.current) return;
 
+    console.log('loadPDX:', filename, 'dataType:', typeof data, 'byteLength:', data?.byteLength);
+
     synthNodeRef.current.port.postMessage(filename);
     synthNodeRef.current.port.postMessage(data);
   }, []);
@@ -377,12 +379,7 @@ export function MDXPlayerProvider({ children }: { children: ReactNode }) {
       // Ignore stale title updates for 500ms after song change
       titleIgnoreUntilRef.current = Date.now() + 500;
 
-      // Load PDX first if available
-      if (item.pdxData && item.pdxFilename) {
-        loadPDX(item.pdxFilename, item.pdxData);
-      }
-
-      // Load and play MDX
+      // Load and play MDX (PDX should already be loaded in WASM from drop time)
       loadMDX(item.mdxFilename, item.mdxData);
 
       // Reset loop counter

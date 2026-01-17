@@ -1806,6 +1806,11 @@ class MDXPlayer {
       await this._processZipFile(zipFile);
     }
 
+    // Initialize audio context if we have PDX files (needed for loadPDX)
+    if (pdxFiles.length > 0 && !this._synthNode) {
+      await this._initializeAudio();
+    }
+
     // Load PDX files directly to WASM (not by filename matching)
     for (const pdxFile of pdxFiles) {
       const data = await this._readFileAsync(pdxFile);
@@ -1843,6 +1848,11 @@ class MDXPlayer {
     }
 
     try {
+      // Initialize audio context first (needed for loadPDX)
+      if (!this._synthNode) {
+        await this._initializeAudio();
+      }
+
       const zip = await JSZip.loadAsync(zipFile);
       const mdxEntries = [];
 

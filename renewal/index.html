@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOROmanのホームページ — Webの30年をスクロールする</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:sans-serif; overflow-x:hidden; background:#fff; }
+
+  /* ===== crossfade background layers ===== */
+  .bg-layer { position:fixed; inset:0; z-index:-1; opacity:0; transition:opacity .15s linear; pointer-events:none; }
+  .bg-0 { background:#ffffff; }
+  .bg-1 { background:linear-gradient(180deg,#dfe5ee 0%,#aebdd1 45%,#e8ecf2 55%,#93a5bd 100%); }
+  .bg-2 { background:linear-gradient(180deg,#7ec3ea 0%,#ffffff 70%); }
+  .bg-3 { background:#f4f4f4; }
+  .bg-4 { background:linear-gradient(160deg,#37474f 0%,#607d8b 60%,#90a4ae 100%); }
+  .bg-5 { background:radial-gradient(1200px 800px at 15% 10%,#3b2d5c 0%,transparent 55%),radial-gradient(1000px 700px at 85% 85%,#0e4d5c 0%,transparent 55%),#0b0e17; }
+  .bg-6 { background:#faf8f5; }
+
+  /* ===== era indicator ===== */
+  #eraBadge { position:fixed; left:14px; bottom:14px; z-index:50; background:rgba(17,17,17,.86); color:#fff;
+    padding:8px 14px; border-radius:999px; font-size:13px; letter-spacing:.04em; backdrop-filter:blur(6px);
+    transition:opacity .4s; }
+  #eraBadge b { font-size:15px; }
+  #scrollHint { position:fixed; right:16px; bottom:14px; z-index:50; color:#666; font-size:12px; animation:bob 1.8s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+  section { min-height:115vh; display:flex; align-items:center; justify-content:center; padding:9vh 16px; position:relative; }
+  .reveal { opacity:0; transform:translateY(42px); transition:opacity .9s ease, transform .9s ease; }
+  .reveal.in { opacity:1; transform:translateY(0); }
+  .era-note { text-align:center; font-size:12px; letter-spacing:.14em; opacity:.65; margin-bottom:14px; text-transform:uppercase; }
+
+  /* ===== ERA 0 : 1995 retro (original) ===== */
+  .retro { font-family:'MS PGothic','ＭＳ Ｐゴシック',sans-serif; text-align:center; color:#000; width:100%; }
+  .retro marquee { font-size:2rem; color:#0000FF; }
+  .retro table { margin:20px auto; border-collapse:collapse; }
+  .retro th,.retro td { padding:8px; border:2px solid #000; }
+  .retro a { color:#0000FF; text-decoration:none; }
+  .retro a:hover { text-decoration:underline; }
+  .counter { display:inline-block; background:#000; padding:2px; }
+  .counter-digit { display:inline-block; background:#000; color:#0f0; font-family:'Courier New',monospace; font-size:1.5rem; font-weight:bold; width:1.2em; text-align:center; border:1px solid #333; margin:0 1px; }
+  .game-corner { background:#f0f0f0; padding:20px; margin:20px auto; border:2px solid #000; max-width:500px; }
+  .game-input { padding:5px; margin:10px; font-size:1rem; width:110px; }
+  .game-button { background:#0000FF; color:#fff; padding:8px 15px; border:none; cursor:pointer; font-size:1rem; }
+  .game-button:hover { background:#0000CC; }
+  .game-message { margin:10px; font-weight:bold; min-height:1.2em; }
+
+  /* ===== ERA 1 : 2000 metallic ===== */
+  .metal-wrap { width:min(680px,94vw); text-align:center; font-family:Verdana,'Hiragino Kaku Gothic ProN',sans-serif; }
+  .metal-card { background:linear-gradient(180deg,#fdfdfd,#c3ccd9 48%,#eef1f6 52%,#9fb0c3); border:1px solid #6d7f95; border-radius:10px;
+    box-shadow:0 12px 34px rgba(30,45,70,.45), inset 0 1px 0 #fff; padding:38px 30px; color:#1c2733; }
+  .metal-card h2 { font-size:30px; letter-spacing:.12em; text-shadow:0 1px 0 #fff, 0 2px 3px rgba(0,0,0,.35); }
+  .metal-btn { display:inline-block; margin:8px 5px 0; padding:9px 20px; border-radius:6px; color:#10202f; font-weight:bold; font-size:14px; text-decoration:none;
+    background:linear-gradient(180deg,#ffffff,#b9c7da 48%,#dfe6ef 52%,#8fa3bb); border:1px solid #5c7089; box-shadow:inset 0 1px 0 #fff,0 2px 5px rgba(0,0,0,.3); }
+  .metal-card p { margin-top:14px; font-size:14px; line-height:1.8; }
+
+  /* ===== ERA 2 : 2005 Web 2.0 ===== */
+  .web2-wrap { width:min(700px,94vw); font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif; }
+  .web2-card { background:#fff; border-radius:22px; box-shadow:0 10px 30px rgba(0,90,160,.28); overflow:hidden; position:relative; }
+  .web2-head { background:linear-gradient(180deg,#5db9f5,#1b7fd4); color:#fff; padding:28px 30px 22px; position:relative; }
+  .web2-head::after { content:""; position:absolute; left:0; right:0; top:0; height:50%; background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0)); }
+  .web2-head h2 { font-size:32px; position:relative; z-index:1; }
+  .beta { position:absolute; right:18px; top:14px; z-index:2; background:#ff8a00; color:#fff; font-weight:bold; padding:5px 12px; border-radius:999px; transform:rotate(8deg); box-shadow:0 3px 8px rgba(0,0,0,.25); font-size:13px; }
+  .web2-body { padding:24px 30px 30px; color:#333; line-height:1.8; font-size:15px; }
+  .web2-btn { display:inline-block; margin-top:14px; background:linear-gradient(180deg,#9be15d,#57a811); color:#fff; font-weight:bold; padding:12px 26px; border-radius:999px; text-decoration:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 4px 10px rgba(60,140,0,.4); font-size:16px; }
+
+  /* ===== ERA 3 : 2010 flat ===== */
+  .flat-wrap { width:min(760px,94vw); font-family:'Segoe UI','Helvetica Neue','Hiragino Kaku Gothic ProN',sans-serif; }
+  .flat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
+  .tile { padding:28px 24px; color:#fff; min-height:150px; }
+  .tile h2 { font-size:34px; font-weight:600; line-height:1.25; }
+  .tile p { font-size:14px; line-height:1.7; opacity:.92; }
+  .t-a { background:#e74c3c; } .t-b { background:#2980b9; } .t-c { background:#27ae60; } .t-d { background:#f39c12; }
+  @media (max-width:560px){ .flat-grid{grid-template-columns:1fr;} }
+
+  /* ===== ERA 4 : 2015 material / hero ===== */
+  .mat-wrap { width:min(760px,94vw); font-family:Roboto,'Noto Sans JP',sans-serif; }
+  .mat-hero { background:linear-gradient(rgba(0,0,0,.32),rgba(0,0,0,.32)),linear-gradient(120deg,#5e7a68,#a8c3a0); color:#fff; padding:52px 36px 40px; border-radius:4px 4px 0 0; }
+  .mat-hero h2 { font-size:36px; font-weight:300; line-height:1.35; }
+  .mat-hero p { margin-top:12px; font-size:15px; opacity:.92; line-height:1.8; }
+  .mat-card { background:#fff; margin:-26px 22px 0; border-radius:4px; box-shadow:0 12px 28px rgba(0,0,0,.28); padding:26px 28px; color:#37474f; line-height:1.85; font-size:15px; position:relative; }
+  .mat-btn { display:inline-block; margin-top:14px; color:#00897b; font-weight:700; text-decoration:none; letter-spacing:.06em; font-size:14px; }
+
+  /* ===== ERA 5 : 2020 dark glass ===== */
+  .glass-wrap { width:min(720px,94vw); font-family:'SF Pro Display','Helvetica Neue','Hiragino Kaku Gothic ProN',sans-serif; }
+  .glass-card { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:24px; backdrop-filter:blur(14px);
+    padding:40px 36px; color:#eef1f6; box-shadow:0 24px 60px rgba(0,0,0,.45); }
+  .glass-card h2 { font-size:34px; font-weight:700; background:linear-gradient(90deg,#a5b4fc,#f0abfc,#67e8f9); -webkit-background-clip:text; background-clip:text; color:transparent; line-height:1.3; }
+  .glass-card p { margin-top:14px; line-height:1.85; font-size:15px; color:#c9d2e0; }
+  .glass-chip { display:inline-block; margin:14px 6px 0 0; padding:7px 14px; border-radius:999px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.22); font-size:13px; color:#e8ecf4; }
+
+  /* ===== ERA 6 : 2025 now ===== */
+  .now-wrap { width:min(720px,94vw); font-family:'Hiragino Mincho ProN','Yu Mincho',serif; color:#26241f; text-align:left; }
+  .now-wrap .kicker { font-family:sans-serif; font-size:12px; letter-spacing:.22em; color:#a08c5b; }
+  .now-wrap h2 { font-size:clamp(30px,6vw,46px); font-weight:600; line-height:1.35; margin-top:14px; }
+  .now-wrap p { margin-top:18px; font-size:16px; line-height:2.0; font-family:sans-serif; color:#4a463d; }
+  .now-links { margin-top:26px; display:flex; flex-wrap:wrap; gap:10px; font-family:sans-serif; }
+  .now-links a { color:#26241f; text-decoration:none; border:1px solid #26241f; padding:10px 20px; border-radius:999px; font-size:14px; transition:all .3s; }
+  .now-links a:hover { background:#26241f; color:#faf8f5; }
+  .now-links a.primary { background:#26241f; color:#faf8f5; }
+  footer { text-align:center; padding:34px 16px 90px; color:#8a8578; font-size:12px; font-family:sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="bg-layer bg-0" data-bg="0"></div>
+<div class="bg-layer bg-1" data-bg="1"></div>
+<div class="bg-layer bg-2" data-bg="2"></div>
+<div class="bg-layer bg-3" data-bg="3"></div>
+<div class="bg-layer bg-4" data-bg="4"></div>
+<div class="bg-layer bg-5" data-bg="5"></div>
+<div class="bg-layer bg-6" data-bg="6"></div>
+
+<div id="eraBadge">時代： <b>1995–1999</b> 個人ホームページ</div>
+<div id="scrollHint">▼ スクロールで時代が進みます ▼</div>
+
+<!-- ============ ERA 0 : RETRO (original) ============ -->
+<section data-era="0" data-years="1995–1999" data-name="個人ホームページ">
+  <div class="retro">
+    <h1><marquee>ようこそ GOROmanのホームページへ</marquee></h1>
+    <p>Sorry, Japanese Only!!</p>
+    <hr>
+    <p>あなたは <br><span class="counter" id="accessCounter"></span><br>番目のお客さんです。</p>
+    <table border="2">
+      <tbody>
+        <tr><th colspan="2">今週のキリ番</th></tr>
+        <tr><td>4444</td><td>LittleA (<a href="https://twitter.com/ovation_guitar/status/1716440451426001290">@ovation_guitar</a>) さん</td></tr>
+        <tr><td>6666</td><td>mic (<a href="https://twitter.com/microom/status/1716581013865058476">@microom</a>)さん</td></tr>
+      </tbody>
+    </table>
+    <p>最終更新日: 2025/01/22</p>
+    <hr>
+    <div class="game-corner">
+      <h2>🎮 ゲームコーナー 🎮</h2>
+      <h3>数当てゲーム (1-100)</h3>
+      <p>1から100までの数字を当ててください！</p>
+      <input type="number" id="guessInput" class="game-input" min="1" max="100">
+      <button class="game-button" onclick="checkGuess()">予想を送信</button>
+      <p id="message" class="game-message"></p>
+      <button class="game-button" onclick="resetGame()">ゲームをリセット</button>
+    </div>
+    <hr>
+    <p>直リン歓迎します。</p>
+    <p>$Id: index.html,v 1.4 2020/04/26 07:50:28 goroman Exp goroman $</p>
+    <p style="margin-top:18px;font-size:13px;color:#666;">↓ このまま下へスクロールすると、Webの30年が始まります ↓</p>
+  </div>
+</section>
+
+<!-- ============ ERA 1 : 2000 metallic ============ -->
+<section data-era="1" data-years="2000–2004" data-name="メタリック＆Flash">
+  <div class="metal-wrap reveal">
+    <p class="era-note" style="color:#33465e;">2000–2004 / Metallic &amp; Flash era</p>
+    <div class="metal-card">
+      <h2>GOROman Portal</h2>
+      <p>ブロードバンドの時代。Webは銀色に光り、ボタンは押し込める立体感が正義だった。<br>その頃のGOROmanは、シェアウェアとゲームの現場でコードを書いていた。</p>
+      <a class="metal-btn" href="#era2">ENTER</a>
+      <a class="metal-btn" href="portfolio.html">WORKS</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERA 2 : 2005 Web 2.0 ============ -->
+<section id="era2" data-era="2" data-years="2005–2009" data-name="Web 2.0">
+  <div class="web2-wrap reveal">
+    <p class="era-note" style="color:#1b6fb5;">2005–2009 / Web 2.0</p>
+    <div class="web2-card">
+      <div class="web2-head"><span class="beta">BETA!</span><h2>GOROman 2.0</h2></div>
+      <div class="web2-body">
+        <p>角丸、グラデーション、つやつやの反射。ブログとSNSが「参加するWeb」を作った時代。みんなが発信者になり、ホームページはプロフィールへ変わり始める。</p>
+        <a class="web2-btn" href="portfolio.html">作品を見てみよう！</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERA 3 : 2010 flat ============ -->
+<section data-era="3" data-years="2010–2014" data-name="フラット＆レスポンシブ">
+  <div class="flat-wrap reveal">
+    <p class="era-note" style="color:#888;">2010–2014 / Flat &amp; Responsive</p>
+    <div class="flat-grid">
+      <div class="tile t-a"><h2>FLAT</h2><p>影も質感も捨てた。色とタイポグラフィだけで勝負する時代。</p></div>
+      <div class="tile t-b"><h2>2010</h2><p>XVI Inc. 設立。GOROmanの会社員ではないものづくりが始まる。</p></div>
+      <div class="tile t-c"><h2>2013</h2><p>Oculus Rift DK1 到着。Mikulus公開、日本のVR黎明期が動き出す。</p></div>
+      <div class="tile t-d"><h2>MOBILE<br>FIRST</h2><p>スマホが主役に。デザインは画面幅に合わせて流動するようになった。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERA 4 : 2015 material / hero ============ -->
+<section data-era="4" data-years="2015–2019" data-name="マテリアル＆ヒーロー">
+  <div class="mat-wrap reveal">
+    <p class="era-note" style="color:#e8ecef;">2015–2019 / Material &amp; Hero</p>
+    <div class="mat-hero">
+      <h2>VRの伝道師、全国を飛ぶ。</h2>
+      <p>大きなヒーローイメージと、紙のようなカードのUI。Webが「アプリらしく」なった時代。</p>
+    </div>
+    <div class="mat-card">
+      <p>Oculus Japanの立ち上げ、Facebookを経て、AniCast（2018）へ。VRクリエイティブアワード2017で Mikulus が個人部門最優秀賞。著書『ミライのつくり方』刊行、学生GOプロジェクト開始。</p>
+      <a class="mat-btn" href="portfolio.html">WORKS を見る →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERA 5 : 2020 dark glass ============ -->
+<section data-era="5" data-years="2020–2024" data-name="ダーク＆グラスモーフィズム">
+  <div class="glass-wrap reveal">
+    <p class="era-note" style="color:#9aa7bd;">2020–2024 / Dark &amp; Glassmorphism</p>
+    <div class="glass-card">
+      <h2>画面の向こうから、<br>ガジェットとAIの時代へ。</h2>
+      <p>ダークモードと半透明のガラス、流れるグラデーション。GOROmanはVRの第一線を離れ、M5Stackのドローン StampFly、KANTAN Play、ブラウザで動くMDXプレーヤーなど、手のひらサイズのものづくりへ。</p>
+      <span class="glass-chip">StampFly</span><span class="glass-chip">KANTAN Play</span><span class="glass-chip">MDX Player</span><span class="glass-chip">LLM Cardputer</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERA 6 : 2025 now ============ -->
+<section data-era="6" data-years="2025–" data-name="AIエージェント時代">
+  <div class="now-wrap reveal">
+    <p class="kicker">YOSHIHITO KONDOH — GOROman aka ナル先生</p>
+    <h2>AIエージェントと、<br>その身体になるハードウェアを作る。</h2>
+    <p>GOROmanは「死に」、ナル先生になった。いまは個人AIエージェントの実運用と、それが宿るガジェット、基板、ロボットを作っている。Webのデザインが30年かけてたどり着いたのは、装飾を捨てた先にある「中身そのもの」だったのかもしれない。</p>
+    <div class="now-links">
+      <a class="primary" href="portfolio.html">ポートフォリオ（作品年表）</a>
+      <a href="https://x.com/GOROman">X @GOROman</a>
+      <a href="https://github.com/Goroman">GitHub</a>
+      <a href="https://note.com/goroman">note</a>
+      <a href="https://www.xvi.co.jp/">XVI Inc.</a>
+    </div>
+  </div>
+</section>
+
+<footer>© GOROman — このページはスクロールで1995年から現在まで旅をします。旧トップページの要素（カウンター／キリ番／数当てゲーム）はそのまま保存しています。</footer>
+
+<script>
+  // --- retro counter (same dummy logic as the original) ---
+  (function(){
+    var base = 7283;
+    var days = Math.floor(Date.now()/86400000);
+    var count = base + days*3 + Math.floor(Math.random()*5);
+    var digits = String(count).padStart(7,'0');
+    var el = document.getElementById('accessCounter');
+    for (var i=0;i<digits.length;i++){ var s=document.createElement('span'); s.className='counter-digit'; s.textContent=digits[i]; el.appendChild(s); }
+  })();
+  // --- number game (original) ---
+  var targetNumber = Math.floor(Math.random()*100)+1, attempts = 0;
+  function checkGuess(){
+    var guess = parseInt(document.getElementById('guessInput').value);
+    var msg = document.getElementById('message'); attempts++;
+    if (isNaN(guess)||guess<1||guess>100){ msg.style.color='red'; msg.textContent='1から100までの数字を入力してください！'; return; }
+    if (guess===targetNumber){ msg.style.color='green'; msg.textContent='おめでとうございます！'+attempts+'回目で正解しました！'; }
+    else if (guess<targetNumber){ msg.style.color='blue'; msg.textContent='もっと大きい数字です！'; }
+    else { msg.style.color='blue'; msg.textContent='もっと小さい数字です！'; }
+  }
+  function resetGame(){ targetNumber=Math.floor(Math.random()*100)+1; attempts=0; document.getElementById('guessInput').value=''; document.getElementById('message').textContent=''; }
+
+  // --- era crossfade engine ---
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section[data-era]'));
+  var layers = {};
+  document.querySelectorAll('.bg-layer').forEach(function(l){ layers[l.dataset.bg]=l; });
+  var badge = document.getElementById('eraBadge');
+  var currentEra = -1;
+
+  function update(){
+    var mid = window.innerHeight*0.5;
+    // find current + next section and blend by overlap of viewport center travelling between section centers
+    var best = 0, bestDist = 1e18, centers = [];
+    sections.forEach(function(sec,i){
+      var r = sec.getBoundingClientRect();
+      var c = r.top + r.height/2;
+      centers.push(c);
+      var d = Math.abs(c-mid);
+      if (d<bestDist){ bestDist=d; best=i; }
+    });
+    // crossfade: weight by distance between neighbouring centers
+    sections.forEach(function(sec,i){
+      var layer = layers[sec.dataset.era]; if(!layer) return;
+      var c = centers[i];
+      var prev = (i>0)? centers[i-1] : c - window.innerHeight;
+      var next = (i<sections.length-1)? centers[i+1] : c + window.innerHeight;
+      var w = 0;
+      if (mid>=prev && mid<=next){
+        // triangular weight peaking at this center
+        if (mid<=c) w = 1 - (c-mid)/Math.max(1,(c-prev)) * 0.999;
+        else w = 1 - (mid-c)/Math.max(1,(next-c)) * 0.999;
+      }
+      layer.style.opacity = Math.max(0, Math.min(1, w)).toFixed(3);
+    });
+    if (best!==currentEra){
+      currentEra = best;
+      var s = sections[best];
+      badge.innerHTML = '時代： <b>'+s.dataset.years+'</b> '+s.dataset.name;
+    }
+  }
+  var ticking=false;
+  window.addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(function(){ update(); ticking=false; }); } }, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+
+  // --- reveal on enter ---
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in'); }); }, {threshold:.25});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  // --- right-click ban: only while the retro era is on screen (as it should be) ---
+  document.addEventListener('contextmenu', function(ev){
+    if (currentEra===0){ alert('右クリック禁止！！！！！！！！！！！！！！！！！！！！！'); ev.preventDefault(); }
+  });
+</script>
+</body>
+</html>

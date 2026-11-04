@@ -39,8 +39,11 @@ jobs:
       - name: Prepare deploy directory
         run: |
           mkdir -p deploy
-          # Copy original static files
-          cp index.old.html deploy/index.html
+          # Renewal top page (scroll-through-web-history) + portfolio
+          cp renewal/index.html deploy/index.html
+          cp renewal/portfolio.html deploy/
+          # Original retro page preserved standalone
+          cp index.old.html deploy/old.html
           cp irc.html deploy/ 2>/dev/null || true
           # Copy Vite build output to mdx/
           mkdir -p deploy/mdx

@@ -3,42 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio — GOROman 作品年表</title>
+<meta name="description" content="GOROmanの作品を1988年頃から現在までたどる、検索できる作品年表。">
+<title>作品年表 — GOROman</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#faf8f5;color:#26241f;line-height:1.7}
-  header{max-width:820px;margin:0 auto;padding:56px 20px 8px}
-  .kicker{font-size:12px;letter-spacing:.22em;color:#a08c5b}
-  h1{font-size:clamp(28px,5vw,40px);font-weight:600;margin-top:10px}
-  header p{margin-top:12px;color:#4a463d;font-size:15px}
-  nav{max-width:820px;margin:0 auto;padding:14px 20px}
-  nav a{color:#26241f;text-decoration:none;border:1px solid #26241f;padding:8px 18px;border-radius:999px;font-size:13px}
-  .tl{max-width:820px;margin:10px auto 80px;padding:0 20px;position:relative}
-  .tl::before{content:"";position:absolute;left:29px;top:0;bottom:0;width:2px;background:#e3ddd0}
-  .item{position:relative;padding:18px 0 18px 52px}
-  .dot{position:absolute;left:24px;top:30px;width:12px;height:12px;border-radius:50%;background:#faf8f5;border:3px solid #a08c5b}
-  .year{font-size:13px;font-weight:700;letter-spacing:.08em;color:#a08c5b}
-  .item h2{font-size:20px;font-weight:600;margin:2px 0 4px}
-  .item p{font-size:14.5px;color:#4a463d}
-  .links{margin-top:6px;font-size:13px}
-  .links a{color:#1b6fb5;text-decoration:none;margin-right:14px}
-  .links a:hover{text-decoration:underline}
-  .badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:999px;vertical-align:middle;margin-left:8px;letter-spacing:.04em}
-  .b-x{background:#26241f;color:#fff}
-  .b-wip{background:#fff3d6;color:#7a5c00;border:1px solid #e5cf8a}
-  .b-note{background:#eef4ea;color:#41663a;border:1px solid #cfe0c6}
-  footer{text-align:center;padding:30px 16px 60px;color:#8a8578;font-size:12px}
+  :root{--ink:#161714;--muted:#63645e;--line:#d6d4cc;--paper:#f5f4ef;--accent:#ec4e2b;--ease:cubic-bezier(.22,1,.36,1)}
+  *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:130px}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;line-height:1.75}a:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.skip{position:fixed;z-index:100;top:8px;left:8px;padding:9px 13px;background:#111;color:#fff;transform:translateY(-150%)}.skip:focus{transform:none}
+  header{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr);gap:clamp(30px,8vw,120px);align-items:end;max-width:1160px;margin:auto;padding:clamp(70px,10vw,130px) 24px 55px;border-bottom:1px solid var(--line)}
+  .kicker{margin:0 0 20px;color:var(--accent);font-size:11px;letter-spacing:.2em}.title-wrap h1{max-width:680px;margin:0;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:clamp(48px,8vw,94px);font-weight:500;line-height:1;letter-spacing:-.07em}.intro{margin:0;color:var(--muted);font-size:14px;line-height:2}
+  .topnav{max-width:1160px;margin:auto;padding:20px 24px}.topnav a{display:inline-flex;gap:8px;align-items:center;color:var(--ink);font-size:12px;text-decoration:none}.topnav a::before{content:"←";transition:transform .2s var(--ease)}.topnav a:hover::before{transform:translateX(-4px)}
+  .tools-wrap{position:sticky;z-index:20;top:0;border-block:1px solid var(--line);background:rgba(245,244,239,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.tools{display:grid;grid-template-columns:minmax(230px,1fr) auto;gap:18px;align-items:center;max-width:1160px;margin:auto;padding:14px 24px}.search{position:relative}.search::before{content:"⌕";position:absolute;top:50%;left:15px;transform:translateY(-52%);font-size:20px}.search input{width:100%;padding:12px 42px;border:1px solid #c6c4bb;border-radius:0;background:rgba(255,255,255,.65);color:var(--ink);font-size:14px}.search button{position:absolute;top:50%;right:8px;display:none;border:0;background:none;transform:translateY(-50%);cursor:pointer}.search.has-value button{display:block}.decades{display:flex;gap:4px;overflow:auto;scrollbar-width:none}.decades button{padding:8px 11px;border:0;background:transparent;color:#686961;font-size:11px;white-space:nowrap;cursor:pointer}.decades button:hover,.decades button[aria-pressed="true"]{background:var(--ink);color:#fff}.result-count{grid-column:1/-1;margin:-8px 0 0;color:#77786f;font-size:11px}
+  .tl{position:relative;max-width:1160px;margin:0 auto;padding:50px 24px 100px}.tl::before{content:"";position:absolute;top:50px;bottom:100px;left:calc(24px + 105px);width:1px;background:var(--line)}
+  .item{position:relative;display:grid;grid-template-columns:82px minmax(0,1fr);column-gap:48px;padding:32px 0;border-bottom:1px solid var(--line);transition:opacity .25s,transform .4s var(--ease)}.item:first-child{padding-top:0}.item[hidden]{display:none}.dot{position:absolute;top:42px;left:99px;width:13px;height:13px;border:4px solid var(--paper);border-radius:50%;background:var(--accent);box-shadow:0 0 0 1px var(--accent)}.item:first-child .dot{top:10px}.year{grid-column:1;margin:2px 0;color:var(--accent);font:600 12px/1.5 Arial,sans-serif;letter-spacing:.05em}.item h2,.item>p:not(.year){grid-column:2}.item h2{margin:0 0 10px;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:clamp(22px,3vw,32px);font-weight:600;line-height:1.45;letter-spacing:-.035em}.item>p:not(.year){max-width:760px;margin:0;color:#55564f;font-size:14px;line-height:1.9}.links{margin-top:12px!important;font-size:12px!important}.links a{display:inline-block;margin:0 18px 4px 0;color:var(--ink);text-decoration-thickness:1px;text-underline-offset:4px}.links a::after{content:" ↗";color:var(--accent)}.badge{display:inline-block;margin-left:9px;padding:3px 8px;border-radius:99px;vertical-align:middle;font-family:Arial,sans-serif;font-size:9px;letter-spacing:.04em}.b-x{background:#222;color:#fff}.b-wip{border:1px solid #ddc777;background:#fff3c9;color:#6f5500}.b-note{border:1px solid #cfe0c6;background:#eef4ea;color:#41663a}.empty{display:none;padding:90px 0;text-align:center;color:var(--muted)}.empty.show{display:block}mark{padding:0;background:#ffe269;color:inherit}footer{padding:36px 20px 70px;border-top:1px solid var(--line);color:#85867f;text-align:center;font-size:11px}
+  @media(max-width:720px){header{grid-template-columns:1fr;padding-top:70px}.title-wrap h1{font-size:clamp(48px,16vw,76px)}.tools{grid-template-columns:1fr;padding:12px 16px}.decades{margin-inline:-16px;padding-inline:16px}.tl{padding:36px 16px 80px}.tl::before{left:27px;top:36px}.item{display:block;padding:28px 0 28px 38px}.dot,.item:first-child .dot{top:35px;left:5px}.year{margin-bottom:4px}.item h2{font-size:23px}.item h2,.item>p:not(.year){grid-column:auto}.badge{margin:6px 0 0;vertical-align:top}.result-count{display:none}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+
+  .archive{max-width:1160px;margin:0 auto;padding:70px 24px 90px;border-top:1px solid var(--line)}
+  .archive h2{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:clamp(28px,4vw,44px);font-weight:600;margin:0 0 10px;letter-spacing:-.03em}
+  .archive .arch-note{color:var(--muted);font-size:13.5px;line-height:1.9;max-width:760px;margin:0 0 34px}
+  .pf-block-title{font-size:15px;font-weight:700;margin:38px 0 6px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+  .pf-yeargroup{display:grid;grid-template-columns:82px minmax(0,1fr);column-gap:48px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .pf-yearhead{margin:2px 0;color:var(--accent);font:600 12px/1.5 Arial,sans-serif;letter-spacing:.05em}
+  .pf-items{list-style:none;margin:0;padding:0}
+  .pf-item{padding:3px 0;font-size:13.5px;line-height:1.65;color:#55564f}
+  .pf-item .pf-year{display:none}
+  .pf-name{font-weight:600;color:var(--ink)}
+  .pf-item a{color:var(--ink);text-decoration-thickness:1px;text-underline-offset:3px}
+  .pf-item--major .pf-name{color:var(--accent)}
+  .pf-lang,.pf-star{color:#8a8b83;font-size:12px}
+  .pf-desc{color:#55564f}
+  @media(max-width:720px){.pf-yeargroup{grid-template-columns:1fr}.archive{padding:50px 16px 70px}}
 </style>
 </head>
 <body>
+<a class="skip" href="#timeline">年表へスキップ</a>
 <header>
-  <p class="kicker">PORTFOLIO</p>
-  <h1>GOROman 作品年表</h1>
-  <p>パソコン通信のホスト局から、VR、ガジェット、AIエージェントまで。「作ってみた」の積み重ね。その一部は本人のXポストで、当時のまま読めます。</p>
+  <div class="title-wrap"><p class="kicker">SELECTED WORKS / 1988—NOW</p><h1>GOROman<br>作品年表</h1></div>
+  <p class="intro">パソコン通信のホスト局から、VR、ガジェット、AIエージェントまで。「作ってみた」の積み重ね。その一部は本人のXポストで、当時のまま読めます。</p>
 </header>
-<nav><a href="index.html">← トップへ（Webの30年スクロール）</a></nav>
+<nav class="topnav"><a href="index.html">トップへ（Webの30年スクロール）</a></nav>
 
-<div class="tl">
+<div class="tools-wrap"><div class="tools"><div class="search"><label for="workSearch" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">作品を検索</label><input type="search" id="workSearch" placeholder="作品名・技術・出来事を検索" autocomplete="off"><button type="button" id="clearSearch" aria-label="検索をクリア">×</button></div><div class="decades" aria-label="年代で絞り込む"><button type="button" data-decade="all" aria-pressed="true">すべて</button><button type="button" data-decade="1980">1980s</button><button type="button" data-decade="1990">1990s</button><button type="button" data-decade="2010">2010s</button><button type="button" data-decade="2020">2020s</button></div><p class="result-count" id="resultCount" aria-live="polite"></p></div></div>
+
+<main class="tl" id="timeline">
 
   <div class="item"><span class="dot"></span><p class="year">1988頃</p><h2>GORO-NET</h2>
     <p>中学2年でホストプログラムを自作し開いたパソコン通信ホスト局。フロッピー破損で全データを失い、フルスクラッチで書き直して GORO-NET2 として復活。ものづくりの原点。</p>
@@ -119,7 +125,414 @@
     <p>RDK X5 を使う2輪倒立振子ロボット。個人AIエージェント「せっけん」の身体として、バッテリー低下時の自動帰還を備える。RDK Challenge 2026 Winter 向け。</p>
     <p class="links"><a href="https://github.com/GOROman/sekken-rover-muse">GitHub</a></p></div>
 
+  <p class="empty" id="empty">該当する作品がありません。検索語や年代を変えてみてください。</p>
+</main>
+<section class="archive" id="archive">
+  <h2>全アーカイブ — 309件</h2>
+  <p class="arch-note">主要作を含む全記録。GitHub公開リポジトリ292件（自作135件＋Fork／派生157件）と、GitHub外の主要作17件の合計です。主要作には色付きで印を付けています。</p>
+<!-- portfolio-list-fragment: generated 2026-11-04 from GitHub API (GOROman owner repos) + works-timeline offline majors -->
+<div class="pf-list">
+  <h3 class="pf-block-title">GitHub外の主要作（年表より）</h3>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">1988頃</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">1988頃</span> <span class="pf-name">GORO-NET／GORO-NET2</span> <span class="pf-desc">中学2年で自作したパソコン通信ホスト局。ものづくりの原点。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">1995頃</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">1995頃</span> <span class="pf-name">GORO-NETs／net-kick</span> <span class="pf-desc">X68000 XVI上でホストプログラムを再びフルスクラッチしたホスト局。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">1996頃</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">1996頃</span> <span class="pf-name">SOHOman</span> <span class="pf-desc">ISDNルーター用Delphi製シェアウェア。約3,000本売れたと本人が語る。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2013</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2013</span> <span class="pf-name">Mikulus</span> <span class="pf-desc">Oculus Rift DK1で初音ミクと会えるVRアプリ。VRクリエイティブアワード2017個人部門最優秀賞。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2013</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2013</span> <span class="pf-name">MikuMikuAkushu（ミクミク握手）</span> <span class="pf-desc">感触デバイス＋シリコンの手模型でVR内の初音ミクと握手できるシステム。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2014〜2016頃</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2014〜2016頃</span> <span class="pf-name">XVI 受託・代表作群</span> <span class="pf-desc">初音ミク VR Special LIVE -ALIVE-／ロート デジアイ／刀剣乱舞ONLINE 三日月宗近Ver. など。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2018</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2018</span> <span class="pf-name">AniCast</span> <span class="pf-desc">Oculus Rift＋Touchだけで3Dキャラクターになりきって生配信できるシステム。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2018</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2018</span> <span class="pf-name">AniCast Maker／AniCast Lab.</span> <span class="pf-desc">VR空間で一人でアニメ制作ができるツール。エイベックスと共同で商用化。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2018</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2018</span> <span class="pf-name">著書『ミライのつくり方 2020-2045 僕がVRに賭けるわけ』</span> <span class="pf-desc">西田宗千佳との共著（星海社新書）。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2018〜2019</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2018〜2019</span> <span class="pf-name">学生GOプロジェクト</span> <span class="pf-desc">学生へOculus Goを無償配布するプロジェクト。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2024</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2024</span> <span class="pf-name">HAH Dev-Flow</span> <span class="pf-desc">GitHub ActionsとOpenAIでPR支援を自動化するHuman–AI–Humanワークフローのデモ。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2024</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2024</span> <span class="pf-name">TR-808 Cowbell</span> <span class="pf-desc">TR-808のカウベル回路をサービスマニュアルから書き起こしたOSHW。回路未検証・進行中。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2025</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2025</span> <span class="pf-name">CXD5602PWBIMU ドキュメント</span> <span class="pf-desc">Sony Spresense用高精度IMUボードの技術ドキュメント。Xポストあり。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2026</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2026</span> <span class="pf-name">TATEX</span> <span class="pf-desc">縦長画像を4分割する小ツール。Xで公開告知。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2026</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2026</span> <span class="pf-name">Grok Bot Tokyo Hackathon 優勝チーム作品</span> <span class="pf-desc">コードを書かずGrok Bot群への音声指示だけで優勝したチーム作品。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2026</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2026</span> <span class="pf-name">1Password 一括パスワード変更・解約ツール（製作中）</span> <span class="pf-desc">Claude Codeで1Password内のパスワード変更と解約を自動化する製作中ツール。</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2026</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major pf-item--offline"><span class="pf-year">2026</span> <span class="pf-name">自作FIDO2セキュリティキー</span> <span class="pf-desc">本人がXで「完成しました」と報告した自作セキュリティキー。</span></li>
+  </ul></div>
+  <h3 class="pf-block-title">自作リポジトリ（forkでないもの）</h3>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2026（58件）</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/sekken-rover-muse">sekken-rover-muse</a> <span class="pf-desc">せっけんロボ ミューズ: 2輪倒立振子 + バッテリー低下時の自動帰還 (RDK Challenge 2026 Winter). Simulation-verified skeleton; real IMU pending.</span> <span class="pf-lang">Python</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/m5stamp-slic-fxs">m5stamp-slic-fxs</a> <span class="pf-desc">Dual-port FXS line simulator / mini PBX board: M5StampS3 + 2x KS0835F (AG1171) SLIC modules for FAX/modem T.30 testing</span> <span class="pf-lang">Python</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/gameboy-color-kusoge">gameboy-color-kusoge</a> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/repo">repo</a> <span class="pf-desc">Fast, cached ghq + fzf repository picker written in Rust for macOS and Linux.</span> <span class="pf-lang">Rust</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-iphone-duo-case">null-iphone-duo-case</a> <span class="pf-desc">Basic two-piece TPU case study for iPhone Duo; Blender meshes, STL and unvalidated print guidance</span> <span class="pf-lang">Python</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/dots-3d-models">dots-3d-models</a> <span class="pf-desc">Dots sleepy, round and squint — 60 mm STL models and clean Blender scene</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/devday-community-hackathon-2026-haas">devday-community-hackathon-2026-haas</a> <span class="pf-lang">TypeScript</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/sega-model-2-ja">sega-model-2-ja</a> <span class="pf-desc">Sega Retro Sega Model 2 非公式日本語訳 / Unofficial Japanese translation, CC BY 4.0</span> <span class="pf-lang">HTML</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-gb-cartridge">null-gb-cartridge</a> <span class="pf-desc">ModRetro公式CAD由来のNULLカートリッジ筐体試作モデル・印刷写真</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/gbc-rp2350b-romcart">gbc-rp2350b-romcart</a> <span class="pf-desc">R0 review draft: RP2350B/Core2350B2 Game Boy cartridge carrier, KiCad/BOM/Gerber; not fabrication-ready</span> <span class="pf-lang">Python</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/fakaikyo">fakaikyo</a> <span class="pf-desc">架空の団体・日本ファミコン魔改造協会（ジョークサイト）</span> <span class="pf-lang">HTML</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/restaurant-order-history">restaurant-order-history</a> <span class="pf-desc">スマホ向け日本語注文履歴メモ。端末内保存・手入力・食事アルバム。</span> <span class="pf-lang">JavaScript</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/nullevi03-model">nullevi03-model</a> <span class="pf-desc">nullevi03のBlenderモデル、GLB、アニメーションとプレビュー</span> <span class="pf-lang">HTML</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-adpcm">null-adpcm</a> <span class="pf-desc">Clean-room OKI MSM6258 ADPCM (X68000) emulator in C++17</span> <span class="pf-lang">C++</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-opm">null-opm</a> <span class="pf-lang">C++</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/muse-stopwatch">muse-stopwatch</a> <span class="pf-desc">Muse Gadgets project for the M5Stack StopWatch (C152).</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-net-cock">null-net-cock</a> <span class="pf-desc">NET-COCK 互換のパソコン通信ホストプログラム (C / SQLite)</span> <span class="pf-lang">C</span> <span class="pf-star">★3</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-modem">null-modem</a> <span class="pf-lang">JavaScript</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-bbs">null-bbs</a> <span class="pf-lang">Rust</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-term">null-term</a> <span class="pf-lang">Rust</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/kantan-play-clone">kantan-play-clone</a> <span class="pf-desc">KANTAN Play online clone in plain HTML/JS with Web MIDI in/out</span> <span class="pf-lang">HTML</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/m5stamps3-phone-exchange">m5stamps3-phone-exchange</a> <span class="pf-desc">Modern two-line analog telephone exchange using M5Stack StampS3</span> <span class="pf-lang">C++</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/tl866man">tl866man</a> <span class="pf-lang">Python</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/chain-chomp-lab">chain-chomp-lab</a> <span class="pf-desc">Circle-based SMB3 Chain Chomp algorithm lab, validated against 6502 ROM routines</span> <span class="pf-lang">JavaScript</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/gpt-6-astra-ps1-game-benchmark">gpt-6-astra-ps1-game-benchmark</a> <span class="pf-lang">C</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/gowin-lm1881-clone">gowin-lm1881-clone</a> <span class="pf-lang">F#</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null">null</a> <span class="pf-lang">HTML</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/m5-paper-nano-lora-transceiver-jp">m5-paper-nano-lora-transceiver-jp</a> <span class="pf-lang">C++</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/ps1-null-fighter">ps1-null-fighter</a> <span class="pf-lang">C</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/stamp-uwb-ranging">stamp-uwb-ranging</a> <span class="pf-desc">M5Stamp C5 + UWB-F DS-TWR ranging prototype</span> <span class="pf-lang">C++</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/cmu-800-usb-pd-power-unit">cmu-800-usb-pd-power-unit</a> <span class="pf-lang">Python</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/ps1-bios-audio-ripper-sx-burst-edition">ps1-bios-audio-ripper-sx-burst-edition</a> <span class="pf-desc">PlayStation BIOS backup over stereo audio OFDM — Burst Edition targeting under 180 seconds</span> <span class="pf-lang">C</span> <span class="pf-star">★3</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/ps1-ode-fpga">ps1-ode-fpga</a> <span class="pf-desc">PS1 Optical Drive Emulator on Sipeed Tang Primer 20K (Gowin GW2A-18) — FPGA port of picostation</span> <span class="pf-lang">Verilog</span> <span class="pf-star">★5</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/claude-gb-emu">claude-gb-emu</a> <span class="pf-lang">C++</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/kantan-gb-play">kantan-gb-play</a> <span class="pf-lang">C</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/calude-gb-game">calude-gb-game</a> <span class="pf-desc">Calude Kodo for Game Boy Color</span> <span class="pf-lang">C</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/tang-primer-20k-z80">tang-primer-20k-z80</a> <span class="pf-lang">Verilog</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/gowin-tang-1k-fsk">gowin-tang-1k-fsk</a> <span class="pf-lang">Verilog</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/tang-primer-20k-ym2151">tang-primer-20k-ym2151</a> <span class="pf-desc">Tang Primer 20K YM2151/JT51 player with PT8211 audio and 720p OPM register monitor</span> <span class="pf-lang">SystemVerilog</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/greenpak-webeditor">greenpak-webeditor</a> <span class="pf-lang">TypeScript</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/boki-quest">boki-quest</a> <span class="pf-desc">日商簿記3級をゲーム感覚で学べるブラウザクイズ</span> <span class="pf-lang">TypeScript</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/vibewatch">vibewatch</a> <span class="pf-desc">A tactile M5Stack StopWatch controller for AI-assisted Vibe Coding</span> <span class="pf-lang">C++</span> <span class="pf-star">★150</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/famicom-cartridge-tool">famicom-cartridge-tool</a> <span class="pf-lang">JavaScript</span> <span class="pf-star">★8</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/calude-rom-cartridge">calude-rom-cartridge</a> <span class="pf-lang">C</span> <span class="pf-star">★4</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/nes-rom-reader-v2">nes-rom-reader-v2</a> <span class="pf-lang">HTML</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/calude-famicom-game">calude-famicom-game</a> <span class="pf-lang">Assembly</span> <span class="pf-star">★30</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/cluade-famicom-emu">cluade-famicom-emu</a> <span class="pf-lang">C++</span> <span class="pf-star">★48</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/save-japan">save-japan</a> <span class="pf-lang">JavaScript</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/hack-ana-one">hack-ana-one</a> <span class="pf-lang">JavaScript</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/famicom-rf-hackrf-decoder">famicom-rf-hackrf-decoder</a> <span class="pf-lang">C++</span> <span class="pf-star">★198</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/nes-rom-reader">nes-rom-reader</a> <span class="pf-desc">ファミコン(FC 60ピン)カセット吸い出しツール — M5Stamp S3 + EasyEDA Pro基板 + Python CLI</span> <span class="pf-lang">HTML</span> <span class="pf-star">★33</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/2151-808">2151-808</a> <span class="pf-lang">TypeScript</span> <span class="pf-star">★12</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/btdd-demo">btdd-demo</a> <span class="pf-desc">進捗サンダー LGTM 検知デモ用</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/nullevi03">nullevi03</a> <span class="pf-lang">Shell</span> <span class="pf-star">★194</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/naruebi-assets">naruebi-assets</a> <span class="pf-desc">NaruEbi character images for Ray-Ban Display DAT</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/NullEviChan">NullEviChan</a> <span class="pf-desc">ナルエビが乗り移ったStackChan - NullEvi possesses StackChan (レリクスシステム)</span> <span class="pf-star">★4</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/null-sensei">null-sensei</a> <span class="pf-lang">HTML</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/human-like">human-like</a> <span class="pf-lang">Python</span> <span class="pf-star">★5</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2025（41件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/hdr-png-converter">hdr-png-converter</a> <span class="pf-desc">SDR画像をPQ HDR (16-bit) PNGに変換するPythonツール</span> <span class="pf-lang">Python</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/vercel-ai-gateway">vercel-ai-gateway</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/claude-code-test-game">claude-code-test-game</a> <span class="pf-lang">TypeScript</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/m5stack-openai-realtime">m5stack-openai-realtime</a> <span class="pf-desc">M5Stack CoreS3 OpenAI Realtime API integration with Arduino Framework</span> <span class="pf-lang">C</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/mosaic-man">mosaic-man</a> <span class="pf-desc">Personal Information Mosaic Man(個人情報モザイクマン)  - Chrome拡張</span> <span class="pf-lang">HTML</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/claude-code-web">claude-code-web</a> <span class="pf-desc">Claude Code Web UI</span> <span class="pf-lang">C++</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/00-codex-test">00-codex-test</a> <span class="pf-desc">Codex Test</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/manus-api-test-app">manus-api-test-app</a> <span class="pf-desc">Manus API</span> <span class="pf-lang">Python</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/kiro-test-">kiro-test-</a> <span class="pf-desc">for Kiro</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Insta360Control">Insta360Control</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/oukaichimon-test">oukaichimon-test</a> <span class="pf-desc">oukaichimon-test</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/devin-test">devin-test</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Vancouver">Vancouver</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/15min-vibe">15min-vibe</a> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/15min-cooking-2">15min-cooking-2</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/test-15min">test-15min</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/cursor-15min-cooking">cursor-15min-cooking</a> <span class="pf-lang">HTML</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/digital-address">digital-address</a> <span class="pf-desc">digital-address</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/claude-code-agent-">claude-code-agent-</a> <span class="pf-desc">CCA</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/IwakenTest">IwakenTest</a> <span class="pf-desc">IwakenTest</span> <span class="pf-lang">C#</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Google-Jules-">Google-Jules-</a> <span class="pf-desc">Google-Jules-Test</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/OpenAI-Codex-">OpenAI-Codex-</a> <span class="pf-desc">OpenAIのCodexを試したいリポジトリ</span> <span class="pf-lang">C</span> <span class="pf-star">★3</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/number-to-words">number-to-words</a> <span class="pf-desc">number-to-words</span> <span class="pf-lang">TypeScript</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/null-sensei-super-quiz-system">null-sensei-super-quiz-system</a> <span class="pf-desc">Null Sensei&#x27;s Super Quiz System</span> <span class="pf-lang">TypeScript</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Gundam-Quiz">Gundam-Quiz</a> <span class="pf-desc">OpenAI GPT-4.1 + Windsurf だけで作るテスト</span> <span class="pf-lang">TypeScript</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/CopilotAgentTest">CopilotAgentTest</a> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/SuperLotSystemX">SuperLotSystemX</a> <span class="pf-desc">Super Lot System X</span> <span class="pf-lang">TypeScript</span> <span class="pf-star">★7</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/SubtractProxy">SubtractProxy</a> <span class="pf-desc">AI Assisted Proxy Server</span> <span class="pf-lang">TypeScript</span> <span class="pf-star">★27</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/SubtractOS">SubtractOS</a> <span class="pf-desc">SubtractOS</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/XKusoRepFilter">XKusoRepFilter</a> <span class="pf-desc">X Kuso Rep Filter for Chrome Extension</span> <span class="pf-lang">JavaScript</span> <span class="pf-star">★17</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/computer-agent-samples">computer-agent-samples</a> <span class="pf-desc">【CUA】 - Computer-Using Agent - OpenAIのコンピュータ操作エージェントを触ってみた！人間不要時代の到来か！？</span> <span class="pf-lang">Python</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/zenn-connect">zenn-connect</a> <span class="pf-desc">Zenn 投稿用</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/AI-Mini4WD">AI-Mini4WD</a> <span class="pf-desc">AI ミニ四駆(Mini4WD)  using OpenAI Realtime API Embedded SDK</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/M5Module-Fan-Test">M5Module-Fan-Test</a> <span class="pf-desc">M5Stack Fan Module v1.1 (STM32F030) Test</span> <span class="pf-lang">C++</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/GaitameIMU-Arduino">GaitameIMU-Arduino</a> <span class="pf-desc">#がいためIMU - SPRESENSE Multi IMU Add-on board [CXD5602PWBIMU1J] for Arduino IDE</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/YM2151-Claude-3.7-Sonnet">YM2151-Claude-3.7-Sonnet</a> <span class="pf-desc">YM2151 FM音源エミュレータ - Claude 3.7 Sonnetで実装</span> <span class="pf-lang">C++</span> <span class="pf-star">★9</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/nRFConnectSDKdeActionsShitai">nRFConnectSDKdeActionsShitai</a> <span class="pf-desc">nRFConnectSDK で Actions したい</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/GOROman">GOROman</a> <span class="pf-desc">My profile</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/IssuesTemplate">IssuesTemplate</a> <span class="pf-desc">Super Issues Template</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/LLMCardputer">LLMCardputer</a> <span class="pf-desc">LLM Cardputer </span> <span class="pf-lang">C++</span> <span class="pf-star">★65</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/hello-openai-realtime-api-beta">hello-openai-realtime-api-beta</a> <span class="pf-desc">https://github.com/openai/openai-realtime-api-beta の勉強</span> <span class="pf-lang">JavaScript</span> <span class="pf-star">★2</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2024（8件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/hello-mqtt">hello-mqtt</a> <span class="pf-desc">ESP-IDF で MQTT にチャレンジしよう</span> <span class="pf-lang">C</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/hello-psram">hello-psram</a> <span class="pf-desc">#PSRAM入門</span> <span class="pf-lang">C</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/GitHubActionsCacheTest">GitHubActionsCacheTest</a></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/SuperSimpleKANTANSWITCH">SuperSimpleKANTANSWITCH</a> <span class="pf-desc">Super Simple KANTAN SWITCH for CH32V003</span> <span class="pf-lang">Makefile</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/Study-I2C-STM32toArduino">Study-I2C-STM32toArduino</a> <span class="pf-desc">STM32CubeIDE と Arduino を使ってI2C</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/Atom-JoyStick-Internal-FW-for-STM32CubeIDE">Atom-JoyStick-Internal-FW-for-STM32CubeIDE</a> <span class="pf-desc">for STM32CubeIDE</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/SuperSimpleM5StampFly">SuperSimpleM5StampFly</a> <span class="pf-lang">C++</span> <span class="pf-star">★3</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/GitHubCopilotWorkspaceTest">GitHubCopilotWorkspaceTest</a> <span class="pf-desc">GitHubCopilotWorkspaceTest</span> <span class="pf-lang">C++</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2023（2件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/rapidFIRE_SPI">rapidFIRE_SPI</a> <span class="pf-desc">ImmersionRC Rapidfire - SPI Mode Programming</span> <span class="pf-lang">C++</span> <span class="pf-star">★8</span></li>
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/psgplayer">psgplayer</a> <span class="pf-desc">portable simple PSG Player</span> <span class="pf-lang">C++</span> <span class="pf-star">★3</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2022（5件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/M5Shutter">M5Shutter</a> <span class="pf-desc">M5Shutter</span></li>
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/InstaChordDMX">InstaChordDMX</a> <span class="pf-desc">InstaChord + DMX Powered by M5Stack DMX Module</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/mxp-mac">mxp-mac</a> <span class="pf-desc">MDX Player mxp for Mac OS</span> <span class="pf-lang">C++</span> <span class="pf-star">★4</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/vscode-mdxmml">vscode-mdxmml</a> <span class="pf-desc">Visual Studio Code Syntax Highlight for X68K MDX MML</span> <span class="pf-lang">Makefile</span> <span class="pf-star">★9</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/MDXVST">MDXVST</a> <span class="pf-desc">X68000 MDX Format for VST3 Plug-in</span> <span class="pf-star">★3</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2021（1件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2021</span> <a class="pf-name" href="https://github.com/GOROman/IC705Control">IC705Control</a> <span class="pf-desc">IC-705 remote control using CI-V</span> <span class="pf-lang">Ruby</span> <span class="pf-star">★2</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2020（4件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2020</span> <a class="pf-name" href="https://github.com/GOROman/MynaZanki">MynaZanki</a> <span class="pf-desc">マイナンバーカードの残機数(暗証番号ミス回数)を表示するiPhoneアプリ</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2020</span> <a class="pf-name" href="https://github.com/GOROman/GOROman.github.io">GOROman.github.io</a> <span class="pf-desc">github.io</span> <span class="pf-lang">JavaScript</span> <span class="pf-star">★8</span></li>
+    <li class="pf-item"><span class="pf-year">2020</span> <a class="pf-name" href="https://github.com/GOROman/ARKit">ARKit</a> <span class="pf-desc">ARKit</span></li>
+    <li class="pf-item"><span class="pf-year">2020</span> <a class="pf-name" href="https://github.com/GOROman/SuperSimpleRubyWebServerDeployToHeroku">SuperSimpleRubyWebServerDeployToHeroku</a> <span class="pf-desc">Super Simple Ruby WebServer Deploy to Heroku</span> <span class="pf-lang">Ruby</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2019（5件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2019</span> <a class="pf-name" href="https://github.com/GOROman/LibICSServo">LibICSServo</a> <span class="pf-desc">Kondo ICS Servo C++ Library</span></li>
+    <li class="pf-item"><span class="pf-year">2019</span> <a class="pf-name" href="https://github.com/GOROman/PremaidAIHack">PremaidAIHack</a> <span class="pf-desc">Premaid AI</span> <span class="pf-lang">C++</span> <span class="pf-star">★8</span></li>
+    <li class="pf-item"><span class="pf-year">2019</span> <a class="pf-name" href="https://github.com/GOROman/OculusQuestMonitor">OculusQuestMonitor</a> <span class="pf-desc">Oculus Quest Monitoring Tool</span></li>
+    <li class="pf-item"><span class="pf-year">2019</span> <a class="pf-name" href="https://github.com/GOROman/Fritzing-Parts">Fritzing-Parts</a></li>
+    <li class="pf-item"><span class="pf-year">2019</span> <a class="pf-name" href="https://github.com/GOROman/GoodbyeGeocitiesJP">GoodbyeGeocitiesJP</a> <span class="pf-desc">Geocities JP to Web Archive(archive.org) Auto Redirector for Chrome extension</span> <span class="pf-lang">JavaScript</span> <span class="pf-star">★32</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2017（2件）</h4><ul class="pf-items">
+    <li class="pf-item pf-item--major"><span class="pf-year">2017</span> <a class="pf-name" href="https://github.com/GOROman/MRFamicom">MRFamicom</a> <span class="pf-desc">Mixed Reality Famicom</span></li>
+    <li class="pf-item"><span class="pf-year">2017</span> <a class="pf-name" href="https://github.com/GOROman/NESBot-mini">NESBot-mini</a> <span class="pf-lang">Objective-C</span> <span class="pf-star">★9</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2016（1件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2016</span> <a class="pf-name" href="https://github.com/GOROman/UnityCloudBuild">UnityCloudBuild</a></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2015（1件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2015</span> <a class="pf-name" href="https://github.com/GOROman/PebbleJs">PebbleJs</a> <span class="pf-desc">Pebble.js</span> <span class="pf-lang">JavaScript</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2014（1件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2014</span> <a class="pf-name" href="https://github.com/GOROman/GoogleGlass">GoogleGlass</a> <span class="pf-desc">for GoogleGlass</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2013（5件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2013</span> <a class="pf-name" href="https://github.com/GOROman/NovintFalcon">NovintFalcon</a> <span class="pf-desc">Novint Falcon</span></li>
+    <li class="pf-item"><span class="pf-year">2013</span> <a class="pf-name" href="https://github.com/GOROman/OculusRift">OculusRift</a> <span class="pf-desc">Oculus Rift</span> <span class="pf-star">★12</span></li>
+    <li class="pf-item"><span class="pf-year">2013</span> <a class="pf-name" href="https://github.com/GOROman/Pebble">Pebble</a> <span class="pf-desc">Pebble: E-Paper Watch for iPhone and Android</span> <span class="pf-star">★3</span></li>
+    <li class="pf-item"><span class="pf-year">2013</span> <a class="pf-name" href="https://github.com/GOROman/STL">STL</a> <span class="pf-desc">GOROman</span></li>
+    <li class="pf-item"><span class="pf-year">2013</span> <a class="pf-name" href="https://github.com/GOROman/3Dman">3Dman</a> <span class="pf-desc">Reail-time control for 3D Printers.</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2010（1件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2010</span> <a class="pf-name" href="https://github.com/GOROman/AmaLog">AmaLog</a> <span class="pf-desc">アマゾンで注文したログ吸出し</span></li>
+  </ul></div>
+  <h3 class="pf-block-title">Fork／派生リポジトリ</h3>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2026（35件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/Turbo-IO">Turbo-IO</a> <span class="pf-desc">雷鸟 iO / RayNeo iO 非官方 SDK：原生鸿蒙 HarmonyOS SDK/客户端、iOS 客户端及 iOS/Android 官方 App 扩展。自有模型、联网搜索、眼镜导航、录音研究、Codex 与 Web 预览，各平台能力以文档为准。面向开发者，仅供非商业学习研究；只提供源码，不提供 IPA/APK/HAP 或签名包。</span> <span class="pf-lang">Objective-C</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/reSpeaker_Clip">reSpeaker_Clip</a> <span class="pf-desc">respeaker Clip</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/fm1_open">fm1_open</a></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/iphone-use">iphone-use</a> <span class="pf-desc">响应快 省Token， Let AI agents (Claude Code, Codex, any MCP client) drive a real iPhone · 让 AI agent 操作真实 iPhone：读屏、点击、输入、滑动，USB 或 Wi-Fi，自有 XCTest runner，可回放的 App flow。Open source, self-hosted on macOS.</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/esp32-iphone-agent">esp32-iphone-agent</a> <span class="pf-desc">Let an AI model use a real iPhone with a $7 ESP32: AirPlay eyes, USB HID hands, any OpenAI-compatible vision model. No Mac, no developer account, no jailbreak.</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/esp-sdr">esp-sdr</a> <span class="pf-desc">ESP-SDR uses the undocumented raw I/Q capture functionality of ESP32 family chips to turn them into (low-duty-cycle) Software Defined Radios</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/actell">actell</a> <span class="pf-desc">Actell (执言) is an experimental AI agent for iPhone that understands the screen and performs actions via CoreDevice, using on-device loopback or an ESP32 relay. An early-stage, vibe-coded prototype for exploration and idea sharing.</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/pebble-index-cfw">pebble-index-cfw</a> <span class="pf-desc">A minimal alternative firmware for the Pebble Index 01 ring</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/muse-gadget-sdk">muse-gadget-sdk</a> <span class="pf-desc">Open source SDK to build Muse gadgets</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/awesome-esp32">awesome-esp32</a> <span class="pf-desc">Hand-picked ESP32 projects worth building, copying, or watching run</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/blackroolinux">blackroolinux</a> <span class="pf-desc">The Linux Distro from down under for the PSX</span> <span class="pf-lang">C</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/jt51">jt51</a> <span class="pf-desc">YM2151 clone in verilog. FPGA proven.</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/oss-chromatic-console-fpga">oss-chromatic-console-fpga</a> <span class="pf-desc">This repository houses the ModRetro Chromatic&#x27;s FPGA design files.</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/M5Stamp-UWB">M5Stamp-UWB</a></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/hacking-the-xbox-ja">hacking-the-xbox-ja</a> <span class="pf-desc">Japanese translation of Andrew &quot;bunnie&quot; Huang&#x27;s Hacking the Xbox, published under CC BY-NC-SA 1.0. 『Hacking the Xbox』日本語訳。原著CC BY-NC-SA 1.0に基づく翻訳コントリビューション。</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/dronestarcode_hack">dronestarcode_hack</a></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/link-cli">link-cli</a> <span class="pf-desc">Let your agents pay online using one-time-use cards or with machine payment protocols.</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/StackChan">StackChan</a> <span class="pf-desc">StackChan open source!</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/ml-ssd">ml-ssd</a></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/llama-cpp-turboquant">llama-cpp-turboquant</a> <span class="pf-desc">LLM inference in C/C++</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/claude-watch">claude-watch</a> <span class="pf-desc">Control your claude code from your apple watch</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/cmux">cmux</a> <span class="pf-desc">Ghostty-based macOS terminal with vertical tabs and notifications for AI coding agents</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/bit-office">bit-office</a> <span class="pf-desc">Pixel office for AI agents and multi-agent collaboration</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/ghost-os">ghost-os</a> <span class="pf-desc">Full computer-use for AI agents. Self-learning workflows. Native macOS. No screenshots required.</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/VisionClaw">VisionClaw</a> <span class="pf-desc">Real-time AI assistant for Meta Ray-Ban smart glasses -- voice + vision + agentic actions via Gemini Live and OpenClaw</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/claude-code-controller">claude-code-controller</a> <span class="pf-desc">Programmatic TypeScript API to pilot Claude Code agents via the internal teams/inbox/tasks filesystem protocol</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/nanobot">nanobot</a> <span class="pf-desc">&quot;🐈 nanobot: The Ultra-Lightweight Clawdbot&quot;</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/termiwatch">termiwatch</a> <span class="pf-desc">Terminal Watch Face for Apple Watch</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/x-algorithm">x-algorithm</a> <span class="pf-desc">Algorithm powering the For You feed on X</span> <span class="pf-lang">Rust</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/GROVE-MIDI-UNIT">GROVE-MIDI-UNIT</a></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/M5Stack-MIDI-Module">M5Stack-MIDI-Module</a> <span class="pf-desc">M5Stack-MIDI-Module</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/ccstatusline">ccstatusline</a> <span class="pf-desc">🚀 Beautiful highly customizable statusline for Claude Code CLI with powerline support, themes, and more.</span> <span class="pf-lang">TypeScript</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/clawdbot">clawdbot</a> <span class="pf-desc">Your own personal AI assistant. Any OS. Any Platform.</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/ucp">ucp</a> <span class="pf-desc">Specification and documentation for the Universal Commerce Protocol (UCP)</span> <span class="pf-lang">Python</span></li>
+    <li class="pf-item"><span class="pf-year">2026</span> <a class="pf-name" href="https://github.com/GOROman/claude-hud">claude-hud</a> <span class="pf-desc">A Claude Code plugin that shows what&#x27;s happening - context usage, active tools, running agents, and todo progress</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2025（83件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/meta-wearables-dat-android">meta-wearables-dat-android</a> <span class="pf-desc">Meta Wearables Device Access Toolkit for Android</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/mcp-cli">mcp-cli</a> <span class="pf-desc">A CLI inspector for the Model Context Protocol</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/gaussian-vrm-sekkyo">gaussian-vrm-sekkyo</a> <span class="pf-desc">説教ゲーム</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/SuperAiMahjong-Web">SuperAiMahjong-Web</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/DeepSeek-OCR">DeepSeek-OCR</a> <span class="pf-desc">Contexts Optical Compression</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/nanochat">nanochat</a> <span class="pf-desc">The best ChatGPT that $100 can buy.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/AP2">AP2</a> <span class="pf-desc">Building a Secure and Interoperable Future for AI-Driven Payments.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/the-algorithm">the-algorithm</a> <span class="pf-desc">Source code for the X Recommendation Algorithm</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/llama2.c">llama2.c</a> <span class="pf-desc">Inference Llama 2 in one file of pure C</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/chromatic_mcu">chromatic_mcu</a> <span class="pf-desc">This repository houses the ModRetro Chromatic&#x27;s MCU design files.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/qwen-code">qwen-code</a> <span class="pf-desc">qwen-code is a coding agent that lives in digital world.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/MemOS">MemOS</a> <span class="pf-desc">MemOS (Preview) | Intelligence Begins with Memory</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/ai-in-japan">ai-in-japan</a> <span class="pf-desc">AI系開発ツールを導入している企業まとめ</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/dxt">dxt</a> <span class="pf-desc">Desktop Extensions: One-click local MCP server installation in desktop apps</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/gemini-cli">gemini-cli</a> <span class="pf-desc">An open-source AI agent that brings the power of Gemini directly into your terminal.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/openai-testing-agent-demo">openai-testing-agent-demo</a> <span class="pf-desc">Demo of a UI testing agent using the OpenAI CUA model and the Responses API.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/lemmy">lemmy</a> <span class="pf-desc">Wrapper around tool using LLMs for agentic workflows</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/gemini-fullstack-langgraph-quickstart">gemini-fullstack-langgraph-quickstart</a> <span class="pf-desc">Get started with building Fullstack Agents using Gemini 2.5 and LangGraph</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/gallery">gallery</a> <span class="pf-desc">A gallery that showcases on-device ML/GenAI use cases and allows people to try and use models locally.</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/KANTAN_Play_core">KANTAN_Play_core</a> <span class="pf-desc">かんぷれアプリケーション（M5Stack用）</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/claude-code-action">claude-code-action</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/airweave">airweave</a> <span class="pf-desc">Airweave lets agents search any app</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/godot">godot</a> <span class="pf-desc">Godot Engine – Multi-platform 2D and 3D game engine</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/anker-solix-api">anker-solix-api</a> <span class="pf-desc">Python library for Anker Solix API</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/codex-universal">codex-universal</a> <span class="pf-desc">Base docker image used in Codex environments</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/codex">codex</a> <span class="pf-desc">Lightweight coding agent that runs in your terminal</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/azooKey-Desktop">azooKey-Desktop</a> <span class="pf-desc">azooKey-Desktop is an open-source Japanese input method for macOS, written in Swift and powered by the Zenzai neural kana-kanji converter. It provides live conversion, optional LLM-based “Magic Conversions”, and Tuner-backed personalization for a smooth, desk-top typing experience. </span> <span class="pf-lang">Swift</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/system_prompts_leaks">system_prompts_leaks</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/caddy">caddy</a> <span class="pf-desc">Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/kubectl-ai">kubectl-ai</a> <span class="pf-desc">AI powered Kubernetes Assistant</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Cap">Cap</a> <span class="pf-desc">Open source Loom alternative. Beautiful, shareable screen recordings.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/deepwiki">deepwiki</a> <span class="pf-desc">deepwiki.com</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/FramePack-eichi">FramePack-eichi</a> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/BitNet">BitNet</a> <span class="pf-desc">Official inference framework for 1-bit LLMs</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/line-bot-mcp-server">line-bot-mcp-server</a> <span class="pf-desc">MCP server that integrates the LINE Messaging API to connect an AI Agent to the LINE Official Account.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/fastapi_mcp">fastapi_mcp</a> <span class="pf-desc">A zero-configuration tool for automatically exposing FastAPI endpoints as Model Context Protocol (MCP) tools.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/A2A">A2A</a> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/ai">ai</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/mcp-manager">mcp-manager</a> <span class="pf-desc">simple web ui to manage mcp (model context protocol) servers in the claude app</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/exia">exia</a> <span class="pf-desc">Next.js, Electronベースのノベルゲームエンジン (開発中)</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/github-mcp-server">github-mcp-server</a> <span class="pf-desc">GitHub&#x27;s official MCP Server</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/ClaudePlaysPokemonStarter">ClaudePlaysPokemonStarter</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/FlexHAL">FlexHAL</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/mcp">mcp</a> <span class="pf-desc">AWS MCP Servers — a suite of specialized MCP servers that bring AWS best practices directly to your development workflow</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/owl">owl</a> <span class="pf-desc">🦉 OWL: Optimized Workforce Learning for General Multi-Agent Assistance in Real-World Task Automation</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/gitdiagram">gitdiagram</a> <span class="pf-desc">Replace &#x27;hub&#x27; with &#x27;diagram&#x27; in any GitHub url to instantly visualize the codebase as an interactive diagram</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Simple_StampFly_Joy">Simple_StampFly_Joy</a> <span class="pf-desc">Simple_StampFly_Joy</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/playwright-mcp">playwright-mcp</a> <span class="pf-desc">Playwright Tools for MCP</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/M5StampFly_skeleton">M5StampFly_skeleton</a> <span class="pf-desc">M5 StampFly 勉強用</span> <span class="pf-lang">C</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/KDTalker">KDTalker</a> <span class="pf-desc">Unlock Pose Diversity: Accurate and Efficient Implicit Keypoint-based Spatiotemporal Diffusion for Audio-driven Talking Portrait</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/ai-conversation-simulator">ai-conversation-simulator</a> <span class="pf-desc">Simulate conversation between your AI bot and AI user</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/mcp-server-cloudflare">mcp-server-cloudflare</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/vscode-extension">vscode-extension</a> <span class="pf-desc">Visual Studio Code Extension for OpenBlink Development</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Second-Me">Second-Me</a> <span class="pf-desc">Where You Build Your AI Duplicates that Connects with Others&#x27;</span> <span class="pf-lang">Python</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/x-alignment-chart">x-alignment-chart</a> <span class="pf-desc">AI-powered D&amp;D-style alignment charts for X users</span> <span class="pf-lang">TypeScript</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/modelcontextprotocol">modelcontextprotocol</a> <span class="pf-desc">A Model Context Protocol Server connector for Perplexity API, to enable web search without leaving the MCP ecosystem.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/blender-mcp">blender-mcp</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/claude-prompt-generator">claude-prompt-generator</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/MetaGPT">MetaGPT</a> <span class="pf-desc">🌟 The Multi-Agent Framework: First AI Software Company, Towards Natural Language Programming</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/OpenManus">OpenManus</a> <span class="pf-desc">No fortress, purely open ground.  OpenManus is Coming.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/usbbluetooth">usbbluetooth</a> <span class="pf-desc">Take full control of your USB Bluetooth controllers!</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/awesome-mcp-servers">awesome-mcp-servers</a> <span class="pf-desc">A collection of MCP servers.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/openblink">openblink</a> <span class="pf-desc">A new way to develop embedded systems.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/www.openblink.org">www.openblink.org</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/openblink-demo-m5">openblink-demo-m5</a> <span class="pf-desc">A new way to develop embedded systems.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/anon-kode">anon-kode</a> <span class="pf-desc">koding with any LLMs</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Megatron-VLM">Megatron-VLM</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/OpenHands">OpenHands</a> <span class="pf-desc">🙌 OpenHands: Code Less, Make More</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/claude-code">claude-code</a> <span class="pf-desc">Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.</span> <span class="pf-lang">Shell</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/gibberlink">gibberlink</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/M5Unit-ASR">M5Unit-ASR</a> <span class="pf-desc">M5Stack Unit ASR Arduino Lib.</span> <span class="pf-lang">C++</span> <span class="pf-star">★3</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/esp32-quake">esp32-quake</a> <span class="pf-desc">Quake for the ESP32-P4 evaluation board</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/cline">cline</a> <span class="pf-desc">Autonomous coding agent right in your IDE, capable of creating/editing files, executing commands, using the browser, and more with your permission every step of the way.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/Microsoft-Activation-Scripts">Microsoft-Activation-Scripts</a> <span class="pf-desc">Open-source Windows and Office activator featuring HWID, Ohook, KMS38, and Online KMS activation methods, along with advanced troubleshooting.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/nodezator">nodezator</a> <span class="pf-desc">A generalist Python node editor</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/open-interpreter">open-interpreter</a> <span class="pf-desc">A natural language interface for computers</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/esp-webrtc-solution">esp-webrtc-solution</a></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/LLM_buildroot-external-m5stack">LLM_buildroot-external-m5stack</a> <span class="pf-desc">LLM</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/M5Module-LLM">M5Module-LLM</a> <span class="pf-desc">Arduino library for M5Stack LLM Module</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/openai-realtime-agents">openai-realtime-agents</a> <span class="pf-desc">This is a simple demonstration of more advanced, agentic patterns built on top of the Realtime API.</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/butterfish">butterfish</a> <span class="pf-desc">A shell with AI superpowers</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/zsh_codex">zsh_codex</a> <span class="pf-desc">This is a ZSH plugin that enables you to use OpenAI&#x27;s Codex AI in the command line.</span></li>
+    <li class="pf-item"><span class="pf-year">2025</span> <a class="pf-name" href="https://github.com/GOROman/esp-idf">esp-idf</a> <span class="pf-desc">Espressif IoT Development Framework. Official development framework for Espressif SoCs.</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2024（14件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/openai-realtime-console">openai-realtime-console</a> <span class="pf-desc">React app for inspecting, building and debugging with the Realtime API</span> <span class="pf-star">★1</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/openai-realtime-embedded-sdk">openai-realtime-embedded-sdk</a> <span class="pf-desc">A SDK to using the Realtime API with Microcontrollers like the ESP32 を XIAO ESP32S3 Sense で動かしたい</span> <span class="pf-lang">C++</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/lsm6dsv-pid">lsm6dsv-pid</a> <span class="pf-desc">lsm6dsv platform independent driver based on Standard C language and compliant with MISRA C</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/pi_tpi">pi_tpi</a> <span class="pf-desc">Using a Raspberry Pi to program an ATTiny10 9 5 or 4 for ESP32</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/mrubyc">mrubyc</a> <span class="pf-desc">mruby/c is another implementation of mruby.</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/M5Unit-Roller485-Internal-FW">M5Unit-Roller485-Internal-FW</a> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/ESP-Drone">ESP-Drone</a></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/M5Unit-EXTIO2-Internal-FW-STM32CubeIDE">M5Unit-EXTIO2-Internal-FW-STM32CubeIDE</a> <span class="pf-desc">STM32CubeIDE Ver</span> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/Atom-JoyStick-Internal-FW">Atom-JoyStick-Internal-FW</a></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/M5StampFly">M5StampFly</a> <span class="pf-lang">C</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/Atom-JoyStick">Atom-JoyStick</a></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/copilot-workspace-user-manual">copilot-workspace-user-manual</a> <span class="pf-desc">📖 The user manual for GitHub Copilot Workspace</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/dump1090">dump1090</a> <span class="pf-desc">Dump1090 is a simple Mode S decoder for RTLSDR devices</span></li>
+    <li class="pf-item"><span class="pf-year">2024</span> <a class="pf-name" href="https://github.com/GOROman/audio2photoreal">audio2photoreal</a> <span class="pf-desc">Code and dataset for photorealistic Codec Avatars driven from audio</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2023（8件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/eCZ-600">eCZ-600</a></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/M5Unified_StackChan_ChatGPT">M5Unified_StackChan_ChatGPT</a> <span class="pf-desc">「ChatGPT API搭載AIｽﾀｯｸﾁｬﾝ」です。</span></li>
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/M5Unit-MiniEncoderC-Internal-FW">M5Unit-MiniEncoderC-Internal-FW</a></li>
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/ExpressLRSHack">ExpressLRSHack</a> <span class="pf-desc">STM32/ESP32/ESP8285-based High-Performance Radio Link for RC applications</span></li>
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/Backpack">Backpack</a> <span class="pf-desc">Firmware for ExpressLRS compatible backpacks</span></li>
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/atomfly_kanazawa">atomfly_kanazawa</a></li>
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/Learn_Prompting">Learn_Prompting</a></li>
+    <li class="pf-item"><span class="pf-year">2023</span> <a class="pf-name" href="https://github.com/GOROman/nips">nips</a> <span class="pf-desc">Nostr Implementation Possibilities</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2022（8件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/dis68k">dis68k</a> <span class="pf-desc">A tool for handling Human68k (Sharp X68000) floppy images.</span></li>
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/libfat-human68k">libfat-human68k</a> <span class="pf-desc">FAT library for handling Human68k filesystem (FAT12 Shift-JIS) formats</span></li>
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/tinySA">tinySA</a> <span class="pf-desc">tiny Spectrum Analyzer</span></li>
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/Unity-TheWorldBeyond">Unity-TheWorldBeyond</a> <span class="pf-desc">Presence Platform showcase demonstrating usage of Scene, Passthrough, Interaction, Voice, and Spatializer.</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/vscode-mdx-preview">vscode-mdx-preview</a> <span class="pf-desc">VS Code Extension to preview and play mdx file.</span></li>
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/run68mac">run68mac</a> <span class="pf-desc">Human68k CUI Emulator for MacOS</span> <span class="pf-lang">C</span> <span class="pf-star">★17</span></li>
+    <li class="pf-item pf-item--major"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/mdxtools">mdxtools</a> <span class="pf-desc">A bunch of tools for handling the MDX music format (music for the Sharp x68000)</span> <span class="pf-lang">C++</span> <span class="pf-star">★2</span></li>
+    <li class="pf-item"><span class="pf-year">2022</span> <a class="pf-name" href="https://github.com/GOROman/simple_mdx2wav_track">simple_mdx2wav_track</a> <span class="pf-star">★1</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2021（2件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2021</span> <a class="pf-name" href="https://github.com/GOROman/betaflight">betaflight</a> <span class="pf-desc">Open Source Flight Controller Firmware</span></li>
+    <li class="pf-item"><span class="pf-year">2021</span> <a class="pf-name" href="https://github.com/GOROman/CubicSDR">CubicSDR</a> <span class="pf-desc">Cross-Platform Software-Defined Radio Application</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2020（3件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2020</span> <a class="pf-name" href="https://github.com/GOROman/mastodon">mastodon</a> <span class="pf-desc">Your self-hosted, globally interconnected microblogging community</span></li>
+    <li class="pf-item"><span class="pf-year">2020</span> <a class="pf-name" href="https://github.com/GOROman/cgm-remote-monitor">cgm-remote-monitor</a> <span class="pf-desc">nightscout web monitor</span></li>
+    <li class="pf-item"><span class="pf-year">2020</span> <a class="pf-name" href="https://github.com/GOROman/atm-cli">atm-cli</a> <span class="pf-desc">Command line tool for generating and working with MIDI files.</span> <span class="pf-lang">Rust</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2019（2件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2019</span> <a class="pf-name" href="https://github.com/GOROman/PremaindAI_TechVerification">PremaindAI_TechVerification</a> <span class="pf-desc">http://robots.dmm.com/robot/premaidai</span> <span class="pf-lang">C#</span></li>
+    <li class="pf-item"><span class="pf-year">2019</span> <a class="pf-name" href="https://github.com/GOROman/portable_mdx">portable_mdx</a> <span class="pf-desc">A portable mdx music format decoder.</span> <span class="pf-lang">C++</span> <span class="pf-star">★1</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2016（1件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2016</span> <a class="pf-name" href="https://github.com/GOROman/uDesktopDuplication">uDesktopDuplication</a> <span class="pf-desc">Desktop Duplication API implementation for Unity (only for Windows 8/10)</span> <span class="pf-lang">C++</span></li>
+  </ul></div>
+  <div class="pf-yeargroup"><h4 class="pf-yearhead">2013（1件）</h4><ul class="pf-items">
+    <li class="pf-item"><span class="pf-year">2013</span> <a class="pf-name" href="https://github.com/GOROman/illusion">illusion</a> <span class="pf-desc">Illusion watchface for the Pebble smart watch</span> <span class="pf-lang">C</span> <span class="pf-star">★1</span></li>
+  </ul></div>
 </div>
+
+</section>
+
 <footer>© GOROman — 年表は調査中の下書きです。年や状態に誤りがあれば本人確認のうえ随時直します。</footer>
+<script>
+(()=>{'use strict';const items=[...document.querySelectorAll('.item')],input=document.getElementById('workSearch'),buttons=[...document.querySelectorAll('[data-decade]')],count=document.getElementById('resultCount'),empty=document.getElementById('empty'),searchBox=input.parentElement;let decade='all';items.forEach(item=>{const year=item.querySelector('.year').textContent;const match=year.match(/(?:19|20)\d{2}/);item.dataset.decade=match?String(Math.floor(Number(match[0])/10)*10):'';item.dataset.search=item.textContent.toLocaleLowerCase('ja')});function apply(){const q=input.value.trim().toLocaleLowerCase('ja');let visible=0;items.forEach(item=>{const show=(decade==='all'||item.dataset.decade===decade)&&(!q||item.dataset.search.includes(q));item.hidden=!show;if(show)visible++});count.textContent=`${visible} / ${items.length} 件を表示`;empty.classList.toggle('show',visible===0);searchBox.classList.toggle('has-value',Boolean(input.value))}input.addEventListener('input',apply);document.getElementById('clearSearch').addEventListener('click',()=>{input.value='';input.focus();apply()});buttons.forEach(button=>button.addEventListener('click',()=>{decade=button.dataset.decade;buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));apply()}));apply()})();
+</script>
 </body>
 </html>

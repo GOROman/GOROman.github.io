@@ -526,6 +526,45 @@ body{background:transparent}
   .year-naru{background:#8a6d00;color:#fff3c4}
   .year-block.naru .year-head{background:color-mix(in srgb, #8a6d00 48%, var(--bg))}
 }
+/* ===== なるぽ (Narupo) ===== */
+.narupo-acct{margin-left:auto;display:flex;align-items:center;min-height:40px}
+.narupo-acct[hidden]{display:none}
+.narupo-login{appearance:none;border:1.5px solid #1a1917;background:#ffe14d;color:#1a1917;font:inherit;font-size:.82rem;font-weight:900;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;min-height:40px}
+.narupo-login:hover{background:var(--ink);color:#ffe14d}
+.narupo-user{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.narupo-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;flex:none;background:var(--surface2)}
+.narupo-avatar.mono{display:inline-grid;place-items:center;font-weight:900;font-size:.85rem;background:var(--ink);color:var(--bg)}
+.narupo-name{font-size:.86rem;font-weight:700;max-width:16ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.narupo-badge{font-size:.7rem;font-weight:900;background:#ffe14d;color:#5c4a00;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.narupo-balance{font-size:.82rem;font-weight:700;color:var(--ink2);white-space:nowrap}
+.narupo-logout{appearance:none;border:1px solid var(--line2);background:transparent;color:var(--ink3);font:inherit;font-size:.75rem;font-weight:700;padding:5px 10px;border-radius:999px;cursor:pointer;min-height:32px}
+.narupo-logout:hover{color:var(--ink);border-color:var(--ink)}
+@media (prefers-color-scheme: dark){
+  .narupo-login{background:#ffd94d}
+  .narupo-login:hover{background:var(--ink);color:#ffd94d}
+  .narupo-badge{background:#8a6d00;color:#fff3c4}
+}
+.narupo-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;padding:10px 12px;border:1px dashed var(--line2);border-radius:var(--radius-sm);background:var(--surface2)}
+.narupo-row[hidden]{display:none}
+.narupo-total{font-size:.84rem;color:var(--ink2)}
+.narupo-total b{color:var(--ink);font-size:.95rem}
+.narupo-btns{display:inline-flex;gap:6px;flex-wrap:wrap}
+.narupo-tip{appearance:none;border:1.5px solid var(--ink);background:var(--surface);color:var(--ink);font:inherit;font-size:.8rem;font-weight:900;padding:5px 12px;border-radius:999px;cursor:pointer;min-height:34px}
+.narupo-tip:hover{background:#ffe14d;color:#1a1917}
+@media (prefers-color-scheme: dark){ .narupo-tip:hover{background:#ffd94d} }
+.narupo-tip:disabled{opacity:.5;cursor:wait}
+.narupo-msg{font-size:.78rem;color:var(--accent);font-weight:700}
+.narupo-rank{margin-top:56px}
+.narupo-rank[hidden]{display:none}
+.narupo-rank h2{font-size:1.5rem;margin:8px 0 6px;line-height:1.4}
+.narupo-rank>p{color:var(--ink2);margin:0 0 14px}
+.narupo-rank-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.narupo-rank-list a{display:flex;align-items:center;gap:12px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px;color:var(--ink)}
+.narupo-rank-list a:hover{border-color:var(--ink)}
+.narupo-rank-no{font-family:"Noto Sans Mono",monospace;font-weight:700;font-size:.9rem;min-width:2ch;text-align:right;color:var(--accent);flex:none}
+.narupo-rank-title{font-weight:700;flex:1;min-width:0}
+.narupo-rank-total{font-size:.86rem;font-weight:900;white-space:nowrap}
+@media (max-width:720px){ .topbar-in{flex-wrap:wrap} .narupo-acct{margin-left:0} }
 </style>
 </head>
 <body>
@@ -539,7 +578,7 @@ body{background:transparent}
       <a href="#stream" data-nav="stream">作ってみた</a>
       <a href="#profile" data-nav="profile">プロフィール</a>
     </nav>
-    
+    <div class="narupo-acct" id="narupoAcct" hidden></div>
   </div>
 </header>
 <div class="readbar" aria-hidden="true"><span id="readBarFill"></span></div>
@@ -584,6 +623,13 @@ body{background:transparent}
   <div class="wrap"><div class="empty" id="emptyState"><b>見つかりませんでした</b>検索する言葉を変えるか、絞り込みを「すべて」に戻してください。</div></div>
 
   <section class="wrap end-gate" id="endGate"><h2 id="gateH">最後まで読みました</h2><p id="gateP">ここまでが年表の全部です。年表の上にある検索と時代タグから、気になる作品を探せます。</p><a class="btn solid" id="gateBtn" href="#works">検索とタグへ（年表の上部）</a><a class="btn" href="#stream" style="margin-left:8px">「作ってみた」ストリームへ</a></section>
+
+  <section class="wrap narupo-rank" id="narupoRank" hidden aria-label="なるぽランキング">
+    <span class="hero-kicker">なるぽ集計</span>
+    <h2>なるぽランキング</h2>
+    <p>読者が各作品へ投げた「なるぽ」（ナルポイント）の累計ランキングです。Xでログインすると、作品カードから なるぽ を投げられます（初回ログインで なるぽ が付与されます）。</p>
+    <ol class="narupo-rank-list" id="narupoRankList"></ol>
+  </section>
 </div><!-- /viewWorks -->
 <div id="viewStream" hidden>
   <div class="wrap" style="padding-top:26px"><a class="back-link" href="#top">← 作品ポートフォリオへ戻る</a></div>
@@ -804,6 +850,10 @@ var WORKS = [
   yt:{id:"EpE7xJE2ono", title:"「かんぷれ」携帯ゲーム機みたいな楽器 — KANTAN Play core（InstaChord公式）"},
   links:[["DTMステーション「電子楽器『かんぷれ』のクラファン開始」（原型とメイキング）","https://www.dtmstation.com/archives/66555.html"],["DTMステーション「『かんぷれ』ついに発売へ。開発者に聞く」","https://www.dtmstation.com/archives/71510.html"],["Kibidango 活動報告「製品名決定〖KANTAN Play Core：かんぷれ〗」","https://kibidango.com/projects/2473/reports/17300"],["Kibidango 活動報告「怒涛の出張ラッシュ 1か月間の振り返り」（試作1号機・2号機）","https://kibidango.com/projects/2473/reports/17513"],["スイッチサイエンス「KANTANPLAY_2」開発ストーリー","https://www.switch-science.com/pages/kantanplay2"],["PR TIMES（開発チーム紹介）","https://prtimes.jp/main/html/rd/p/000000006.000058517.html"],["DTMステーション KANTAN Play インタビュー","https://www.dtmstation.com/archives/62146.html"]],
   xs:[["https://x.com/GOROman/status/1653391587962138624","KANTAN Playつくりました @TyounanMOTI さんと。"],["https://x.com/GOROman/status/1689491076632207360","ちょっと思いついてしまったのでこういう安い電卓買って M5Stamp とか ESP32 かなんかで KANTAN Play 化してみたいと思います。"],["https://x.com/GOROman/status/1691686346971390282","M5 Core2のGPIOにとりあえず繋いでみた。\n\n#KANTANPlay @insta_chord"],["https://x.com/GOROman/status/1713039567887229290","KANTAN Play プロトタイプ！ @insta_chord @M5Stack #MFTokyo2023"],["https://x.com/GOROman/status/1713881770603778519","電卓です。初期プロトタイプ 持ってきました。\n#KANTANPlay #かんプレコア\n#M5Stack #M5JPTour2023"],["https://x.com/GOROman/status/1714253250814484481","製品名決定【KANTAN Play Core】\n【だれでも弾ける】だけじゃない！オープンソースで成長する新しい楽器\n#Kibidango #きびだんご"],["https://x.com/GOROman/status/1799741974381318154","#かんぷれ 入力デバイスを自作できる"],["https://x.com/GOROman/status/1819175412301443232","#かんぷれ クラファン目標達成‼️"]]},
+ {era:"ai", year:"2025–26", sort:"2025-09-19", title:"Ray-Ban Meta × DAT", cat:"スマートグラス", imgs:["assets/rayban-teardown.jpg","assets/naruebi-glass.jpg","assets/rayban-display2.jpg","assets/rayban-display.jpg"], alt:"Ray-Ban Meta × DAT — 分解工具を当てた Ray-Ban Meta 本体（本人の X 投稿写真）。ギャラリーはメガネのディスプレイに表示したナルエビちゃん、Meta Ray-Ban Display 本体、Neural Band",
+  desc:"Meta のスマートグラス Ray-Ban Meta／Meta Ray-Ban Display を、自分の AI とつないで使う一連の作例。2025年9月、入手直後から「Ray-Ban Meta 分解したい」と投稿し、10月にはディスプレイ搭載モデル Meta Ray-Ban Display のセットアップを完了した（ギャラリーの写真は本体と Neural Band）。12月には Ray-Ban Meta のカメラ映像でジェスチャー認識させる仕組みと、見えているものを VLM が解説してくれる仕組みを作り、ジェスチャー認識の作例には「W-DAT」の名を付けた。2026年5月には「Meta Ray-Ban Display + DAT + Android」の構成で、AIキャラクター「ナルエビちゃん」をメガネのディスプレイの中に召喚（表示）することに成功した。なお「DAT」は、本人がこのメガネ連携の仕組みに付けた名前で、GitHub にも「Ray-Ban Display DAT」用にナルエビちゃんの画像リポジトリを用意している。DATレコーダーのような録音機材としての DAT の作例やポストは、本人のアーカイブには確認できなかった。下の埋め込みは関連ポストを時系列で並べたもの。",
+  links:[["GitHub naruebi-assets（Ray-Ban Display DAT 用のナルエビちゃん画像）","https://github.com/GOROman/naruebi-assets"]],
+  xs:[["https://x.com/GOROman/status/1968855014211719442","Ray-Ban Meta 分解したい"],["https://x.com/GOROman/status/1975697399742890385","Meta Ray-Ban Display セットアップ完了☑️"],["https://x.com/GOROman/status/1996805881833685176","Ray-Ban Meta （メガネ）のカメラでジェスチャー認識させるやつを作ってみた。なんかに使えそう\nW-DAT"],["https://x.com/GOROman/status/1997220933770326440","Ray-Ban Meta のカメラで見えてるものをVLMで解説してくれるやつをとりあえず作った"],["https://x.com/GOROman/status/2058694730163347488","ついにメガネの中にナルエビちゃん召喚できた！！！ ゆめがひろがりんぐ\n\nMeta Ray-Ban Display + DAT + Android"]]},
  {era:"ai", year:"2026", sort:"2026-01-09", title:"TATEX", cat:"Webツール", img:"assets/tatex.jpg", alt:"TATEX — 縦長画像4分割ツールの画面", 
   desc:"「投稿タップしたら縦になる」画像を作るため、縦長画像を4分割するツールを Manus で作って無料公開した小ツール。下は告知ポストの公式埋め込み。",
   x:"https://x.com/GOROman/status/2010319432720228491", links:[]},
@@ -1402,7 +1452,7 @@ function workCard(w){
   if(w.x){ links += '<a class="xlink" href="'+w.x+'" target="_blank" rel="noopener">'+X_ICON+'元のポスト</a>'; }
   var tags = w._tags || [];
   var noStr = ("00"+(w._no||0)).slice(-3); var pid = "w-"+noStr;
-  var html = '<article class="work reveal" id="'+pid+'" data-era="'+w.era+'" data-tags="'+esc(tags.join(" "))+'" data-search="'+esc((w.title+" "+w.desc+" "+w.cat+" "+w.year+" "+tags.join(" ")).toLowerCase())+'">'
+  var html = '<article class="work reveal" id="'+pid+'" data-work-key="'+pid+'" data-era="'+w.era+'" data-tags="'+esc(tags.join(" "))+'" data-search="'+esc((w.title+" "+w.desc+" "+w.cat+" "+w.year+" "+tags.join(" ")).toLowerCase())+'">'
     + '<div class="work-grid">' + media
     + '<div class="work-body"><div class="work-top"><span class="work-cat">'+esc(w.cat)+'</span>'
     + (w.status ? '<span class="status">'+esc(w.status)+'</span>' : '')
@@ -1411,6 +1461,7 @@ function workCard(w){
     + tagRow(tags)
     + (allImgs.length>1 ? '<div class="work-gallery">'+allImgs.slice(1).map(function(src){return '<img src="'+src+'" alt="'+esc((w.alt||w.title)+' の写真')+'" loading="lazy" decoding="async" data-kind="photo" onerror="imgErr(this)">';}).join("")+'</div>' : '')
     + (links ? '<div class="work-links">'+links+'</div>' : '')
+    + '<div class="narupo-row" data-narupo-row hidden><span class="narupo-total">累計 <b data-narupo-total>0</b> なるぽ</span><span class="narupo-btns" role="group" aria-label="この作品に なるぽ を投げる"><button type="button" class="narupo-tip" data-tip="1">+1 なるぽ</button><button type="button" class="narupo-tip" data-tip="5">+5</button><button type="button" class="narupo-tip" data-tip="10">+10</button></span><span class="narupo-msg" role="status"></span></div>'
     + (w.yt ? ytFacade(w.yt) : '')
     + (w.x ? xEmbed(w.x, w.xt) : '')
     + (w.xs ? w.xs.map(function(pair){ return xEmbed(pair[0], pair[1]); }).join("") : '')
@@ -2067,6 +2118,162 @@ document.addEventListener("error", function(e){
   var t=e.target;
   if(t && t.tagName==="IMG" && !t.hasAttribute("data-kind")){ t.style.display="none"; }
 }, true);
+})();
+</script>
+<script>
+/* ================= なるぽ (Narupo): external API client =================
+   Points live on the Narupo API (Cloudflare Worker + D1). Nothing is stored
+   in the browser; if the API is unreachable, only this UI stays disabled. */
+(function(){
+  var API = "https://goroman-narupo.hentai-naru-sensei.workers.dev";
+  var acct = document.getElementById("narupoAcct");
+  var me = null;            /* /api/me payload when logged in */
+  var worksTotals = {};     /* work_key -> {total, tippers} */
+  var TITLES = {};          /* work_key -> work title (resolved from the page) */
+  document.querySelectorAll(".work[data-work-key]").forEach(function(card){
+    var h = card.querySelector("h3");
+    TITLES[card.getAttribute("data-work-key")] = h ? h.textContent : card.getAttribute("data-work-key");
+  });
+  function fmt(n){ return Number(n || 0).toLocaleString(); }
+  function myBalance(){
+    if(!me) return 0;
+    if(me.balance != null) return me.balance;
+    if(me.user && me.user.balance != null) return me.user.balance;
+    return 0;
+  }
+  function renderAcct(){
+    if(!acct) return;
+    acct.innerHTML = "";
+    if(!me){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "narupo-login";
+      b.textContent = "Xでログインして なるぽ を使う";
+      b.addEventListener("click", function(){
+        location.href = API + "/auth/x?return_to=" + encodeURIComponent(location.href);
+      });
+      acct.appendChild(b);
+    } else {
+      var u = me.user || {};
+      var wrap = document.createElement("span"); wrap.className = "narupo-user";
+      if(u.avatar_url && /^https:\/\//.test(u.avatar_url)){
+        var img = document.createElement("img");
+        img.className = "narupo-avatar"; img.src = u.avatar_url; img.alt = "";
+        wrap.appendChild(img);
+      } else {
+        var mono = document.createElement("span");
+        mono.className = "narupo-avatar mono"; mono.setAttribute("aria-hidden", "true");
+        mono.textContent = (String(u.name || u.handle || "N").trim().charAt(0) || "N");
+        wrap.appendChild(mono);
+      }
+      var nm = document.createElement("span"); nm.className = "narupo-name";
+      nm.textContent = u.name || (u.handle ? "@" + u.handle : "");
+      wrap.appendChild(nm);
+      if(u.is_subscriber === 1 || u.is_subscriber === true){
+        var bd = document.createElement("span"); bd.className = "narupo-badge";
+        bd.textContent = "サブスク加入者";
+        wrap.appendChild(bd);
+      }
+      var bal = document.createElement("span"); bal.className = "narupo-balance";
+      bal.textContent = "残高 " + fmt(myBalance()) + " なるぽ";
+      wrap.appendChild(bal);
+      var lo = document.createElement("button");
+      lo.type = "button"; lo.className = "narupo-logout"; lo.textContent = "ログアウト";
+      lo.addEventListener("click", function(){
+        fetch(API + "/auth/logout", {method: "POST", credentials: "include"})
+          .then(function(){ me = null; renderAcct(); })
+          .catch(function(){ me = null; renderAcct(); });
+      });
+      wrap.appendChild(lo);
+      acct.appendChild(wrap);
+    }
+    acct.hidden = false;
+  }
+  function updateTotals(){
+    document.querySelectorAll("[data-narupo-row]").forEach(function(row){
+      var card = row.closest(".work"); if(!card) return;
+      var t = worksTotals[card.getAttribute("data-work-key")];
+      var b = row.querySelector("[data-narupo-total]");
+      if(b) b.textContent = fmt(t ? t.total : 0);
+    });
+  }
+  function renderRanking(ranking){
+    var sec = document.getElementById("narupoRank");
+    var list = document.getElementById("narupoRankList");
+    if(!sec || !list) return;
+    list.innerHTML = "";
+    var shown = 0;
+    (ranking || []).forEach(function(r){
+      if(!r || !r.work_key || !TITLES[r.work_key]) return;
+      var li = document.createElement("li");
+      var a = document.createElement("a"); a.href = "#" + r.work_key;
+      var rk = document.createElement("span"); rk.className = "narupo-rank-no"; rk.textContent = String(shown + 1);
+      var tt = document.createElement("span"); tt.className = "narupo-rank-title"; tt.textContent = TITLES[r.work_key];
+      var tot = document.createElement("span"); tot.className = "narupo-rank-total"; tot.textContent = fmt(r.total) + " なるぽ";
+      a.appendChild(rk); a.appendChild(tt); a.appendChild(tot);
+      li.appendChild(a); list.appendChild(li); shown++;
+    });
+    if(shown) sec.hidden = false;
+  }
+  function loadRanking(){
+    fetch(API + "/api/ranking").then(function(res){ if(!res.ok) throw new Error("ng"); return res.json(); })
+      .then(function(j){ renderRanking(j && j.ranking); })
+      .catch(function(){});
+  }
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest ? e.target.closest("[data-tip]") : null;
+    if(!btn) return;
+    var row = btn.closest("[data-narupo-row]");
+    var card = btn.closest(".work");
+    if(!row || !card) return;
+    var msg = row.querySelector(".narupo-msg");
+    function say(t){ if(msg) msg.textContent = t; }
+    if(!me){ say("なるぽ を投げるにはログインが必要です（ページ上部のボタンから）。"); return; }
+    var key = card.getAttribute("data-work-key");
+    var amount = parseInt(btn.getAttribute("data-tip"), 10) || 0;
+    btn.disabled = true; say("送信中…");
+    fetch(API + "/api/tip", {
+      method: "POST", credentials: "include",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({work_key: key, amount: amount})
+    }).then(function(res){
+      return res.json().catch(function(){ return {}; }).then(function(j){ return {status: res.status, j: j}; });
+    }).then(function(r){
+      btn.disabled = false;
+      if(r.status === 200 && r.j && r.j.ok){
+        me.balance = r.j.balance;
+        if(me.user) me.user.balance = r.j.balance;
+        if(!worksTotals[key]) worksTotals[key] = {total: 0, tippers: 0};
+        worksTotals[key].total = r.j.work_total;
+        renderAcct(); updateTotals(); loadRanking();
+        say(amount + " なるぽ を投げました。ありがとうございます！");
+      } else if(r.status === 401){
+        me = null; renderAcct();
+        say("ログインが必要です。ページ上部のボタンからログインしてください。");
+      } else if(r.status === 400 && r.j && r.j.error === "insufficient_balance"){
+        say("なるぽ の残高が足りません。");
+      } else {
+        say("うまく送れませんでした。時間をおいて再度お試しください。");
+      }
+    }).catch(function(){
+      btn.disabled = false;
+      say("通信エラーで送れませんでした。");
+    });
+  });
+  /* login state: 200 -> logged in, 401 -> show the login button, network error -> stay disabled */
+  fetch(API + "/api/me", {credentials: "include"})
+    .then(function(res){ return res.status === 200 ? res.json() : null; })
+    .then(function(j){ if(j && j.user) me = j; renderAcct(); })
+    .catch(function(){});
+  /* per-work totals: only reveal the tip rows once the API answers */
+  fetch(API + "/api/works")
+    .then(function(res){ if(!res.ok) throw new Error("ng"); return res.json(); })
+    .then(function(j){
+      worksTotals = (j && j.works) || {};
+      document.querySelectorAll("[data-narupo-row]").forEach(function(r){ r.hidden = false; });
+      updateTotals();
+    })
+    .catch(function(){});
+  loadRanking();
 })();
 </script>
 </body>

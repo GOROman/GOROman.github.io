@@ -476,6 +476,8 @@ body{background:transparent}
 /* FAX tag */
 .tag[data-tag="FAX"]{--tagbg:#e7e5e4;--tagink:#44403c}
 @media (prefers-color-scheme: dark){ .tag[data-tag="FAX"]{--tagbg:#44403c;--tagink:#e7e5e4} }
+.tag[data-tag="VF2"]{--tagbg:#fde68a;--tagink:#78350f}
+@media (prefers-color-scheme: dark){ .tag[data-tag="VF2"]{--tagbg:#57370d;--tagink:#fde68a} }
 /* X embed: fallback card is always rendered; official embed replaces it only on success */
 .x-fallback{border:1px solid var(--line2);border-radius:12px;padding:14px 16px;background:var(--surface2)}
 .x-fallback-text{margin:0;font-size:.92rem;line-height:1.8;white-space:pre-line}
@@ -552,7 +554,7 @@ body{background:transparent}
     <div class="stream-head">
       <span class="hero-kicker">Xアーカイブ 665,121件から抽出・精査</span>
       <h2>「作ってみた」ストリーム <span id="streamTotal"></span></h2>
-      <p>X の全アーカイブ（2007〜2026年・665,121件）を走査し、「作ってみた」「やってみた」「つくった」「作った」「作りました」など、本人が自分の制作を完了形で報告したポストを年別に並べました。掲載数の数え方は次のとおりです。全アーカイブの実測では、完了形のポストはリツイートを除いて794件が上限でした。そこからキーワード抽出と下記の除外規則で絞り込み、さらに「3Dプリンタ」「3Dプリント」を含むポストから、具体的に何をプリントしたか分かるものも同じ基準で発掘して加えた<span id="dExt"></span>件と、別途厳選した<span id="dCur"></span>件を統合し、両方に含まれる重複<span id="dDup"></span>件を除いた全<span id="streamTotal2"></span>件が、このストリームの掲載数です。794件すべてを載せているわけではありません。除外規則は、リツイートと引用、記事や他人の動画の共有、「やってみたい」「作りたかった」といった願望表現、他人が作り手のポスト、伝聞と仮定、失敗・未完了の報告、登録や認証といった手続きだけのポスト、対象が特定できない短文、文脈のない返信や「昔作った」といった曖昧な言及だけのポスト、そして他人へのメンションで始まる返信ポストです。各ポストには通し番号とパーマネントリンク、内容に合うタグ（VR、Drone、Synthesizer、電子工作、3Dプリンタ、Famicom、PlayStation、Chromatic、FPGA、Oscilloscope、VST、FAX など）が付いていて、タグを押すと同じタグのポストに絞り込めます。アイコンは年代ごとの当時のものを使い、写真はアーカイブに残っていたものを付けています。2021年はアーカイブ自体に欠落があり、この条件に合うポストが残っていません。スクロールに合わせて少しずつ読み込むので、そのまま下へ読み進められます。各カードから元のポストを開けます。</p>
+      <p>X の全アーカイブ（2007〜2026年・665,121件）を走査し、「作ってみた」「やってみた」「つくった」「作った」「作りました」など、本人が自分の制作を完了形で報告したポストを年別に並べました。掲載数の数え方は次のとおりです。全アーカイブの実測では、完了形のポストはリツイートを除いて794件が上限でした。そこからキーワード抽出と下記の除外規則で絞り込み、さらに「3Dプリンタ」「3Dプリント」を含むポストから、具体的に何をプリントしたか分かるものも同じ基準で発掘して加えた<span id="dExt"></span>件と、別途厳選した<span id="dCur"></span>件を統合し、両方に含まれる重複<span id="dDup"></span>件を除いた全<span id="streamTotal2"></span>件が、このストリームの掲載数です。794件すべてを載せているわけではありません。除外規則は、リツイートと引用、記事や他人の動画の共有、「やってみたい」「作りたかった」といった願望表現、他人が作り手のポスト、伝聞と仮定、失敗・未完了の報告、登録や認証といった手続きだけのポスト、対象が特定できない短文、文脈のない返信や「昔作った」といった曖昧な言及だけのポスト、そして他人へのメンションで始まる返信ポストです。各ポストには通し番号とパーマネントリンク、内容に合うタグ（VR、Drone、Synthesizer、電子工作、3Dプリンタ、Famicom、PlayStation、Chromatic、FPGA、Oscilloscope、VST、FAX、VF2 など）が付いていて、タグを押すと同じタグのポストに絞り込めます。アイコンは年代ごとに当時のものを使い、写真はアーカイブに残っていたものを付けています。2021年はアーカイブ自体に欠落があり、この条件に合うポストが残っていません。スクロールに合わせて少しずつ読み込むので、そのまま下へ読み進められます。各カードから元のポストを開けます。</p>
     </div>
     <div class="stream-grid" id="streamGrid"></div>
     <div class="stream-more" id="streamMore"><p class="stream-count" id="streamCount"></p><button class="btn" id="streamMoreBtn" type="button">もっと見る</button></div>
@@ -588,7 +590,7 @@ body{background:transparent}
       </div>
       <div class="profile-card" id="profile">
         <h2>自己紹介</h2>
-        <p>小学生のときに『バックアップ活用テクニック』を読んでファミコンを改造したのが、ものづくりの始まりです。中学1年で始めたパソコン通信の時代から、VR、ドローン、AI エージェントまで、新しい技術が出るたびにまず自分で作って確かめてきました。個人で作った「Mikulus」は、VR のワークスペースや OS の原型として評価されました。XVI では、バーチャルプロダクションの仕組みである AniCast などを作りました。最近は、M5Stack を中心とした小さなハードウェアと LLM を組み合わせ、AI と一緒に作ること自体を作品にしています。</p>
+        <p>小学生のときに『バックアップ活用テクニック』を読んでファミコンを改造したのが、ものづくりの始まりです。中学1年で始めたパソコン通信の時代から、VR、ドローン、AI エージェントまで、新しい技術が出るたびにまず自分で作って確かめてきました。個人で作った「Mikulus」は VR のワークスペースや OS の原型として評価されました。XVI では、バーチャルプロダクションの仕組みである AniCast などを作りました。最近は、M5Stack を中心とした小さなハードウェアと LLM を組み合わせ、AI と一緒に作ること自体を作品にしています。</p>
         <div class="profile-facts">
           <div class="fact"><b>受賞</b><span>VRクリエイティブアワード2017 個人部門最優秀賞（Mikulus）／ M5Stack Global Innovation Contest 2026 Special Mentions、Best AI Application（Vibe Watch） ほか。下の「受賞歴」にまとめています。</span></div>
           <div class="fact"><b>著書</b><span>『ミライのつくり方 2020-2045 僕がVRに賭けるわけ』（2018年、星海社新書、西田宗千佳と共著）／ 増補版『ミライをつくろう！』（2020年、翔泳社）</span></div>
@@ -602,7 +604,7 @@ body{background:transparent}
         <div class="profile-facts">
           <div class="fact"><b>2017年 — VRクリエイティブアワード2017 個人部門 最優秀賞（Mikulus）</b><span>VRコンソーシアム主催。全128作品・ファイナリスト15作品の中から選出。<a href="#w-009">作品「Mikulus」を見る</a> ／ <a href="https://xrc.or.jp/html/archives/award/award2017.html" target="_blank" rel="noopener">公式結果（XRコンソーシアム）</a> ／ <a href="https://ascii.jp/elem/000/001/492/1492966/" target="_blank" rel="noopener">ASCII.jp 報道</a></span></div>
           <div class="fact"><b>2016年 — Japan VR Award 2016 読者投票で最多得票（Mikulus）</b><span>Mogura VR 主催の Japan VR Award 2016 で、読者から最多得票を得たと同メディアが報じています。<a href="https://www.moguravr.com/vrc-award-2017/" target="_blank" rel="noopener">Mogura VR 記事</a></span></div>
-          <div class="fact"><b>2026年 — M5Stack Global Innovation Contest 2026 Special Mentions／Best AI Application（Vibe Watch）</b><span>M5Stack 公式結果ページに @GOROman の Vibe Watch が Special Mentions（Best AI Application）として掲載。<a href="https://www.m5stack.com/global-innovation-contest-2026/results" target="_blank" rel="noopener">M5Stack 公式結果</a></span></div>
+          <div class="fact"><b>2026年 — M5Stack Global Innovation Contest 2026 Special Mentions／Best AI Application（Vibe Watch）</b><span>M5Stack 公式結果ページに @GOROman の Vibe Watch が Special Mentions（Best AI Application）として掲載されています。<a href="https://www.m5stack.com/global-innovation-contest-2026/results" target="_blank" rel="noopener">M5Stack 公式結果</a></span></div>
           <div class="fact"><b>2026年 — Grok Bot Tokyo Hackathon 優勝（チーム）</b><span>人間がコードを書かず Grok Bot 群への音声指示だけで開発したチームで優勝。本人はスライド／進行／時間管理を担当。<a href="https://dev.to/goroman/how-we-won-a-hackathon-without-writing-a-single-line-of-code-part-1-three-people-grok-bot-six-184j" target="_blank" rel="noopener">DEV 連載 Part 1</a></span></div>
         </div>
       </div>
@@ -616,7 +618,7 @@ body{background:transparent}
           <li><span class="iv-media">電ファミニコゲーマー（2018年）</span><a href="https://news.denfaminicogamer.jp/interview/180806/4" target="_blank" rel="noopener">川上量生×GOROman 対談</a><span class="iv-note">パソコン通信時代からの歩みを語る対談。作品「GORO-NET／GORO-NET2」からもリンクしています。</span></li>
           <li><span class="iv-media">エイベックス公式（2018年11月19日）</span><a href="https://avex.com/jp/ja/contents/anicastlab-interview-1/" target="_blank" rel="noopener">AniCast Lab. インタビュー #1</a><span class="iv-note">エイベックスと共同で設立した AniCast Lab. についての公式インタビュー（連載1回目）。</span></li>
           <li><span class="iv-media">エイベックス公式（2018年11月30日）</span><a href="https://avex.com/jp/ja/contents/anicastlab-interview-2/" target="_blank" rel="noopener">AniCast Lab. インタビュー #2</a><span class="iv-note">AniCast Lab. 公式インタビューの2回目。</span></li>
-          <li><span class="iv-media">AREA JAPAN（Autodesk）（2019年1月22日）</span><a href="https://area.autodesk.jp/column/trend_tech/3dcg-animation-future/02/" target="_blank" rel="noopener">連載「3DCGの未来 〜CGアニメとメディアリレーション〜」第2回：近藤 義仁 氏（GOROman／株式会社エクシヴィ代表取締役社長 VRエヴァンジェリスト）</a><span class="iv-note">聞き手は東映アニメーションの野口光一氏。VR に魅せられて会社を副社長に任せた経緯から、Oculus Japan 立ち上げ、AniCast までを語っています。</span></li>
+          <li><span class="iv-media">AREA JAPAN（Autodesk）（2019年1月22日）</span><a href="https://area.autodesk.jp/column/trend_tech/3dcg-animation-future/02/" target="_blank" rel="noopener">連載「3DCGの未来 〜CGアニメとメディアリレーション〜」第2回：近藤 義仁 氏（GOROman／株式会社エクシヴィ代表取締役社長 VRエヴァンジェリスト）</a><span class="iv-note">聞き手は東映アニメーションの野口光一氏。VR に魅せられて会社を副社長に任せた経緯から、Oculus Japan の立ち上げ、AniCast までを語っています。</span></li>
           <li><span class="iv-media">ITmedia PC USER（2019年9月2日）</span><a href="https://www.itmedia.co.jp/pcuser/articles/1909/02/news041.html" target="_blank" rel="noopener">“VRのご意見番”GOROman氏に聞く「まずはSlack、その先で生きるVR会議」</a><span class="iv-note">VR 会議やテレイグジステンス登壇の実践について聞くインタビュー。まずは Slack など非同期の仕組み、その先に VR 会議があるという考え方を語っています。</span></li>
           <li><span class="iv-media">AV Watch（2019年12月9日）</span><a href="https://av.watch.impress.co.jp/docs/series/rt/1222802.html" target="_blank" rel="noopener">VRベンチャーとavexが組む「AniCast Maker」の狙い</a><span class="iv-note">VR ベンチャーの XVI とエイベックスが組んだ「AniCast Maker」の狙いを聞く記事。</span></li>
           <li><span class="iv-media">CGWORLD（2020年11月）</span><a href="https://cgworld.jp/interview/202011-quest2.html" target="_blank" rel="noopener">近藤“GOROman”義仁氏に聞くOculus Quest 2発売の意味</a><span class="iv-note">Oculus Quest 2 発売の意味について聞くインタビュー。</span></li>
@@ -674,10 +676,10 @@ var WORKS = [
   desc:"『ストリートファイターII』と『珍遊記』を合体させたような格闘ゲームを X68000 で作り始めた、という本人の自伝中の言及。完成・公開されたかは不明。",
   links:[["note 自伝","https://note.com/goroman/n/n3fa8785c5d0a"],["ニコニコ動画（2008年投稿）","https://www.nicovideo.jp/watch/sm2983996"]]},
  {era:"dawn", year:"1995", title:"GORO-NETs／net-kick", cat:"パソコン通信", imgs:["assets/goro-nets-1.jpg","assets/goro-nets-2.jpg"], alt:"GORO-NETs／net-kick が動く画面（2022年 #MI68 で撮影された X の投稿写真）",
-  desc:"X68000 XVI 上でホストプログラムを再度フルスクラッチし、当時流行の net-cock 互換として「net-kick」を制作、「GORO-NETs」としてホスト局を再開した。",
+  desc:"X68000 XVI 上でホストプログラムを再びフルスクラッチで書き直し、当時流行していた net-cock の互換ソフトとして「net-kick」を制作して、「GORO-NETs」としてホスト局を再開した。",
   links:[["note 自伝（その2）","https://note.com/goroman/n/n74b59841a138"]]},
  {era:"dawn", year:"1996", title:"SOHOman", cat:"シェアウェア（作者名「ゴロ」）", img:"assets/sohoman.jpg", alt:"SOHOman Ver.1.40 の画面（『インターネットマガジン』1998年7月号 p.326 の誌面に掲載された実物スクリーンショット）",
-  desc:"ISDNルーター MN128-SOHO／オムロン MT128-NET をテレホーダイ時間帯だけ接続しっぱなしにする Delphi 製シェアウェア。当時はシェアウェア作者「ゴロ」として活動していた。500円で発売後、Vector や窓の杜への掲載と『インターネットマガジン』への掲載を機に1,000円へ値上げし、約3,000本売れた。Vector には v1.46（1999年4月13日公開）の紹介ページと作者ページ「ゴロ」が今も残っている。左の画面写真は『インターネットマガジン』1998年7月号（p.326）の誌面に掲載された Ver.1.40 の実物スクリーンショットで、B1／B2 の回線状態と接続時間を表示する小さなウィンドウが写っている。",
+  desc:"ISDNルーター MN128-SOHO／オムロン MT128-NET をテレホーダイ時間帯だけ接続しっぱなしにする Delphi 製シェアウェア。当時はシェアウェア作者「ゴロ」として活動していた。500円で発売後、Vector や窓の杜、『インターネットマガジン』への掲載を機に1,000円へ値上げし、約3,000本売れた。Vector には v1.46（1999年4月13日公開）の紹介ページと作者ページ「ゴロ」が今も残っている。左の画面写真は『インターネットマガジン』1998年7月号（p.326）の誌面に掲載された Ver.1.40 の実物スクリーンショットで、B1／B2 の回線状態と接続時間を表示する小さなウィンドウが写っている。",
   links:[["Vector SOHOman 紹介ページ","https://www.vector.co.jp/soft/win95/net/se058599.html"],["Vector 作者ページ「ゴロ」","https://www.vector.co.jp/vpack/browse/person/an010525.html"],["窓の杜 今週の掲載ソフト（v1.43）","https://forest.watch.impress.co.jp/addition/1998073.html"],["Internet Watch ダイジェスト（v1.41）","https://internet.watch.impress.co.jp/www/digest/backno/9806/24.htm"],["インターネットマガジン 1998年7月号（紹介PDF）","https://iwparchives.jp/wp-content/themes/twentytwelve/bn/pdf/im199807-326-ReadMe.pdf"],["note 自伝（その2）","https://note.com/goroman/n/n74b59841a138"]]},
  {era:"dawn", year:"1996–99", title:"「ゴロ」名義のシェアウェア群（IPsend ほか）", cat:"シェアウェア",
   desc:"SOHOman と同じ作者名「ゴロ」で Vector に登録されていた同時期のソフト群。現在の IP アドレスをホームページへ貼り付ける「IPsend for Win32」（自伝では、SOHOman の前に作ったが売れなかったと語られる）、メーラー MessageManager のメールを Becky! 形式へ変換する「MessageManager to Becky!」、実行すると間髪いれずに Windows を終了する「ShutDown」の3本が、Vector の作者ページに SOHOman と並んで掲載されている。",
@@ -686,7 +688,7 @@ var WORKS = [
   desc:"紙のコンピュータでファミコンを模したAR実験。カメラ越しに紙がゲーム機になる、のちの MRFamicom（2017）の源流にあたる作品。",
   yt:{id:"Je0Y2Hhu3Nk", title:"AR Papar Famicom (AR 紙コンピュータ)"}, links:[["ニコニコ動画「ARToolKitで紙ファミコンを作ってみた」","https://www.nicovideo.jp/watch/sm3598815"]]},
  {era:"dawn", year:"2010", title:"iPhone版 MDXプレイヤー", cat:"音楽 / X68000",
-  desc:"X68000 の MDX 音楽形式を iPhone で再生するプレイヤー。2020年の WASM 版プレーヤーの、10年前の前身。",
+  desc:"X68000 の MDX 音楽形式を iPhone で再生するプレイヤー。2020年の WASM 版プレーヤーの10年前の前身にあたる。",
   yt:{id:"UVRqLPIdgdc", title:"iPhoneで動くMDXプレイヤー (X68000)"}, links:[["ニコニコ動画（2010年投稿）","https://www.nicovideo.jp/watch/sm10974105"]]},
  {era:"vr", year:"2013", title:"Mikulus", cat:"VRアプリ", status:"VRクリエイティブアワード2017 個人部門最優秀賞", img:"assets/mikulus.jpg", alt:"VRアプリ Mikulus の画面",
   desc:"Oculus Rift DK1 で初音ミクと会える VR アプリ。DK1 入手直後に公開され、日本の VR 黎明期を代表する個人作になった。のち「VR時代のワークスペース／OS」へ発展し、VRクリエイティブアワード2017 個人部門最優秀賞を受賞。2016年には、VR の中から Unity をリアルタイムに編集できる「VR内Unityリアルタイムエディタ」も作った（下の埋め込み）。",
@@ -698,10 +700,10 @@ var WORKS = [
   yt:{id:"HnmgUgPKijc", title:"MikuMikuAkushu"},
   links:[["ねとらぼ 記事","https://nlab.itmedia.co.jp/cont/articles/3231597/"]]},
  {era:"vr", year:"2014–16", title:"XVI時代の代表作群（受託VR／ARコンテンツ）", cat:"XVIの仕事",
-  desc:"角川アスキー総研の講座プロフィール（2017年）で、Mikulus、MikuMikuAkushu と並んで本人の「代表作」として挙げられている XVI 時代の仕事群——「初音ミク VR Special LIVE -ALIVE-」「ロート デジアイ」「DMM GAMES VR × 刀剣乱舞ONLINE 三日月宗近Ver.」など。各作品の個別の年は未確認のため、まとめて掲載する。",
+  desc:"角川アスキー総研の講座プロフィール（2017年）で、Mikulus、MikuMikuAkushu と並んで本人の「代表作」として挙げられている XVI 時代の仕事群で、「初音ミク VR Special LIVE -ALIVE-」「ロート デジアイ」「DMM GAMES VR × 刀剣乱舞ONLINE 三日月宗近Ver.」などがある。各作品の個別の年は未確認のため、まとめて掲載する。",
   links:[["週刊アスキー 講座案内（講師プロフィール）","https://weekly.ascii.jp/elem/000/001/456/1456729/"]]},
  {era:"vr", year:"2017", sort:"2017-03-19", title:"MRFamicom", cat:"MR実験",
-  desc:"ファミコン実機の RAM を FPGA で傍受し、ESP32 と WiFi／UDP 経由で Unity／HoloLens へ送って、ゲーム内の出来事を現実側のエフェクトとして出す MR 実験。SRAM トレーサーボードは @FIssiki さんが開発した。2017年3〜4月にハッシュタグ #MRファミコン で制作経過を投稿し、Maker Faire Tokyo 2017 に出展（出展名義 KOALAB.）。2008年の AR Paper Famicom から続く「現実にゲーム機を重ねる」系譜の一作。以前この項目に載せていた写真は本人のものではなかったため外した。本人の制作風景は、下の埋め込み（本人の #MRファミコン 関連ポスト）の動画・写真で確認できる。下の埋め込みは、その関連ポストを時系列で並べたもの。",
+  desc:"ファミコン実機の RAM を FPGA で傍受し、ESP32 と WiFi／UDP 経由で Unity／HoloLens へ送って、ゲーム内の出来事を現実側のエフェクトとして出す MR 実験。SRAM トレーサーボードは @FIssiki さんが開発した。2017年3〜4月にハッシュタグ #MRファミコン で制作経過を投稿し、Maker Faire Tokyo 2017 に出展（出展名義 KOALAB.）。2008年の AR Paper Famicom から続く「現実にゲーム機を重ねる」系譜の一作。以前この項目に載せていた写真は本人のものではなかったため外した。本人の制作風景は、下に時系列で並べた関連ポストの動画・写真で確認できる。",
   links:[],
   xs:[["https://x.com/GOROman/status/843599597876400129","魔改造 #MRファミコン"],["https://x.com/GOROman/status/846708683878924289","ファミコン>FPGA>ESP32>Wifi>UDP>Unity\n\n#MRファミコン"],["https://x.com/GOROman/status/846917610130202626","#MRファミコン 進捗。ファミコン実機のRAM内容にUnityからアクセス可能になったぞ！！\n\nこのUnityアプリをHoloLensに対応させると。。。"],["https://x.com/GOROman/status/848198976893370372","#MRファミコン 進捗\nマリオのX/Y座標をRAMから読む事に成功！"],["https://x.com/GOROman/status/848328375391232000","#MRファミコン 遂にHoloLensに繋がった！\n\nファミコン実機>FPGA>ESP32>>>(Wifi)>>>UDP>HoloLens"],["https://x.com/GOROman/status/848331730255728640","#MRファミコン　もう少し衝撃的な感じの動画。\n実機ファミコンで遊んでブロック壊すとMRでリアル側にブロックが降ってくる！"],["https://x.com/GOROman/status/912678573734903809","#MRファミコン FPGAで傍受してるのでRAMの内容がリアルタイムでわかる"]]},
  {era:"vr", year:"2018", title:"AniCast／AniCast Maker", cat:"バーチャルプロダクション", img:"assets/anicast.jpg", alt:"AniCast — VR空間でキャラクターになりきる配信システム",
@@ -715,7 +717,7 @@ var WORKS = [
   desc:"自著の売上などを原資に、学生へ Oculus Go を無償配布するプロジェクト。2019年には Facebook 本社の VR 教育担当から預かった100台の配布を告知し、約1,260件のリプライが集まった。",
   links:[["Mogura VR 記事","https://www.moguravr.com/student-go-project/"]]},
  {era:"scale", year:"2020", title:"WASM MDXプレーヤー「聴いてみよう！MDX！」", cat:"Web / WebAssembly",
-  desc:"X68000 の MDX 音楽形式をブラウザで再生する WebAssembly プレーヤー。FM音源8ch＋ADPCM8ch のビジュアライザーや Web MIDI 対応を備える。基盤デコーダ portable_mdx は yosshin4004 氏の作で、本人の作はその WASM 化とプレーヤー側。",
+  desc:"X68000 の MDX 音楽形式をブラウザで再生する WebAssembly プレーヤー。FM音源8ch＋ADPCM8ch のビジュアライザーや Web MIDI 対応を備える。基盤デコーダ portable_mdx は yosshin4004 氏の作で、本人が手がけたのはその WASM 化とプレーヤーの実装である。",
   links:[["GitHub リポジトリ","https://github.com/GOROman/GOROman.github.io"],["プレーヤーを開く","https://goroman.github.io/"]]},
  {era:"scale", year:"2022", title:"MDXツール群（MDXVST／mdxtools／VS Code拡張）", cat:"音楽ツール / X68000", imgs:["assets/mdx-vst-1.jpg","assets/mdx-vst-2.jpg"], alt:"MDXVST のデバッグ中の画面（X の投稿写真）",
   desc:"X68000 MDX 形式まわりの自作ツール群。VST3 プラグイン版プレーヤー MDXVST、MDX 取り扱いツール集、VS Code 用 MML シンタックスハイライトと MDX プレビュー拡張を2022年4〜5月に相次いで公開した。",
@@ -725,19 +727,22 @@ var WORKS = [
   desc:"M5Stamp S3 を使う手のひらサイズのオープンソースドローン StampFly のコア開発。ChatGPT を設計ドキュメントや PID 調整に活用し、製品としては2024年8月に M5Stamp Fly として発売された。",
   yt:{id:"919VGdPmd2Q", title:"StampFly Practice（TAKASU 高須正和）"},
   links:[["drone.jp 発売記事","https://drone.jp/news/2024080222055494456.html"],["Hackster プロジェクト","https://www.hackster.io/stampfly/stamp-fly-an-open-source-diy-drone-kit-from-japan-shenzhen-93d099"]]},
- {era:"ai", year:"2024", title:"GOROman's TR-808 Cowbell", cat:"OSSハードウェア", img:"assets/tr808-cowbell.jpg", alt:"TR-808 カウベル回路の基板", status:"回路未検証・Ongoing",
-  desc:"Roland TR-808 のカウベル回路をサービスマニュアルの回路図から忠実に書き起こしたオープンソースハードウェア。回路図の書き起こしは完了しているが、回路の動作テストは未実施（プロジェクトページの記述どおり）。",
-  links:[["OSHWLab プロジェクト","https://oshwlab.com/goroman/tr-808-cowbell_2024-05-26_11-33-44"]]},
+ {era:"ai", year:"2024", sort:"2024-05-26", title:"GOROman's TR-808 Cowbell", cat:"OSSハードウェア / Synthesizer", img:"assets/tr808-cowbell.jpg", alt:"GOROman's TR-808 Cowbell — 「写経シリーズ No.1 - 808 CowBell」とシルク印刷された基板の3Dレンダリング", status:"動作確認済み",
+  desc:"Roland TR-808 のカウベル回路をサービスマニュアルの回路図から忠実に書き起こしたオープンソースハードウェア（「写経シリーズ No.1」）。OSHWLab のプロジェクトページ（2024年5月公開）では、公開されていたのは回路図の書き起こしまでで、動作テストは未実施とされていた。その後、実機で音が出ることが確認された。本人も2026年6月のポストで「TR-808のカウベルのアナログ回路を再現してリアルカウベル叩くと808の音がする」と振り返っている。下はそのポストの埋め込み。",
+  links:[["OSHWLab プロジェクト","https://oshwlab.com/goroman/tr-808-cowbell_2024-05-26_11-33-44"]],
+  xs:[["https://x.com/GOROman/status/2061612447988146261","あれ ってなんですか？ TR-808のカウベルのアナログ回路を再現してリアルカウベル叩くと808の音がするのとかは作りました\n(作ったものが1000個くらいあるのでどれかわからんw"]]},
  {era:"ai", year:"2025", title:"LLM Cardputer", cat:"AIガジェット", img:"assets/llm-cardputer.jpg", alt:"LLM Cardputer — Cardputer と Module LLM の合体マシン",
   desc:"M5Stack Cardputer に Module LLM を合体させ、手のひらサイズでオフライン LLM チャットが動くコンピュータにした作例。ケース加工や UART 接続の作り方まで公開した。",
   links:[["GitHub リポジトリ","https://github.com/GOROman/LLMCardputer"],["DEV 記事","https://dev.to/goroman/building-a-palm-sized-local-llm-with-m5stack-cardputer-and-modulellm-2hpf"]]},
- {era:"ai", year:"2025", title:"AI-Mini4WD（しゃべるAIミニ四駆）", cat:"AI × 玩具", img:"assets/ai-mini4wd.jpg", alt:"AI-Mini4WD — マイコンとバッテリーを載せたミニ四駆のシャーシ（X の投稿動画サムネイル）",
-  desc:"OpenAI Realtime API Embedded SDK を ESP32 系に載せ、音声で話せる AI ミニ四駆を作るプロジェクト。2025年3月の WebRTC Meetup Tokyo #29 で「しゃべるAIミニ四駆をつくる」と題して LT 登壇した。",
-  links:[["GitHub リポジトリ","https://github.com/GOROman/AI-Mini4WD"]]},
- {era:"ai", year:"2025", title:"かんぷれ -KANTAN Play core-", cat:"音楽ガジェット", img:"assets/kantan-play.jpg", alt:"かんぷれ -KANTAN Play core- 本体",
-  desc:"InstaChord の「誰でも弾ける」思想から生まれたワンボタン音楽ガジェット。本人は Web 版 KANTAN Play の開発とコンセプトデベロッパーとして関与。ハード版「かんぷれ」はクラウドファンディングで成功を収めた。",
+ {era:"ai", year:"2025", sort:"2025-03-09", title:"AI-Mini4WD（しゃべるAIミニ四駆）", cat:"AI × 玩具", img:"assets/ai-mini4wd.jpg", alt:"AI-Mini4WD — サンタ仕様のミニ四駆にマイコンとバッテリーを載せたシャーシ（X の投稿写真）",
+  desc:"きっかけは2024年12月、子どもとのクリスマス用に買ったサンタ仕様のミニ四駆だった。同月21日には秋月電子のモータードライバを載せて ESP32 から I2C 制御（バックも可能）にし、やがて OpenAI Realtime API Embedded SDK を載せて音声で会話できる「しゃべるAIミニ四駆」になった。2025年3月の WebRTC Meetup Tokyo #29 で「しゃべるAIミニ四駆をつくる」と題して LT 登壇し、GitHub で公開した。この作例が OpenAI 社内の目に留まって DM が届き、サンフランシスコの OpenAI DevDay 参加につながったと、本人が Qiita の登壇資料や CodeZine のレポートで語っている。下の埋め込みは制作過程のポスト。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/AI-Mini4WD"],["Qiita「ミニ四駆を買って改造してたらサンフランシスコのOpenAI DevDayに参加できた話①」","https://qiita.com/Null-Sensei/items/5d3fcf50fd53680abac6"],["CodeZine「OpenAI DevDay 2026 現地レポート」（ミニ四駆が参加のきっかけ）","https://codezine.jp/article/detail/30237"]],
+  xs:[["https://x.com/GOROman/status/1870364857079636329","M5でI2C制御可能なミニ四駆つくった。"],["https://x.com/GOROman/status/1929097763154727182","ChatGPT(OpenAI Realtime API搭載)で音声で会話できるミニ四駆を作りました！！"]]},
+ {era:"ai", year:"2024–25", sort:"2024-06-08", title:"かんぷれ -KANTAN Play core-", cat:"音楽ガジェット", img:"assets/kantan-play.jpg", alt:"かんぷれ -KANTAN Play core- 本体",
+  desc:"メイキングは Web 版 KANTAN Play から始まる。本人が Web 版を作って遊ぶうちに「やっぱり物理ボタンが欲しい、ハードウェア音源も欲しい」と思うようになり、2023年8月に M5Stack を使ってプロトタイプを自作した（DTMステーションでの本人の談）。同年10月に製品名「KANTAN Play core（かんぷれ）」が決まった時点で、試作機はまだコード（和音）もドラムも鳴らせない「音が鳴るだけの箱」だった。試作1号機は Maker Faire Tokyo 2023、試作2号機は Maker Faire Shenzhen 2023 で展示され、開発の様子は Kibidango の活動報告で随時公開された。2024年6月にクラウドファンディングを開始して約6,400万円を集め、2025年5月に一般販売が始まった。本人は Web 版 KANTAN Play の開発者で、ハード版ではコンセプトデベロッパーを務める。下の埋め込みは、原型となった InstaChord 連携の自作ポストから KANTAN Play 関連ポストまでを並べたもの。",
   yt:{id:"EpE7xJE2ono", title:"「かんぷれ」携帯ゲーム機みたいな楽器 — KANTAN Play core（InstaChord公式）"},
-  links:[["PR TIMES（開発チーム紹介）","https://prtimes.jp/main/html/rd/p/000000006.000058517.html"],["DTMステーション KANTAN Play インタビュー","https://www.dtmstation.com/archives/62146.html"]]},
+  links:[["DTMステーション「電子楽器『かんぷれ』のクラファン開始」（原型とメイキング）","https://www.dtmstation.com/archives/66555.html"],["DTMステーション「『かんぷれ』ついに発売へ。開発者に聞く」","https://www.dtmstation.com/archives/71510.html"],["Kibidango 活動報告「製品名決定〖KANTAN Play Core：かんぷれ〗」","https://kibidango.com/projects/2473/reports/17300"],["Kibidango 活動報告「怒涛の出張ラッシュ 1か月間の振り返り」（試作1号機・2号機）","https://kibidango.com/projects/2473/reports/17513"],["スイッチサイエンス「KANTANPLAY_2」開発ストーリー","https://www.switch-science.com/pages/kantanplay2"],["PR TIMES（開発チーム紹介）","https://prtimes.jp/main/html/rd/p/000000006.000058517.html"],["DTMステーション KANTAN Play インタビュー","https://www.dtmstation.com/archives/62146.html"]],
+  xs:[["https://x.com/GOROman/status/1541038293298851845","インスタコードを弾くとM5 Stackが連動してDMXのライトが光るシステムを作りました。"],["https://x.com/GOROman/status/1653336522463277056","インスタコード用のドラムシーケンサーをChatGPTに聞きながらマッハでつくってみた"],["https://x.com/GOROman/status/2100940438614212799","Jevによるコード進行 AI選択システムを作ってみた\n金がどんどん溶けるw\nKANTAN-PLAY\n\nCc: @necobut"]]},
  {era:"ai", year:"2026", sort:"2026-01-09", title:"TATEX", cat:"Webツール", img:"assets/tatex.jpg", alt:"TATEX — 縦長画像4分割ツールの画面", 
   desc:"「投稿タップしたら縦になる」画像を作るため、縦長画像を4分割するツールを Manus で作って無料公開した小ツール。下は告知ポストの公式埋め込み。",
   x:"https://x.com/GOROman/status/2010319432720228491", links:[]},
@@ -770,7 +775,7 @@ var WORKS = [
   desc:"RDK X5 を使う2輪倒立振子ロボット。カメラで人を検出して追従し、Wi-Fi 経由で指示できる構成を目指す。ボディは 3D プリント製。RDK Challenge 2026 Winter 向けのプロジェクトで、現在はシミュレーション検証済みの制御骨格から実機化を進めている段階。",
   links:[["GitHub リポジトリ","https://github.com/GOROman/sekken-rover-muse"]]},
  {era:"vr", year:"2017", sort:"2017-02-19", title:"オーグメンテッドジョイスティック", cat:"自作コントローラ", img:"assets/posts/833292507110715392-1.jpg", alt:"オーグメンテッドジョイスティックの有機ELモニタ（完成ポストの動画から）",
-  desc:"ジョイスティックの入力を Arduino に通して「オーグメント（拡張）」し、JAMMA で基板側へ返す自作コントローラ。VSync 同期連射や、VF2 の台湾ステップ／千本パンチといった技の1ボタン発動をファームウェアでアシストする。有機ELモニタと入力モニタ、押したボタンが光るギミックを搭載し、2017年2月に完成を報告した。高校時代に買った電波新聞社のインテリジェントジョイスティック XE-1 SFC が「あんまりインテリジェンスではなかった」ことへの回答として作られた。8年後の2025年にも、VF2 で自動で千本パンチするジョイスティックを作っている。下の埋め込みは、着想から完成、2025年の続報までの関連ポスト。",
+  desc:"ジョイスティックの入力を Arduino に通して「オーグメント（拡張）」し、JAMMA で基板側へ返す自作コントローラ。VSync 同期連射や、VF2 の台湾ステップ／千本パンチといった技の1ボタン発動をファームウェアでアシストする。有機ELモニタと入力モニタ、押したボタンが光るギミックを搭載し、2017年2月に完成を報告した。高校時代に買った電波新聞社のインテリジェントジョイスティック XE-1 SFC が「あんまりインテリジェンスではなかった」ことへの回答として作られた。8年後の2025年には、VF2 で自動で千本パンチするジョイスティックも作った。下の埋め込みは、着想から完成、2025年の続報までの関連ポスト。",
   links:[],
   xs:[["https://x.com/GOROman/status/830936749266268160","ジョイスティックの入力を一旦Arduinoに入れてオーグメントして基板側にJAMMAで返すというオーグメンテッドジョイスティックをおもいついた。AJ。VSync同期連射もオーグメンテッドの一種だ。"],["https://x.com/GOROman/status/832804731290411009","オーグメンテッドジョイスティック\n有機ELモニタ搭載完了"],["https://x.com/GOROman/status/833292507110715392","技をアシストするジョイスティック完成！\n\n#オーグメンテッドジョイスティック"],["https://x.com/GOROman/status/833303841755967489","VF2の台湾ステップをオーグメントした\n\n#オーグメンテッドジョイスティック"],["https://x.com/GOROman/status/1922061879452561564","バーチャファイター2で自動で千本パンチするジョイスティックつくったよ"]]},
  {era:"vr", year:"2017", sort:"2017-03-16", title:"NESBot-mini", cat:"GitHub / ファミコン", img:"assets/nesbot-mini.jpg", alt:"NESBot-mini — ファミコン本体に Arduino Uno を組み込み、スーパーマリオブラザーズのカセットを挿した実機",
@@ -785,12 +790,16 @@ var WORKS = [
   desc:"サービス終了した Yahoo!ジオシティーズ のページを Web Archive（archive.org）へ自動リダイレクトする Chrome 拡張（2019年5月公開）。消えゆくWebを残すための小さな道具。公開直後に ねとらぼ と INTERNET Watch（やじうまWatch）で紹介された。",
   links:[["GitHub リポジトリ","https://github.com/GOROman/GoodbyeGeocitiesJP"],["ねとらぼ 記事「サービス終了の「Yahoo!ジオシティーズ」発掘に役立つChrome拡張が登場」","https://nlab.itmedia.co.jp/cont/articles/3290680/amp/"],["INTERNET Watch やじうまWatch「Yahoo!ジオシティーズにアクセスすると自動的にアーカイブを表示するChrome拡張機能」","https://internet.watch.impress.co.jp/docs/yajiuma/1183454.html"]]},
  {era:"ai", year:"2025", sort:"2025-03-18", title:"XKusoRepFilter", cat:"GitHub / Chrome拡張",
-  desc:"X のクソリプをフィルタする Chrome 拡張（2025年3月公開、GitHub）。SubtractProxy と同じ「情報の引き算」の系譜にあるブラウザ側の実装。",
-  links:[["GitHub リポジトリ","https://github.com/GOROman/XKusoRepFilter"]]},
+  desc:"X の投資スパム系クソリプ（「しばらく観察していると……」）に Block ボタンを表示してブロックしやすくする Chrome 拡張「X Kuso Rep Filter」（2025年3月公開、GitHub）。ソースコードやドキュメント、CI/CD 環境まで、ほぼ AI に作らせた点でも話題になり、窓の杜「やじうまの杜」で記事として紹介された。SubtractProxy と同じ「情報の引き算」の系譜にあるブラウザ側の実装。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/XKusoRepFilter"],["窓の杜 やじうまの杜「X/Twitterを跋扈する投資スパムを弾くChrome拡張機能が登場」","https://forest.watch.impress.co.jp/docs/serial/yajiuma/1671297.html"],["note 解説記事「𝕏で多発するクソリプを撲滅する方法」（ピル山 めろ子。）","https://note.com/mero_fx/n/n96c4914bc3b4"]]},
  {era:"ai", year:"2026", sort:"2026-08-24", title:"PlayStation FPGA実験（ps1-ode-fpga）", cat:"GitHub / PlayStation / FPGA", img:"assets/posts/2101855979998748892-1.jpg", alt:"初代プレステ SCPH-3500 と SCPH-7500 の基板（X の投稿写真）",
-  desc:"初代 PlayStation の光学ドライブエミュレータを FPGA（Sipeed Tang Primer 20K／Gowin GW2A）に移植する GitHub プロジェクト ps1-ode-fpga（picostation の FPGA 移植、2026年8月公開）。あわせて、PlayStation の BIOS をステレオ音声 OFDM で吸い出す実験 ps1-bios-audio-ripper も公開している。同じ時期には、初代プレステの通信対戦ポートを FPGA で傍受し、AI が運転する相手と対戦できる「接待レーサーレボリューション」も作った。下の埋め込みはその関連ポスト。",
+  desc:"picostation（初代 PlayStation の光学ドライブエミュレータ）を FPGA（Sipeed Tang Primer 20K／Gowin GW2A）へ移植する GitHub プロジェクト ps1-ode-fpga（2026年8月公開）。あわせて、PlayStation の BIOS をステレオ音声 OFDM で吸い出す実験 ps1-bios-audio-ripper も公開している。同じ時期には、初代プレステの通信対戦ポートを FPGA で傍受し、AI が運転する相手と対戦できる「接待レーサーレボリューション」も作った。下の埋め込みはその関連ポスト。",
   links:[["GitHub ps1-ode-fpga","https://github.com/GOROman/ps1-ode-fpga"],["GitHub ps1-bios-audio-ripper","https://github.com/GOROman/ps1-bios-audio-ripper-sx-burst-edition"]],
   xs:[["https://x.com/GOROman/status/2091771236057747928","FPGAでPS1でODEなんかできてた。動くかはしらん。"],["https://x.com/GOROman/status/2101870310626857423","初代プレステの通信ポートを基板からぶっこぬきました。"],["https://x.com/GOROman/status/2102448051801747470","我ながらスゲーものができたwww\n\nプレステのリッジレーサーの通信対戦をFPGAで傍受してWebRTCでスマホでリアルタイムで見れるwww 2P側はAIが操縦www\n\n#生成AIなんでも展示会"]]},
+ {era:"ai", year:"2026", sort:"2026-08-24", title:"Chromatic魔改造（FPGA＋FM音源搭載）", cat:"Chromatic / FPGA", status:"完成ポストを確認",
+  desc:"ModRetro の携帯ゲーム機 Chromatic（Palmer Luckey が作った Game Boy 互換機）を、FPGA と ESP32 とカスタム ROM で魔改造した作例。2026年8月、FM音源を搭載して「#かんぷれ みたいな楽器」にして弾いてみた報告（いいね152）に始まり、同年10月には YM2151（OPM）8ch＋ADPCM のハック、Chromatic を Muse Gadgets 化する実験、「FPGA/ESP32 MOD」の披露と、関連ポストが続いた。Chromatic を楽器化するというかんぷれの系譜を、別ハードで試した実験である。下の埋め込みは関連ポストを時系列で並べたもの。",
+  links:[],
+  xs:[["https://x.com/GOROman/status/2091702333826842804","あの @PalmerLuckey が作った @modretro CHROMATIC を魔改造(FPGAとESP32とカスタムROM)してFM音源を搭載。#かんぷれ みたいな楽器にして弾いてみた！"],["https://x.com/GOROman/status/2107692409488585215","MODRETRO ChromaticをMuse Gadgetsに出来た！ ESP32のRAMがあんま無いので苦労した。"],["https://x.com/GOROman/status/2107697008589046069","Modretro Chromatic YM2151(OPM) 8CH +ADPCM HACK"],["https://x.com/GOROman/status/2110838019876151694","ModRetro @modretro Chromatic\nFPGA/ESP32 MOD\n\nCc: @PalmerLuckey"]]},
  {era:"ai", year:"2026", sort:"2026-07-22", title:"claude-famicom-emu", cat:"GitHub / Famicom", img:"assets/claude-famicom-emu.jpg", alt:"claude-famicom-emu の画面 — ピン接触不良シミュレーションとデバッガを備えたブラウザ版ファミコンエミュレータ（X の投稿動画から）",
   desc:"ブラウザで動くファミコンエミュレータ（2026年7月公開）。C++コアを WebAssembly 化し、60ピンコネクタの接触不良シミュレーション（ピンを壊す、カセットを斜めに傾ける、息を吹きかける）、任意のピンに当てられるオシロスコープ、電源を入れたままのカセット交換、TAS再生、可変クロック（1Hz〜1.79MHz）などを備える。AIと作った2026年夏のファミコン実験の一つ。プロジェクト名は claude-famicom-emu、GitHub のリポジトリ名は cluade-famicom-emu。",
   links:[["GitHub リポジトリ（cluade-famicom-emu）","https://github.com/GOROman/cluade-famicom-emu"],["ブラウザで遊ぶ（GitHub Pages）","https://goroman.github.io/cluade-famicom-emu/"]],
@@ -808,7 +817,7 @@ var WORKS = [
   desc:"YM2151（FM音源）で TR-808 風 UI のシンセをブラウザで動かす GitHub プロジェクト（2026年7月公開）。ファミコン音源版と並んで、2026年夏の「Vibe Coding でシンセを作る」実験の公開リポジトリ。",
   links:[["GitHub リポジトリ","https://github.com/GOROman/2151-808"],["GitHub YM2151-Claude（FM音源エミュレータ）","https://github.com/GOROman/YM2151-Claude-3.7-Sonnet"]]},
  {era:"ai", year:"2026", sort:"2026-09-25", title:"null-net-cock", cat:"GitHub / パソコン通信",
-  desc:"1990年代のパソコン通信ホスト「NET-COCK」互換のホストプログラムを C／SQLite で実装した GitHub プロジェクト（2026年9月公開）。1995年の GORO-NETs／net-kick から31年越しで、同じ題材に帰ってきた作品。",
+  desc:"1990年代のパソコン通信ホスト「NET-COCK」互換のホストプログラムを C／SQLite で実装した GitHub プロジェクト（2026年9月公開）。1995年の GORO-NETs／net-kick から31年越しで同じ題材に帰ってきた作品である。",
   links:[["GitHub リポジトリ","https://github.com/GOROman/null-net-cock"]]}, {era:"vr", year:"2016", sort:"2016-01-15", title:"FaceRig→MMDプラグイン", cat:"フェイストラッキング", desc:"FaceRig のパラメータを取得して、MikuMikuMoving（MMM）側の MMD モデルへ反映するプラグイン。2016年1月のポストはいいね682／RT632と大きな反響があった。FaceRig のパラメータを Unity へ適用する版も作っている。下の埋め込みはその関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/687939400672636929","Facerigのパラメータを取得してMMDに反映するMMM用プラグインをつくった。"],["https://x.com/GOROman/status/687278840142495744","FaceRigからパラメータ取得してUnityに適用するのをつくった。"]]},
  {era:"vr", year:"2017", sort:"2017-01-07", title:"バルス（家中の電気を消すコマンド）", cat:"スマートホーム", img:"assets/posts/817712142535139329-1.jpg", alt:"バルス — Apple Watch の Siri が「お望みどおりにいたします」と応えた画面（X の投稿写真）", desc:"声のコマンド「バルス」で家中の電気を一斉に消す仕組み。Siri が受け付けて実行し、Apple Watch には「お望みどおりにいたします」と応答が出る。2017年1月の報告ポストは RT1,089 と大きく拡散した。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/817712142535139329", xt:"家中の電気を消すコマンド「バルス」を作った。Siriがちゃんと対応して消してくれる。", links:[]},
  {era:"vr", year:"2018", sort:"2018-05-18", title:"Oculus Go サザビー風カスタム", cat:"VRハードカスタム", img:"assets/posts/997316207521943552-1.jpg", alt:"Oculus Go サザビー風カスタム — 真紅に塗られた Oculus Go（X の投稿写真）", desc:"Oculus Go をサザビー風に仕上げたカスタム機。真紅のボディに金色のジオンマークをあしらった。2018年5月の完成ポストはいいね500。下は完成ポストの埋め込み。", x:"https://x.com/GOROman/status/997316207521943552", xt:"Oculus Go サザビー風 完成！", links:[]},
@@ -820,9 +829,28 @@ var WORKS = [
  {era:"ai", year:"2026", sort:"2026-01-08", title:"クルクルミラクル", cat:"AIツール", desc:"マウスカーソルをクルクル回すと、その範囲を AI が要約してくれるツール。メールの返信文も書いてもらえる。2026年1月のポストはいいね412。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2009250960867041584", xt:"マウスカーソルをクルクルすると、その範囲をAIが要約してくれるやつを作った。メールの返信も書いてもらえる。  #クルクルミラクル", links:[]},
  {era:"ai", year:"2026", sort:"2026-08-18", title:"X68000 PIC→MP4変換／柳沢PICツール", cat:"X68000 / 画像ツール", desc:"X68000 の PIC フォーマット画像を MP4 にする変換ツール（稲妻レンダリング）。2026年8月のポストはいいね2,564と大きな反響があった。続いて、任意の画像を X68K 柳沢PIC 表示にするツールも作った。下の埋め込みは関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/2089544728291442876","暇なのでX68000のPICフォーマットをMP4にするやつ作った。稲妻レンダリング。"],["https://x.com/GOROman/status/2089618087784091662","任意の画像をX68K柳沢PIC表示にするツールを作りました！  『キミだけの稲妻を堪能しよう！』"]]},
  {era:"ai", year:"2026", sort:"2026-09-19", title:"青空文庫をXポスト風に読むやつ", cat:"Webツール / 読書", desc:"青空文庫の文章を、X のポスト風の見た目で読めるリーダー。2026年9月のポストはいいね1,044。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2100989510813446342", xt:"青空文庫をXポスト風に読むやつを作ってみた。", links:[]},
- {era:"ai", year:"2026", sort:"2026-09-25", title:"FAX受信AI判別システム", cat:"FAX / 回線ハック", desc:"FAXモデム2台を繋いで PC で FAX を受信できるようにし、受信が完了したら自動で OpenAI の API に画像認識させて、誰宛の FAX か判別する仕組み。公衆回線なしで FAX／モデムの T.30 テストができる SLIC基板（別項目）と同じ、「電話回線を自前で扱う」系譜の作品。下の埋め込みは関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/2103461740575088971","FAXモデム２台繋げて、FAX受信するの作った。"],["https://x.com/GOROman/status/2103469143655932104","パソコンでFAX受信できるようにして、受信完了したら自動でOpenAIのAPIで画像認識させて誰宛か判別するのを作ってみた。"]]},
+ {era:"ai", year:"2026", sort:"2026-09-25", title:"FAX受信AI判別システム", cat:"FAX / 回線ハック", desc:"FAXモデム2台を繋いで PC で FAX を受信できるようにし、受信が完了したら自動で OpenAI の API で画像認識して、誰宛の FAX か判別する仕組み。公衆回線なしで FAX／モデムの T.30 テストができる SLIC基板（別項目）と同じ、「電話回線を自前で扱う」系譜の作品。下の埋め込みは関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/2103461740575088971","FAXモデム２台繋げて、FAX受信するの作った。"],["https://x.com/GOROman/status/2103469143655932104","パソコンでFAX受信できるようにして、受信完了したら自動でOpenAIのAPIで画像認識させて誰宛か判別するのを作ってみた。"]]},
  {era:"ai", year:"2026", sort:"2026-10-06", title:"Visit Japan Web AIエージェント＋電子ペーパーQR", cat:"AIエージェント", img:"assets/posts/2107208164915700031-1.jpg", alt:"Visit Japan Web の税関申告QRコードを表示した電子ペーパー端末（X の投稿写真）", desc:"入国手続きサイト「Visit Japan Web」への記入を AI エージェントに行わせ、発行された QR コードを電子ペーパー端末（バッテリーが切れても表示が残る）へ転送する仕組み。2026年10月のポストはいいね702。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2107208164915700031", xt:"あのクソ面倒な Visit Japan WebにAIエージェントが記入し、QRは電子ペーパー(バッテリ無くなっても表示できる)に転送するやつを作った", links:[]},
- {era:"ai", year:"2026", sort:"2026-11-01", title:"reSpeaker Clip カスタムファームウェア", cat:"ファームウェア", status:"完成報告ポストを確認", desc:"ウェアラブル録音デバイス reSpeaker Clip のカスタムファームウェア（CFW）。家に帰ると BLE で Mac Studio を検知して自動で Wi-Fi を開き、録音ファイルを自動転送（HotSync）し、RE-USE でノイズキャンセルして自動文字起こしまで行い、吸い出したファイルは自動で消す。2026年11月に完成を報告した。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2116749370670657918", xt:"reSpeaker Clip の CFW作った。家に帰ったらBLEでMac Studio検知して、勝手にWifi開いて録音ファイルを自動でHotSync。勝手にRE-USEでノイズキャンセルして自動文字起こし。吸い出したファイルは自動で消す。", links:[]}
+ {era:"ai", year:"2026", sort:"2026-11-01", title:"reSpeaker Clip カスタムファームウェア", cat:"ファームウェア", status:"完成報告ポストを確認", desc:"ウェアラブル録音デバイス reSpeaker Clip のカスタムファームウェア（CFW）。家に帰ると BLE で Mac Studio を検知して Wi-Fi につなぎ、録音ファイルを自動転送（HotSync）し、RE-USE でノイズキャンセルして自動文字起こしまで行い、吸い出したファイルは自動で消す。2026年11月に完成を報告した。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2116749370670657918", xt:"reSpeaker Clip の CFW作った。家に帰ったらBLEでMac Studio検知して、勝手にWifi開いて録音ファイルを自動でHotSync。勝手にRE-USEでノイズキャンセルして自動文字起こし。吸い出したファイルは自動で消す。", links:[]},
+ {era:"vr", year:"2014", sort:"2014-02-18", title:"Pebbleで会社の電気をオン・オフ", cat:"スマートウォッチ / ホームオートメーション", img:"assets/posts/435564115642171392-1.jpg", alt:"Pebbleで会社の電気をオン・オフ — 赤い Pebble の画面に「BAR On」「BAR Off」のメニューが表示されている（X の投稿写真）",
+  desc:"スマートウォッチ Pebble から会社の会議室やロビー、BAR の電気をオン・オフできる仕組み（2014年2月）。写真の Pebble の画面には「BAR On／BAR Off」のメニューが並ぶ。前年2013年11月には Pebble の Bluetooth をハックして家のエアコンを入れる実験もしており、2017年の「バルス」（声で家中の電気を消す）へ続くウェアラブルから家電を操る系譜の初期作である。下の埋め込みは関連ポスト。",
+  links:[],
+  xs:[["https://x.com/GOROman/status/406228295970062336","腕時計PebbleのBluetoothをHackして家のエアコンをオンにするつくったよ！！\n\nHome Automation - Pebble smart watch"],["https://x.com/GOROman/status/435564115642171392","腕時計Pebbleから会社の会議室やロビーとかBARの電気オン・オフ出来るのつくった！！(^O^)"],["https://x.com/GOROman/status/456801492519768064","GoogleGlassから会社の会議室の蛍光灯 On/Off出来るネイティブアプリつくった。\n音声認識 or タッチでOK!"]]},
+ {era:"vr", year:"2016", sort:"2016-01-21", title:"3Dプリント ファミコンカセット", cat:"3Dプリンタ / Famicom", img:"assets/posts/690082058819993600-1.jpg", alt:"3Dプリント ファミコンカセット — 実物カセットを分解・計測してモデリングし、3Dプリントしたカセット（X の投稿写真）",
+  desc:"ファミコンのカセットを分解し、ノギスで計ってモデリングして、自宅の3Dプリンタでプリントしたファミコンカセット（2016年1月のポストはいいね74）。始まりは2013年3月で、「両面出来ました」「フタ閉じるとこんな感じです」と試作の様子を投稿していた。13年後の2026年7月には、ファミカセ専用CAD（STLエクスポート対応）まで作って、再びカセットをプリントしている。下の埋め込みは関連ポストを時系列で並べたもの。",
+  links:[],
+  xs:[["https://x.com/GOROman/status/318282225189801984","3Dプリンタで作ったファミコンカセット。両面出来ました。"],["https://x.com/GOROman/status/318292018960949248","３Dプリントしたファミコンカセット。フタ閉じるとこんな感じです。ファミコンに差してみたい。"],["https://x.com/GOROman/status/690082058819993600","ファミコンのカセット分解してノギスで計ってモデリングして自宅の3Dプリンターでプリントしたファミコンのカセット"],["https://x.com/GOROman/status/2081139023746326840","ファミコンのカセットを３Dプリントしたいのでファミカセ専用CADつくった。STLエキスポート対応"],["https://x.com/GOROman/status/2081241440747933891","3Dプリントしたファミコンカセット\n いい感じ"]]},
+ {era:"vr", year:"2016", sort:"2016-07-24", title:"ポケモンGo 自動孵化装置", cat:"ゲームハック",
+  desc:"『ポケモンGO』のタマゴ孵化（歩行距離のカウント）を自動化しようと作った装置（2016年7月）。本人の報告は「作ってみた が、効果なし」。うまくいかなかったことも含めて正直に報告された実験作らしい一作である。下は報告ポストの埋め込み。",
+  x:"https://x.com/GOROman/status/757187529741217792", xt:"ポケモンGo 自動孵化装置作ってみた\nが、効果なし",
+  links:[]},
+ {era:"ai", year:"2026", sort:"2026-10-16", title:"VF2→Blender リアルタイム取り込み", cat:"VF2 / 3Dツール",
+  desc:"『バーチャファイター2』を Blender へリアルタイムに持ってくるツール（2026年10月、いいね209）。VF2 を素材として 3D 空間へ取り込む実験で、2017年のオーグメンテッドジョイスティック、2025年の自動千本パンチジョイスティック、そして制作中の VF2専用アケコンへと続く長年の VF2 ハックの系譜の一作である。下は報告ポストの埋め込み。",
+  x:"https://x.com/GOROman/status/2111075984590200939", xt:"バーチャファイター2をBlenderにリアルタイムで持ってくるやつを作ってみた",
+  links:[]},
+ {era:"ai", year:"2026", sort:"2026-11-15", title:"VF2専用アケコン「NULL CITY ARCADE STICK NC-03」", cat:"VF2 / 自作コントローラ", status:"制作中",
+  desc:"『バーチャファイター2』専用の自作アーケードスティック。1レバー＋3ボタン（G／P／K）＋小ボタン（1P／START）という VF2 に絞った構成で、筐体は Bambu Lab H3C で3Dプリントする。コンセプト名は「NULL CITY ARCADE STICK NC-03」（300×190×55mm）で、仕様はアート天板とクリアアクリル（M3×6で脱着できる）の組み合わせ。レバーはセイミツ製コンパクト系を使う。2026年11月時点で実物大の天板モックまで進み、本体印刷に向けて調整中。2017年のオーグメンテッドジョイスティックから続くVF2 のためのコントローラ作りの最新形である。",
+  links:[]}
 ];
 
 /* ================= DATA: archive stream (posts.json verified) ================= */
@@ -852,7 +880,7 @@ function imgErr(el){
   el.remove();
   if(p && p.classList && (p.classList.contains("post-photos") || p.classList.contains("work-gallery")) && !p.querySelector("img")) p.remove();
 }
-var TAG_ORDER=["3Dプリンタ","Drone","VR","AR","MR","Famicom","NES","PlayStation","Chromatic","FPGA","Oscilloscope","FAX","X68000","VST","Synthesizer","Music","Game","Robot","AI","電子工作","Web","Book","Video","Photo"];
+var TAG_ORDER=["3Dプリンタ","Drone","VR","AR","MR","Famicom","NES","PlayStation","Chromatic","FPGA","Oscilloscope","FAX","VF2","X68000","VST","Synthesizer","Music","Game","Robot","AI","電子工作","Web","Book","Video","Photo"];
 function tagsFor(text, hasPhoto, hasVideo){
   var t = text||""; var hit = {};
   function m(re, tag){ if(re.test(t)) hit[tag]=1; }
@@ -867,6 +895,7 @@ function tagsFor(text, hasPhoto, hasVideo){
   m(/FPGA/, "FPGA");
   m(/オシロ|Oscilloscope|DSO138|ファンクションジェネレータ/, "Oscilloscope");
   m(/FAX|ファクス|モデム|回線シミュレータ/, "FAX");
+  m(/VF2|バーチャファイター/, "VF2");
   m(/\bNES\b|NESBot/, "NES");
   m(/X68000|MDX|MML/, "X68000");
   m(/MDXVST|VSTプラグイン|VST開発|VST3|はじめてのVST|VSTが|VSTを|VSTで|VSTの|VSTに/, "VST");

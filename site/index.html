@@ -505,6 +505,12 @@ body{background:transparent}
 .x-fallback-meta a{color:var(--teal);font-weight:700}
 .x-state{margin:8px 0 0;font-size:.78rem;color:var(--ink3);line-height:1.6}
 .x-embed.x-failed .x-state{color:var(--accent);font-weight:700}
+.x-fallback.x-compact{padding:9px 12px;background:transparent;border-style:dashed}
+.x-fallback.x-compact .x-state{margin:0}
+.x-embed.x-failed .x-fallback.x-compact .x-state{color:var(--ink3);font-weight:400}
+.how-count{margin:12px 0 0}
+.how-count summary{cursor:pointer;color:var(--teal);font-weight:700;font-size:.9rem;width:fit-content}
+.how-count p{color:var(--ink2);font-size:.9rem;line-height:1.9;margin:10px 0 0}
 .x-slot iframe{margin:0 auto!important;display:block}
 /* interviews */
 .interview-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:16px}
@@ -618,7 +624,7 @@ body{background:transparent}
   </div>
 
   <!-- ================= TIMELINE (rendered by JS) ================= -->
-  <section class="wrap feed-intro" id="feedIntro"><span class="hero-kicker" id="feedKicker">スワイプで読み進める年表</span><h2 id="feedH">止まらない年表 — 1枚ずつ、38年分</h2><p id="feedP">作品は1枚ずつのカードで並んでいます。画面下のボタンで次の作品へジャンプできます。そのまま下へ、のんびり読み進めてください。</p><p class="feed-progress" id="feedCount"></p><p class="works-profile-link"><a href="#profile">プロフィールはこちら</a></p></section>
+  <section class="wrap feed-intro" id="feedIntro"><span class="hero-kicker" id="feedKicker">スワイプで読み進める年表</span><h2 id="feedH">止まらない年表 — 1枚ずつ、38年分</h2><p id="feedP">作品は1枚ずつのカードで並んでいます。画面下のボタンで次の作品へジャンプできます。</p><p class="feed-progress" id="feedCount"></p><p class="works-profile-link"><a href="#profile">プロフィールはこちら</a></p></section>
   <div class="wrap" id="timelineRoot"></div>
   <div class="wrap"><div class="empty" id="emptyState"><b>見つかりませんでした</b>検索する言葉を変えるか、絞り込みを「すべて」に戻してください。</div></div>
 
@@ -638,7 +644,8 @@ body{background:transparent}
     <div class="stream-head">
       <span class="hero-kicker">Xアーカイブ 665,121件から抽出・精査</span>
       <h2>「作ってみた」ストリーム <span id="streamTotal"></span></h2>
-      <p>X の全アーカイブ（2007〜2026年・665,121件）を走査し、「作ってみた」「やってみた」「つくった」「作った」「作りました」など、本人が自分の制作を完了形で報告したポストを年別に並べました。掲載数の数え方は次のとおりです。全アーカイブの実測では、完了形のポストはリツイートを除いて794件が上限でした。そこからキーワード抽出と下記の除外規則で絞り込み、さらに「3Dプリンタ」「3Dプリント」を含むポストから、具体的に何をプリントしたか分かるものも同じ基準で発掘して加えた<span id="dExt"></span>件と、別途厳選した<span id="dCur"></span>件を統合し、両方に含まれる重複<span id="dDup"></span>件と、作品ポートフォリオに収録済みの<span id="dWork"></span>件（そちらに一本化）を除いた全<span id="streamTotal2"></span>件が、このストリームの掲載数です。794件すべてを載せているわけではありません。除外規則は、リツイートと引用、記事や他人の動画の共有、「やってみたい」「作りたかった」といった願望表現、他人が作り手のポスト、伝聞と仮定、失敗・未完了の報告、登録や認証といった手続きだけのポスト、対象が特定できない短文、文脈のない返信や「昔作った」といった曖昧な言及だけのポスト、そして他人へのメンションで始まる返信ポストです。各ポストには通し番号とパーマネントリンク、内容に合うタグ（VR、Drone、Synthesizer、電子工作、3Dプリンタ、Famicom、PlayStation、Chromatic、FPGA、Oscilloscope、VST、FAX、VF2、JEV など）が付いていて、タグを押すと同じタグのポストに絞り込めます。アイコンは年代ごとに当時のものを使い、写真はアーカイブに残っていたものを付けています。2021年はアーカイブ自体に欠落があり、この条件に合うポストが残っていません。スクロールに合わせて少しずつ読み込むので、そのまま下へ読み進められます。各カードから元のポストを開けます。</p>
+      <p>X の全アーカイブ（2007〜2026年・665,121件）から、本人が自分の制作を完了形で報告したポスト（「作ってみた」「作った」など）を年別に並べました。各ポストには通し番号とタグが付いていて、タグを押すと同じタグのポストに絞り込めます。そのまま下へ読み進められます。</p>
+      <details class="how-count"><summary>掲載数の数え方・除外規則について</summary><p>掲載数の数え方は次のとおりです。全アーカイブの実測では、完了形のポストはリツイートを除いて794件が上限でした。そこからキーワード抽出と下記の除外規則で絞り込み、さらに「3Dプリンタ」「3Dプリント」を含むポストから、具体的に何をプリントしたか分かるものも同じ基準で発掘して加えた<span id="dExt"></span>件と、別途厳選した<span id="dCur"></span>件を統合し、両方に含まれる重複<span id="dDup"></span>件と、作品ポートフォリオに収録済みの<span id="dWork"></span>件（そちらに一本化）を除いた全<span id="streamTotal2"></span>件が、このストリームの掲載数です。794件すべてを載せているわけではありません。除外規則は、リツイートと引用、記事や他人の動画の共有、「やってみたい」「作りたかった」といった願望表現、他人が作り手のポスト、伝聞と仮定、失敗・未完了の報告、登録や認証といった手続きだけのポスト、対象が特定できない短文、文脈のない返信や「昔作った」といった曖昧な言及だけのポスト、そして他人へのメンションで始まる返信ポストです。タグは内容に合うもの（VR、Drone、Synthesizer、電子工作、3Dプリンタ、Famicom、PlayStation、Chromatic、FPGA、Oscilloscope、VST、FAX、VF2、JEV など）を付けています。アイコンは年代ごとに当時のものを使い、写真はアーカイブに残っていたものを付けています。2021年はアーカイブ自体に欠落があり、この条件に合うポストが残っていません。</p></details>
     </div>
     <div class="stream-grid" id="streamGrid"></div>
     <div class="stream-more" id="streamMore"><p class="stream-count" id="streamCount"></p><button class="btn" id="streamMoreBtn" type="button">もっと見る</button></div>
@@ -971,11 +978,11 @@ var WORKS = [
   xs:[["https://x.com/GOROman/status/2121807987480367347","NULL CITY"]],
   links:[["GitHub リポジトリ（GOROman/null-city）","https://github.com/GOROman/null-city"]],
   col:"アケコンは、アーケードゲームの操作パネルを家庭用に再現したコントローラのことです。バーチャファイター2 はレバーと3ボタン（ガード／パンチ／キック）だけで全ての技が出せる設計なので、ボタンはこの3つに絞れます。3Dプリント製の筐体に、実在しない街「NULL CITY」の量産機という設定と型番 NC-03 を与えた、実用品でありながら世界観のある一台です。"},
-{era:"dawn", year:"2008", sort:"2008-06-08", title:"ARToolKitで部屋にフィギュアを出現させてみた", cat:"AR実験 / ニコニコ動画",
+{era:"dawn", year:"2008", sort:"2008-06-08", title:"ARToolKitで部屋にフィギュアを出現させてみた", cat:"AR実験 / ニコニコ動画", img:"assets/nico-sm3594805.jpg", alt:"ARToolKitで部屋にフィギュアを出現させてみた — 机の上のマーカーに CG のフィギュアが出現する映像（ニコニコ動画の再生画面スクリーンショット）",
   desc:"AR（拡張現実）の開発キット ARToolKit を使い、実写の部屋の映像に CG のフィギュアを合成する実験（2008年6月、ニコニコ動画）。「どこまでリアルに CG を実写合成できるか」への挑戦で、同じ日に発表した AR Paper Famicom（別項目）と並ぶ AR の初期作。当時はスマートフォンも AR という言葉自体も一般的でなく、Web カメラと紙のマーカーで現実に CG を重ねる実験が個人でできるようになったばかりの時期だった。",
   links:[["ニコニコ動画「ARToolKitで部屋にフィギュアを出現させてみた」","https://www.nicovideo.jp/watch/sm3594805"]],
   col:"ARToolKit は、カメラ映像の中の四角いマーカー（目印）の位置を読み取り、その場所に CG を重ねて表示する仕組みです。今ではスマホの AR 機能として当たり前になりましたが、2008年当時は研究者と一部の作り手だけの道具でした。紙ファミコンと同じ日に、フィギュアでも試しているのが初期の実験らしいところです。"},
-{era:"dawn", year:"2008頃", sort:"2008-06-09", title:"PRT実写合成（ARToolKit × Precomputed Radiance Transfer）", cat:"AR実験 / ニコニコ動画", img:"assets/nico-sm3594805.jpg", alt:"同時期の ARToolKit 作例「ARToolKitで部屋にフィギュアを出現させてみた」— 机の上に CG のフィギュアが出現する映像（ニコニコ動画の再生画面スクリーンショット）",
+{era:"dawn", year:"2008頃", sort:"2008-06-09", title:"PRT実写合成（ARToolKit × Precomputed Radiance Transfer）", cat:"AR実験 / ニコニコ動画",
   desc:"ニコニコ動画で AR 実験を公開していた時期の作例。ARToolKit で実写の映像に CG を重ねる際に、PRT（Precomputed Radiance Transfer）という仕組みを組み合わせ、CG 側の陰影や光の当たり方をあらかじめ計算しておくことで、実写へ自然に溶け込む合成を試した。本人は後のインタビューで「ボクのニコ動見てもらえれば全部やってます。ARツールキット使って、Precomputed Radiance Transfer という仕組みで実写合成したりとか」と振り返っている。同じ ARToolKit を使った「ARToolKitで部屋にフィギュアを出現させてみた」「AR Paper Famicom」（いずれも別項目）と並ぶ初期 AR の作例で、PRT は独立した道具の名前ではなく、この ARToolKit による実写合成の中で使われた描画の仕組みを指す。個別動画のタイトルや ID はインタビューでは示されていないため、出典のインタビューとニコニコ動画の本人ページへリンクする。",
   links:[["電ファミニコゲーマー「backspace.fm」対談（PRT実写合成への言及）","https://news.denfaminicogamer.jp/backspace-fm/goroman-2"],["インサイド インタビュー（ニコニコ技術部とARの活動）","https://www.inside-games.jp/article/2017/04/17/106593.html"],["ニコニコ動画「ARToolKitで部屋にフィギュアを出現させてみた」（同時期の作例）","https://www.nicovideo.jp/watch/sm3594805"],["ニコニコ動画 本人ページ","https://www.nicovideo.jp/user/1037576"]],
   col:"PRT（Precomputed Radiance Transfer）は、物に光が当たってできる陰影や、物同士の光の反射をあらかじめ計算しておく描画の仕組みです。実写に CG を重ねるときに使うと、CG がその場の明かりで照らされているように見え、合成の浮き方が減ります。ARToolKit が「どこに重ねるか（マーカーの位置と姿勢）」を決め、PRT が「どう照らすか」を決める、という分担の実験でした。"},
@@ -1797,7 +1804,7 @@ function streamCard(p){
   var avatar=p.av
     ? '<span class="avatar"><span class="av-txt" aria-hidden="true">G_</span><img src="'+p.av+'" alt="" loading="lazy" decoding="async" data-kind="avatar" onerror="imgErr(this)"></span>'
     : '<span class="avatar" aria-hidden="true">G_</span>';
-  var embed='<div class="x-embed" data-xurl="'+p.url+'"><div class="x-fallback x-compact"><p class="x-state" role="status">Xの公式埋め込みを読み込み中…</p><p class="x-fallback-meta"><a href="'+p.url+'" target="_blank" rel="noopener">Xで元のポストを見る</a></p></div><div class="x-slot" hidden></div></div>';
+  var embed='<div class="x-embed" data-xurl="'+p.url+'"><div class="x-fallback x-compact"><p class="x-state" role="status">Xの公式埋め込みを読み込み中…</p></div><div class="x-slot" hidden></div></div>';
   var badge = p.pop===3 ? '<span class="pop-badge">人気のポスト</span>' : (p.pop===2 ? '<span class="pop-badge soft">反響の大きいポスト</span>' : '');
   return '<article class="post-card reveal'+(p.pop?(" pop"+p.pop):"")+'" id="'+pid+'" data-tags="'+esc((p.tags||[]).join(" "))+'">'
     + '<div class="post-head">'+avatar+'<div class="who"><div class="dname">'+esc(p.dname)+'</div><div class="handle">@GOROman</div></div>'+badge+'<span class="post-date">'+p.date+'</span></div>'
@@ -1805,7 +1812,7 @@ function streamCard(p){
     + (p.phs&&p.phs.length?'<div class="post-photos'+(p.phs.length>1?' multi':'')+'">'+p.phs.map(function(src){return '<img src="'+src+'" alt="投稿に添付された写真" loading="lazy" decoding="async" data-kind="photo" onerror="imgErr(this)">';}).join("")+'</div>':'')
     + (p.note?'<p class="desc" style="margin:10px 0 0;color:var(--ink2);font-size:.86rem">'+esc(p.note)+'</p>':'')
     + tagRow(p.tags)
-    + '<div class="post-meta"><span>'+HEART+p.fav.toLocaleString()+'</span><span>'+REPOST+p.rt.toLocaleString()+'</span></div>'
+    + ((p.fav||p.rt)?'<div class="post-meta"><span>'+HEART+p.fav.toLocaleString()+'</span><span>'+REPOST+p.rt.toLocaleString()+'</span></div>':'')
     + embed
     + '<div class="post-actions"><a class="no-chip" href="#'+pid+'" title="このポストのパーマネントリンク">No.'+noStr+'</a><button type="button" class="copy-btn" data-copy="#'+pid+'" aria-label="ポスト No.'+noStr+' のパーマネントリンクをコピー">'+COPY_ICON+'</button>'
     + (WORK_BY_TWEET[p.sid] ? '<a class="btn mini" href="#w-'+("00"+WORK_BY_TWEET[p.sid].no).slice(-3)+'">作品 No.'+("00"+WORK_BY_TWEET[p.sid].no).slice(-3)+'「'+esc(WORK_BY_TWEET[p.sid].title)+'」としても掲載</a>' : '')
@@ -2079,7 +2086,7 @@ function loadTwitterWidgets(){
 function xEmbedFail(el){
   el.classList.add("x-failed");
   var st=el.querySelector(".x-state");
-  if(st) st.textContent="Xの公式埋め込みを表示できませんでした。ポスト本文と元ポストへのリンクはこのカードに掲載しています。";
+  if(st) st.textContent = el.querySelector(".x-compact") ? "Xの埋め込みは表示できませんでした" : "Xの公式埋め込みを表示できませんでした。ポスト本文と元ポストへのリンクはこのカードに掲載しています。";
   var slot=el.querySelector(".x-slot"); if(slot){ slot.hidden=true; slot.innerHTML=""; }
 }
 function xEmbedProcess(el){

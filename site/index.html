@@ -592,7 +592,7 @@ body{background:transparent}
     <div class="stream-head">
       <span class="hero-kicker">Xアーカイブ 665,121件から抽出・精査</span>
       <h2>「作ってみた」ストリーム <span id="streamTotal"></span></h2>
-      <p>X の全アーカイブ（2007〜2026年・665,121件）を走査し、「作ってみた」「やってみた」「つくった」「作った」「作りました」など、本人が自分の制作を完了形で報告したポストを年別に並べました。掲載数の数え方は次のとおりです。全アーカイブの実測では、完了形のポストはリツイートを除いて794件が上限でした。そこからキーワード抽出と下記の除外規則で絞り込み、さらに「3Dプリンタ」「3Dプリント」を含むポストから、具体的に何をプリントしたか分かるものも同じ基準で発掘して加えた<span id="dExt"></span>件と、別途厳選した<span id="dCur"></span>件を統合し、両方に含まれる重複<span id="dDup"></span>件を除いた全<span id="streamTotal2"></span>件が、このストリームの掲載数です。794件すべてを載せているわけではありません。除外規則は、リツイートと引用、記事や他人の動画の共有、「やってみたい」「作りたかった」といった願望表現、他人が作り手のポスト、伝聞と仮定、失敗・未完了の報告、登録や認証といった手続きだけのポスト、対象が特定できない短文、文脈のない返信や「昔作った」といった曖昧な言及だけのポスト、そして他人へのメンションで始まる返信ポストです。各ポストには通し番号とパーマネントリンク、内容に合うタグ（VR、Drone、Synthesizer、電子工作、3Dプリンタ、Famicom、PlayStation、Chromatic、FPGA、Oscilloscope、VST、FAX、VF2、JEV など）が付いていて、タグを押すと同じタグのポストに絞り込めます。アイコンは年代ごとに当時のものを使い、写真はアーカイブに残っていたものを付けています。2021年はアーカイブ自体に欠落があり、この条件に合うポストが残っていません。スクロールに合わせて少しずつ読み込むので、そのまま下へ読み進められます。各カードから元のポストを開けます。</p>
+      <p>X の全アーカイブ（2007〜2026年・665,121件）を走査し、「作ってみた」「やってみた」「つくった」「作った」「作りました」など、本人が自分の制作を完了形で報告したポストを年別に並べました。掲載数の数え方は次のとおりです。全アーカイブの実測では、完了形のポストはリツイートを除いて794件が上限でした。そこからキーワード抽出と下記の除外規則で絞り込み、さらに「3Dプリンタ」「3Dプリント」を含むポストから、具体的に何をプリントしたか分かるものも同じ基準で発掘して加えた<span id="dExt"></span>件と、別途厳選した<span id="dCur"></span>件を統合し、両方に含まれる重複<span id="dDup"></span>件と、作品ポートフォリオに収録済みの<span id="dWork"></span>件（そちらに一本化）を除いた全<span id="streamTotal2"></span>件が、このストリームの掲載数です。794件すべてを載せているわけではありません。除外規則は、リツイートと引用、記事や他人の動画の共有、「やってみたい」「作りたかった」といった願望表現、他人が作り手のポスト、伝聞と仮定、失敗・未完了の報告、登録や認証といった手続きだけのポスト、対象が特定できない短文、文脈のない返信や「昔作った」といった曖昧な言及だけのポスト、そして他人へのメンションで始まる返信ポストです。各ポストには通し番号とパーマネントリンク、内容に合うタグ（VR、Drone、Synthesizer、電子工作、3Dプリンタ、Famicom、PlayStation、Chromatic、FPGA、Oscilloscope、VST、FAX、VF2、JEV など）が付いていて、タグを押すと同じタグのポストに絞り込めます。アイコンは年代ごとに当時のものを使い、写真はアーカイブに残っていたものを付けています。2021年はアーカイブ自体に欠落があり、この条件に合うポストが残っていません。スクロールに合わせて少しずつ読み込むので、そのまま下へ読み進められます。各カードから元のポストを開けます。</p>
     </div>
     <div class="stream-grid" id="streamGrid"></div>
     <div class="stream-more" id="streamMore"><p class="stream-count" id="streamCount"></p><button class="btn" id="streamMoreBtn" type="button">もっと見る</button></div>
@@ -727,9 +727,9 @@ var WORKS = [
  {era:"dawn", year:"小学生時代", title:"ファミコン改造", cat:"ものづくりのルーツ", imgs:["assets/bakkatsu-covers.jpg","assets/bakkatsu-part4.jpg"], alt:"『バックアップ活用テクニック』（バッ活）の表紙が並ぶ本人の Kindle ライブラリ（本人の X 投稿写真）",
   desc:"小学生のときに『バックアップ活用テクニック』を読んでファミコンを改造したのが、ものづくりのルーツ。中学1年でパソコン通信を始め、GORO-NET の開局へつながった。写真は本人が X に投稿したもので、Kindle で全巻そろえた『バッ活』の表紙と、PART4 に載ったファミコン改造記事（ハイパージョイスティック MK II の改造）のページ。",
   links:[["X 投稿「バッ活 読むかー」（2024年）","https://x.com/GOROman/status/1817412783333597559"],["X 投稿「Kindleで こち亀とバッ活は全巻買ってある」（2025年）","https://x.com/GOROman/status/1890943005932028217"]]},
- {era:"dawn", year:"1988", title:"GORO-NET／GORO-NET2", cat:"パソコン通信",
-  desc:"中学1年でパソコン通信を始め、ホストプログラムを自作してホスト局「GORO-NET」を開局。フロッピー破損で全データを失い、フルスクラッチで書き直して「GORO-NET2」として復活させた。",
-  links:[["note 自伝「サンクコストブレイカー」","https://note.com/goroman/n/n3fa8785c5d0a"],["電ファミニコゲーマー 川上量生×GOROman 対談","https://news.denfaminicogamer.jp/interview/180806/4"]]},
+ {era:"dawn", year:"1988", title:"GORO-NET／GORO-NET2", cat:"パソコン通信", img:"assets/goro-net-log.jpg", alt:"GORO-NET のチャットログ（1993年）— 30年封印されていた MO ディスクから復元された GR931009.LOG と、SysOp の「ゴロ」と利用者の会話（X の投稿写真、提供：Q さん）",
+  desc:"中学1年でパソコン通信を始め、ホストプログラムを自作してホスト局「GORO-NET」を開局。フロッピー破損で全データを失い、フルスクラッチで書き直して「GORO-NET2」として復活させた。写真は当時の GORO-NET のチャットログ（1993年）。当時の利用者 Q さんが、誤って初期化しかけて30年「封印」していた MO ディスクを2024年に復元し、SysOp の「ゴロ」と『ナイトストライカー』について語り合う会話が残っていた。本人も X で引用ポストして反応している。",
+  links:[["note 自伝「サンクコストブレイカー」","https://note.com/goroman/n/n3fa8785c5d0a"],["電ファミニコゲーマー 川上量生×GOROman 対談","https://news.denfaminicogamer.jp/interview/180806/4"],["X 投稿（Q さん「ゴロネッツのログ、あります」2024年）","https://x.com/Qman/status/1851539138958459187"],["ねとらぼ「封印された記録媒体を30年越しに復元」","https://nlab.itmedia.co.jp/nl/spv/2411/07/news055.html"]]},
  {era:"dawn", year:"高校時代", title:"ストリートうっきーIV（仮）", cat:"ゲーム制作", status:"自伝中の言及", img:"assets/ukki4.jpg", alt:"ストリートうっきーIV（仮）— ニコニコ動画に投稿された動画のサムネイル",
   desc:"『ストリートファイターII』と『珍遊記』を合体させたような格闘ゲームを X68000 で作り始めた、という本人の自伝中の言及。完成・公開されたかは不明。",
   links:[["note 自伝","https://note.com/goroman/n/n3fa8785c5d0a"],["ニコニコ動画（2008年投稿）","https://www.nicovideo.jp/watch/sm2983996"]]},
@@ -742,11 +742,11 @@ var WORKS = [
  {era:"dawn", year:"1996–99", title:"「ゴロ」名義のシェアウェア群（IPsend ほか）", cat:"シェアウェア",
   desc:"SOHOman と同じ作者名「ゴロ」で Vector に登録されていた同時期のソフト群。現在の IP アドレスをホームページへ貼り付ける「IPsend for Win32」（自伝では、SOHOman の前に作ったが売れなかったと語られる）、メーラー MessageManager のメールを Becky! 形式へ変換する「MessageManager to Becky!」、実行すると間髪いれずに Windows を終了する「ShutDown」の3本が、Vector の作者ページに SOHOman と並んで掲載されている。",
   links:[["Vector IPsend for Win32","https://www.vector.co.jp/soft/win95/net/se043831.html"],["Vector MessageManager to Becky!","https://www.vector.co.jp/soft/win95/net/se042721.html"],["Vector ShutDown","https://www.vector.co.jp/soft/win95/util/se042742.html"],["Vector 作者ページ「ゴロ」","https://www.vector.co.jp/vpack/browse/person/an010525.html"]]},
- {era:"dawn", year:"2008", title:"AR Paper Famicom", cat:"AR実験",
-  desc:"紙のコンピュータでファミコンを模したAR実験。カメラ越しに紙がゲーム機になる、のちの MRFamicom（2017）の源流にあたる作品。",
+ {era:"dawn", year:"2008", title:"AR Paper Famicom", cat:"AR実験", img:"assets/nico-sm3598815.jpg", alt:"AR Paper Famicom — ARマーカーの付いた紙を手に持つ映像（ニコニコ動画「ARToolKitで紙ファミコンを作ってみた」の再生画面スクリーンショット）",
+  desc:"紙のコンピュータでファミコンを模したAR実験。カメラ越しに紙がゲーム機になる、のちの MRFamicom（2017）の源流にあたる作品。サムネイルはニコニコ動画の再生画面のスクリーンショット。",
   yt:{id:"Je0Y2Hhu3Nk", title:"AR Papar Famicom (AR 紙コンピュータ)"}, links:[["ニコニコ動画「ARToolKitで紙ファミコンを作ってみた」","https://www.nicovideo.jp/watch/sm3598815"]]},
- {era:"dawn", year:"2010", title:"iPhone版 MDXプレイヤー", cat:"音楽 / X68000",
-  desc:"X68000 の MDX 音楽形式を iPhone で再生するプレイヤー。2020年の WASM 版プレーヤーの10年前の前身にあたる。",
+ {era:"dawn", year:"2010", title:"iPhone版 MDXプレイヤー", cat:"音楽 / X68000", img:"assets/nico-sm10974105.jpg", alt:"iPhone版 MDXプレイヤー — iPhone で MDX を再生している映像（ニコニコ動画の再生画面スクリーンショット）",
+  desc:"X68000 の MDX 音楽形式を iPhone で再生するプレイヤー。2020年の WASM 版プレーヤーの10年前の前身にあたる。サムネイルはニコニコ動画の再生画面のスクリーンショット。",
   yt:{id:"UVRqLPIdgdc", title:"iPhoneで動くMDXプレイヤー (X68000)"}, links:[["ニコニコ動画（2010年投稿）","https://www.nicovideo.jp/watch/sm10974105"]]},
  {era:"vr", year:"2013", title:"Mikulus", cat:"VRアプリ", status:"VRクリエイティブアワード2017 個人部門最優秀賞", img:"assets/mikulus.jpg", alt:"VRアプリ Mikulus の画面",
   desc:"Oculus Rift DK1 で初音ミクと会える VR アプリ。DK1 入手直後に公開され、日本の VR 黎明期を代表する個人作になった。のち「VR時代のワークスペース／OS」へ発展し、VRクリエイティブアワード2017 個人部門最優秀賞を受賞。2016年には、VR の中から Unity をリアルタイムに編集できる「VR内Unityリアルタイムエディタ」も作った（下の埋め込み）。",
@@ -757,9 +757,6 @@ var WORKS = [
   desc:"Novint Falcon（3D感触デバイス）＋シリコンの手模型で、VR内の初音ミクと実際に握手できるシステム。「一夜漬け」で完成し、2013年9月23日の Oculus Festival in Japan で初披露、デジタルコンテンツEXPO 2013 でも展示された。",
   yt:{id:"HnmgUgPKijc", title:"MikuMikuAkushu"},
   links:[["ねとらぼ 記事","https://nlab.itmedia.co.jp/cont/articles/3231597/"]]},
- {era:"vr", year:"2014–16", title:"XVI時代の代表作群（受託VR／ARコンテンツ）", cat:"XVIの仕事",
-  desc:"角川アスキー総研の講座プロフィール（2017年）で、Mikulus、MikuMikuAkushu と並んで本人の「代表作」として挙げられている XVI 時代の仕事群で、「初音ミク VR Special LIVE -ALIVE-」「ロート デジアイ」「DMM GAMES VR × 刀剣乱舞ONLINE 三日月宗近Ver.」などがある。各作品の個別の年は未確認のため、まとめて掲載する。",
-  links:[["週刊アスキー 講座案内（講師プロフィール）","https://weekly.ascii.jp/elem/000/001/456/1456729/"]]},
  {era:"vr", year:"2017", sort:"2017-03-19", title:"MRFamicom", cat:"MR実験",
   desc:"ファミコン実機の RAM を FPGA で傍受し、ESP32 と WiFi／UDP 経由で Unity／HoloLens へ送って、ゲーム内の出来事を現実側のエフェクトとして出す MR 実験。SRAM トレーサーボードは @FIssiki さんが開発した。2017年3〜4月にハッシュタグ #MRファミコン で制作経過を投稿し、Maker Faire Tokyo 2017 に出展（出展名義 KOALAB.）。2008年の AR Paper Famicom から続く「現実にゲーム機を重ねる」系譜の一作。以前この項目に載せていた写真は本人のものではなかったため外した。本人の制作風景は、下に時系列で並べた関連ポストの動画・写真で確認できる。",
   links:[],
@@ -782,18 +779,18 @@ var WORKS = [
   links:[["GitHub MDXVST","https://github.com/GOROman/MDXVST"],["GitHub vscode-mdxmml","https://github.com/GOROman/vscode-mdxmml"],["GitHub mxp-mac（Mac版MDXプレイヤー）","https://github.com/GOROman/mxp-mac"]],
   xs:[["https://x.com/GOROman/status/1514929237756882946","X68000のMDXファイルをロードしてトラック別にリアルタイム再生できるVSTプラグインできた！\n\n #はじめてのVST開発"],["https://x.com/GOROman/status/1519862913582141440","好きなMDXファイルで演奏するやつができた。源平討魔伝キーボード。\n\n#MDXVST #はじめてのVST開発"]]},
  {era:"scale", year:"2023–25", title:"StampFly", cat:"OSSドローン", img:"assets/stampfly.jpg", alt:"手のひらサイズのドローン StampFly",
-  desc:"M5Stamp S3 を使う手のひらサイズのオープンソースドローン StampFly のコア開発。ChatGPT を設計ドキュメントや PID 調整に活用し、製品としては2024年8月に M5Stamp Fly として発売された。前身は M5Stack の Atom Fly で、2022年にサンプルコードを動かすところから始まり、AtomFly2 の ELRS 化とチューニング、「やっと飛ばせた！！！」の初飛行（2023年5月）を経て StampFly へつながった。発売後も、起動音をゼビウス風に変える改造や、ファームウェアをゼロから書き直す「#SuperSimpleM5StampFly」の試みが続いた。下の埋め込みは、Atom Fly 時代からの製作ポストを時系列で並べたもの。",
+  desc:"M5Stamp S3 を使う手のひらサイズのオープンソースドローン StampFly のコア開発。ChatGPT を設計ドキュメントや PID 調整に活用し、製品としては2024年8月に M5Stamp Fly として発売された。前身は M5Stack の Atom Fly で、2022年にサンプルコードを動かすところから始まり、AtomFly2 の ELRS 化とチューニング、「やっと飛ばせた！！！」の初飛行（2023年5月）を経て StampFly へつながった。発売後も、起動音をゼビウス風に変える改造（「Atom JoyStick」の項目に収録）や、ファームウェアをゼロから書き直す「#SuperSimpleM5StampFly」の試みが続いた。下の埋め込みは #SuperSimpleM5StampFly の開始ポスト。Atom Fly 時代の製作ポストは「AtomFly／AtomFly2」の項目にまとめた。",
   yt:{id:"919VGdPmd2Q", title:"StampFly Practice（TAKASU 高須正和）"},
   links:[["drone.jp 発売記事","https://drone.jp/news/2024080222055494456.html"],["Hackster プロジェクト","https://www.hackster.io/stampfly/stamp-fly-an-open-source-diy-drone-kit-from-japan-shenzhen-93d099"]],
-  xs:[["https://x.com/GOROman/status/1564447436877492224","AtomFLY Github上のサンプルコード 動作した"],["https://x.com/GOROman/status/1659149983755665408","AtomFly2 + ELRS化！ チューニングしたらめちゃくちゃ飛ばしやすくなった"],["https://x.com/GOROman/status/1659160502491295745","やっと飛ばせた！！！ 日本で飛ばせるドローンを作ろう！ M5StackのAtomFlyプロジェクト"],["https://x.com/GOROman/status/1660596756575567872","魔改造AtomFly 飛んだ？！"],["https://x.com/GOROman/status/1822469893113131422","とりあえず起動音をゼビウス風にしてみた\n\n#StampFly #AtomJoyStick"],["https://x.com/GOROman/status/1822907695449649419","#SuperSimpleM5StampFly\nM5Stack社が発売した StampFly と AtomJoyStick のファームウェアをゼロから書いてみよう！！という無謀な試み。飛んだら成功！飽きたら終了！\n\nとりあえずREADMEを書いた"]],
+  xs:[["https://x.com/GOROman/status/1822907695449649419","#SuperSimpleM5StampFly\nM5Stack社が発売した StampFly と AtomJoyStick のファームウェアをゼロから書いてみよう！！という無謀な試み。飛んだら成功！飽きたら終了！\n\nとりあえずREADMEを書いた"]],
   col:"PID 調整は、ドローンの姿勢制御の効き具合を係数で調整する作業です。飛ばしては直す、の繰り返しがドローン作りの中心で、メイキングのポストがそのまま開発日誌になります。Atom Fly から StampFly へ、名前が変わっても「日本で飛ばせるドローンを作る」という課題は一貫しています。"},
  {era:"ai", year:"2024", sort:"2024-05-26", title:"GOROman's TR-808 Cowbell", cat:"OSSハードウェア / Synthesizer", img:"assets/tr808-cowbell.jpg", alt:"GOROman's TR-808 Cowbell — 「写経シリーズ No.1 - 808 CowBell」とシルク印刷された基板の3Dレンダリング", status:"動作確認済み",
   desc:"Roland TR-808 のカウベル回路をサービスマニュアルの回路図から写経した基板と、その回路を本物のカウベルに仕込んだ楽器。始まりは2020年8月8日で、「連休中にやるネタ」として「TR-808のカウベルのアナログ回路を回路図から作ってみる」と投稿していた。2024年5月に回路図の書き起こしを OSHWLab で「写経シリーズ No.1」として公開。6月3日に JLCPCB から基板が届き、「#100日後に鳴るカウベル」と名付けて1日1パーツずつ実装を始めた。シュミットトリガー発振の540Hzと800Hzを調整し、−15Vの負電源が必要なことに気づいて用意し、6月23日に「カウベル鳴りました！」。次に本物のカウベル側に取りかかり、エンベロープをギターピックアップで拾う方式で、7月31日に「本物のカウベルを叩くとTR-808カウベルの音になるやつができた」。8月8日の #808day に合わせて公開し、ローランド公式にもリポストされた。2025年の #808day にも再掲され（いいね415）、2026年6月には基板を「アート作品」としてメルカリで売る話まで出ている。下の埋め込みは、2020年の発端から制作過程、完成、808day、販売までの関連ポストを時系列で並べたもの。",
   links:[["OSHWLab プロジェクト","https://oshwlab.com/goroman/tr-808-cowbell_2024-05-26_11-33-44"]],
   xs:[["https://x.com/GOROman/status/1291985239233794049","連休中にやるネタ(予定\n\nブラストシティのコンパネをOBSのスイッチャーにする\nTR-808のカウベルのアナログ回路を回路図から作ってみる\n#X68iOS を復活させる(XcodeとTest Flight)\nV2MMLで色々やってみる"],["https://x.com/GOROman/status/1797585647370432589","EasyEDAでつくった写経基板\nJLCPCBから届きました。"],["https://x.com/GOROman/status/1797632295328981428","圧倒的進捗！\n1日1パーツ装着で100日目に完成か？\n\n#100日後に鳴るカウベル"],["https://x.com/GOROman/status/1800513729106464812","TR-808 カウベル写経基板\nシュミットトリガー発振で540Hzと800Hz"],["https://x.com/GOROman/status/1803767150559240253","写経基板とりあえず全部 組んだ！！\nだが、-15V(負電源)が必要だったw"],["https://x.com/GOROman/status/1803771979507679248","写経基板 808風カウベル(？) 無理矢理鳴らす"],["https://x.com/GOROman/status/1804803688675827732","EasyEDAでRoland TR-808のカウベル回路図を写経した基板。カウベル鳴りました！\n\n#EasyEDA #TR808"],["https://x.com/GOROman/status/1817532298633626031","リアルカウベル から TR-808 のカウベルの音(アナログ回路)を出すのを作り中(トリガは加速度センサでやると良さそう"],["https://x.com/GOROman/status/1818641045888041167","本物のカウベルを叩くとTR-808カウベルの音になるやつができた！(アナログ回路)"],["https://x.com/GOROman/status/1821346302103285814","今日は８月８日。HAPPY 808day ということで、TR-808 カウベル回路を再現する基板をつくってリアルカウベルを叩くと808カウベルが鳴るやつをつくりました！\n\n#808day"],["https://x.com/GOROman/status/1920034277842198533","I built a setup where hitting a real cowbell triggers the iconic TR-808 cowbell sound.\nRecreated the original TR-808 circuit and had the PCB made at JLCPCB. 🛠️🔔 #808 #DIY #synthnerd"],["https://x.com/GOROman/status/1953608201485836363","Roland TR-808 カウベルのアナログ回路を再現する基板をつくってリアルカウベルを叩くと808カウベルが鳴るやつをつくりました。\n\n#808day"],["https://x.com/GOROman/status/2061612447988146261","あれ ってなんですか？ TR-808のカウベルのアナログ回路を再現してリアルカウベル叩くと808の音がするのとかは作りました\n(作ったものが1000個くらいあるのでどれかわからんw"],["https://x.com/GOROman/status/2066322700902293597","TR-808のカウベルをサービスマニュアルの回路図から写経してEasyEDAで設計してJLCPCBで基板起こしてハンダ半田付けしたアート作品も売ります。"]]},
  {era:"ai", year:"2025", title:"LLM Cardputer", cat:"AIガジェット", img:"assets/llm-cardputer.jpg", alt:"LLM Cardputer — Cardputer と Module LLM の合体マシン",
-  desc:"M5Stack Cardputer に Module LLM を合体させ、手のひらサイズでオフライン LLM チャットが動くコンピュータにした作例。ケース加工や UART 接続の作り方まで公開した。",
-  links:[["GitHub リポジトリ","https://github.com/GOROman/LLMCardputer"],["DEV 記事","https://dev.to/goroman/building-a-palm-sized-local-llm-with-m5stack-cardputer-and-modulellm-2hpf"]]},
+  desc:"M5Stack Cardputer に Module LLM を合体させ、手のひらサイズでオフライン LLM チャットが動くコンピュータにした作例。ケース加工や UART 接続の作り方まで、Qiita と Zenn に日本語の製作記事を公開した（英語版は DEV）。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/LLMCardputer"],["Qiita「ローカルLLMを手のひらサイズで動かしてみよう！ M5 Cardputer + ModuleLLM」","https://qiita.com/GOROman/items/769bf17589d5661f7a70"],["Zenn「LLMCardputerの作成方法」","https://zenn.dev/goroman/articles/970e407ecce2f1"],["DEV 記事（英語）","https://dev.to/goroman/building-a-palm-sized-local-llm-with-m5stack-cardputer-and-modulellm-2hpf"]]},
  {era:"ai", year:"2025", sort:"2025-03-09", title:"AI-Mini4WD（しゃべるAIミニ四駆）", cat:"AI × 玩具", img:"assets/ai-mini4wd.jpg", alt:"AI-Mini4WD — サンタ仕様のミニ四駆にマイコンとバッテリーを載せたシャーシ（X の投稿写真）",
   desc:"きっかけは2024年12月、子どもとのクリスマス用に買ったサンタ仕様のミニ四駆だった。同月21日には秋月電子のモータードライバを載せて ESP32 から I2C 制御（バックも可能）にし、やがて OpenAI Realtime API Embedded SDK を載せて音声で会話できる「しゃべるAIミニ四駆」になった。2025年3月の WebRTC Meetup Tokyo #29 で「しゃべるAIミニ四駆をつくる」と題して LT 登壇し、GitHub で公開した。この作例が OpenAI 社内の目に留まって DM が届き、サンフランシスコの OpenAI DevDay 参加につながったと、本人が Qiita の登壇資料や CodeZine のレポートで語っている。下の埋め込みは制作過程のポスト。",
   links:[["GitHub リポジトリ","https://github.com/GOROman/AI-Mini4WD"],["Qiita「ミニ四駆を買って改造してたらサンフランシスコのOpenAI DevDayに参加できた話①」","https://qiita.com/Null-Sensei/items/5d3fcf50fd53680abac6"],["CodeZine「OpenAI DevDay 2026 現地レポート」（ミニ四駆が参加のきっかけ）","https://codezine.jp/article/detail/30237"]],
@@ -867,7 +864,7 @@ var WORKS = [
  {era:"ai", year:"2026", sort:"2026-07-22", title:"claude-famicom-emu", cat:"GitHub / Famicom", img:"assets/claude-famicom-emu.jpg", alt:"claude-famicom-emu の画面 — ピン接触不良シミュレーションとデバッガを備えたブラウザ版ファミコンエミュレータ（X の投稿動画から）",
   desc:"ブラウザで動くファミコンエミュレータ（2026年7月公開）。C++コアを WebAssembly 化し、60ピンコネクタの接触不良シミュレーション（ピンを壊す、カセットを斜めに傾ける、息を吹きかける）、任意のピンに当てられるオシロスコープ、電源を入れたままのカセット交換、TAS再生、可変クロック（1Hz〜1.79MHz）などを備える。AIと作った2026年夏のファミコン実験の一つ。プロジェクト名は claude-famicom-emu、GitHub のリポジトリ名は cluade-famicom-emu。",
   links:[["GitHub リポジトリ（cluade-famicom-emu）","https://github.com/GOROman/cluade-famicom-emu"],["ブラウザで遊ぶ（GitHub Pages）","https://goroman.github.io/cluade-famicom-emu/"],["自作ゲームで遊ぶ（タイトル画面つき）","https://goroman.github.io/cluade-famicom-emu/?pin=0&debug=1&rom=https://raw.githubusercontent.com/GOROman/calude-famicom-game/main/roms/19-image-title.nes"]],
-  xs:[["https://x.com/GOROman/status/2079819137308881305","ファミコンの斜め差しシミュレータを作りました。"],["https://x.com/GOROman/status/2080079464416067857","自作ファミコンエミュにオシロスコープとプロアクションリプレイ的なメモリ書き換え追加"],["https://x.com/GOROman/status/2080469956920303954","自作ファミコンゲームのタイトル画面できた。\n↓\n遊べます"],["https://x.com/GOROman/status/2081239040863748253","Claude Code で作ってるファミコンゲーム だいぶ面白くなってきた。 #狩人行動"]]},
+  xs:[["https://x.com/GOROman/status/2080079464416067857","自作ファミコンエミュにオシロスコープとプロアクションリプレイ的なメモリ書き換え追加"],["https://x.com/GOROman/status/2080469956920303954","自作ファミコンゲームのタイトル画面できた。\n↓\n遊べます"],["https://x.com/GOROman/status/2081239040863748253","Claude Code で作ってるファミコンゲーム だいぶ面白くなってきた。 #狩人行動"]]},
  {era:"ai", year:"2026", sort:"2026-07-22", title:"nes-rom-reader", cat:"GitHub / Famicom", img:"assets/posts/2079762417094135820-1.jpg", alt:"nes-rom-reader — ファミコンカセット吸い出し機の実機（X の投稿写真）",
   desc:"M5Stamp S3＋自作基板でファミコンカセット（FC 60ピン）を吸い出すツール（2026年7月公開）。基板設計（EasyEDA Pro）とファームウェア、Web UI は Claude Code（Fable）に作らせ、部品の注文とハンダ付けは本人が担当した。吸い出しは Python CLI とブラウザ Web UI（WebSerial）の両方から行える。関連リポジトリ famicom-cartridge-tool もあわせて公開されている。下は完成報告の代表ポストの公式埋め込み。",
   x:"https://x.com/GOROman/status/2079762417094135820", xt:"ついにClaude Code Fableに頼んで作ったファミコンROM吸い出し機が完成しました！ 基板設計とファームウェアとWeb UIはAIです。部品の注文とハンダ付けは人間(オレ)がやりました！！！！ スーパーモンキー大冒険のCGROMチェックできます！",
@@ -928,19 +925,19 @@ var WORKS = [
   desc:"AR（拡張現実）の開発キット ARToolKit を使い、実写の部屋の映像に CG のフィギュアを合成する実験（2008年6月、ニコニコ動画）。「どこまでリアルに CG を実写合成できるか」への挑戦で、同じ日に発表した AR Paper Famicom（別項目）と並ぶ AR の初期作。当時はスマートフォンも AR という言葉自体も一般的でなく、Web カメラと紙のマーカーで現実に CG を重ねる実験が個人でできるようになったばかりの時期だった。",
   links:[["ニコニコ動画「ARToolKitで部屋にフィギュアを出現させてみた」","https://www.nicovideo.jp/watch/sm3594805"]],
   col:"ARToolKit は、カメラ映像の中の四角いマーカー（目印）の位置を読み取り、その場所に CG を重ねて表示する仕組みです。今ではスマホの AR 機能として当たり前になりましたが、2008年当時は研究者と一部の作り手だけの道具でした。紙ファミコンと同じ日に、フィギュアでも試しているのが初期の実験らしいところです。"},
-{era:"dawn", year:"2008頃", sort:"2008-06-09", title:"PRT実写合成（ARToolKit × Precomputed Radiance Transfer）", cat:"AR実験 / ニコニコ動画",
+{era:"dawn", year:"2008頃", sort:"2008-06-09", title:"PRT実写合成（ARToolKit × Precomputed Radiance Transfer）", cat:"AR実験 / ニコニコ動画", img:"assets/nico-sm3594805.jpg", alt:"同時期の ARToolKit 作例「ARToolKitで部屋にフィギュアを出現させてみた」— 机の上に CG のフィギュアが出現する映像（ニコニコ動画の再生画面スクリーンショット）",
   desc:"ニコニコ動画で AR 実験を公開していた時期の作例。ARToolKit で実写の映像に CG を重ねる際に、PRT（Precomputed Radiance Transfer）という仕組みを組み合わせ、CG 側の陰影や光の当たり方をあらかじめ計算しておくことで、実写へ自然に溶け込む合成を試した。本人は後のインタビューで「ボクのニコ動見てもらえれば全部やってます。ARツールキット使って、Precomputed Radiance Transfer という仕組みで実写合成したりとか」と振り返っている。同じ ARToolKit を使った「ARToolKitで部屋にフィギュアを出現させてみた」「AR Paper Famicom」（いずれも別項目）と並ぶ初期 AR の作例で、PRT は独立した道具の名前ではなく、この ARToolKit による実写合成の中で使われた描画の仕組みを指す。個別動画のタイトルや ID はインタビューでは示されていないため、出典のインタビューとニコニコ動画の本人ページへリンクする。",
-  links:[["電ファミニコゲーマー「backspace.fm」対談（PRT実写合成への言及）","https://news.denfaminicogamer.jp/backspace-fm/goroman-2"],["インサイド インタビュー（ニコニコ技術部とARの活動）","https://www.inside-games.jp/article/2017/04/17/106593.html"],["ニコニコ動画 本人ページ","https://www.nicovideo.jp/user/1037576"]],
+  links:[["電ファミニコゲーマー「backspace.fm」対談（PRT実写合成への言及）","https://news.denfaminicogamer.jp/backspace-fm/goroman-2"],["インサイド インタビュー（ニコニコ技術部とARの活動）","https://www.inside-games.jp/article/2017/04/17/106593.html"],["ニコニコ動画「ARToolKitで部屋にフィギュアを出現させてみた」（同時期の作例）","https://www.nicovideo.jp/watch/sm3594805"],["ニコニコ動画 本人ページ","https://www.nicovideo.jp/user/1037576"]],
   col:"PRT（Precomputed Radiance Transfer）は、物に光が当たってできる陰影や、物同士の光の反射をあらかじめ計算しておく描画の仕組みです。実写に CG を重ねるときに使うと、CG がその場の明かりで照らされているように見え、合成の浮き方が減ります。ARToolKit が「どこに重ねるか（マーカーの位置と姿勢）」を決め、PRT が「どう照らすか」を決める、という分担の実験でした。"},
- {era:"dawn", year:"2008", sort:"2008-05-31", title:"WiiリモコンでVRヘッドトラッキング", cat:"VR実験 / ニコニコ動画",
+ {era:"dawn", year:"2008", sort:"2008-05-31", title:"WiiリモコンでVRヘッドトラッキング", cat:"VR実験 / ニコニコ動画", img:"assets/nico-sm3506246.jpg", alt:"WiiリモコンでVRヘッドトラッキング — 頭の動きに連動して視点が変わる映像（ニコニコ動画「WiiでVRシステムをやってみた」の再生画面スクリーンショット）",
   desc:"Johnny Chung Lee 氏が公開した手法を追試し、Wii リモコンの赤外線カメラで頭の位置を読み取って、画面の中の視点を頭の動きに連動させる実験（2008年5月、ニコニコ動画）。背景を付けた「その２」まで制作した。市販のゲーム機のコントローラを VR の入力装置に転用する発想で、2013年の Mikulus へ続く VR 実験の起点にあたる。",
   links:[["ニコニコ動画「WiiでVRシステムをやってみた」","https://www.nicovideo.jp/watch/sm3506246"],["ニコニコ動画「WiiでVRシステムをやってみた その２」","https://www.nicovideo.jp/watch/sm3506952"]],
   col:"ヘッドトラッキングは、頭の動きに合わせて画面の見え方を変える技術です。頭を右に動かせば画面の中も右を向くので、平面のモニタでも「窓から3Dの世界を覗いている」ような立体感が出ます。Wii リモコンには赤外線カメラが内蔵されていて、頭に付けた赤外線 LED の位置を測ることができました。"},
- {era:"dawn", year:"2008", sort:"2008-05-04", title:"ニンテンドーDSでPCと通信／ iTunes リモコン", cat:"組み込み / ニコニコ動画",
+ {era:"dawn", year:"2008", sort:"2008-05-04", title:"ニンテンドーDSでPCと通信／ iTunes リモコン", cat:"組み込み / ニコニコ動画", img:"assets/nico-sm3189804.jpg", alt:"ニンテンドーDSでPCと通信 — DS を手に持ち、ノートPC と通信している映像（ニコニコ動画「ＤＳでＰＣと通信するプログラムを作ってみた」の再生画面スクリーンショット）",
   desc:"ニンテンドーDS の Wi-Fi 機能を使い、PC 側のプログラムと通信する仕組みを自作した実験（2008年5月、ニコニコ動画）。翌日には応用編として、DS から PC の iTunes をリモートコントロールする動画も公開した。ゲーム機を汎用の入力・表示デバイスとして使う、後のガジェットハックの原型のような作品。",
   links:[["ニコニコ動画「ＤＳでＰＣと通信するプログラムを作ってみた」","https://www.nicovideo.jp/watch/sm3189804"],["ニコニコ動画「ＤＳでｉＴｕｎｅｓをリモートコントロールしてみた」","https://www.nicovideo.jp/watch/sm3201704"]],
   col:"ニンテンドーDS は本来、ゲーム以外のプログラムを動かすことを想定していません。それでも自作プログラムを動かす方法が当時の作り手の間で共有されていて、Wi-Fi で PC と通信できれば、DS が2画面のリモコンや情報端末に化けます。今のスマホ連携の感覚を、ゲーム機で先取りしていた実験です。"},
- {era:"dawn", year:"2012", sort:"2012-10-13", title:"iPhoneで鉛筆を削ってみた（WeMo遠隔コンセント）", cat:"ホームオートメーション / ニコニコ動画",
+ {era:"dawn", year:"2012", sort:"2012-10-13", title:"iPhoneで鉛筆を削ってみた（WeMo遠隔コンセント）", cat:"ホームオートメーション / ニコニコ動画", img:"assets/nico-sm19108041.jpg", alt:"iPhoneで鉛筆を削ってみた — iPhone の操作で鉛筆削りが動く映像（ニコニコ動画の再生画面スクリーンショット）",
   desc:"遠隔操作できるコンセント WeMo を買い、iPhone からコンセントのオン・オフで鉛筆削りを動かす実験（2012年10月、ニコニコ動画）。EOS M で撮影して公開した。ネット経由で家電を操作する「スマートホーム」の道具が一般向けに売られ始めた時期の作例で、2013〜14年の Pebble での家電コントロール（別項目）へつながる。",
   links:[["ニコニコ動画「iPhoneで鉛筆を削ってみた」","https://www.nicovideo.jp/watch/sm19108041"]],
   col:"WeMo は、コンセントと家電の間に挟むと、スマホから電源の入り切りができるようになる道具です。仕組みは単純でも、「ネット越しに物理的なものが動く」体験は当時まだ新しく、鉛筆削りのような日常の道具で試すところに、この人の作風が出ています。"},
@@ -950,7 +947,7 @@ var WORKS = [
   links:[],
   xs:[["https://x.com/GOROman/status/303111441135828992","3Dプリンタをペンタブ使ってリアルタイムで動かすプログラム(3Dman)を作りました。結構レスポンスいいです。"],["https://x.com/GOROman/status/1159152791572496384","昔ペンタブと3Dプリンタ繋いでみたけど。今ならVRから動かすのもできそう"]],
   col:"3Dプリンタは通常、モデリングしたデータを読み込ませて自動で造形します。3Dman はその工程を飛ばして、ペンタブのペンを動かすとプリンタのヘッドがそのまま追いかける、いわば「手で描く3Dプリンタ」です。ペンタブはペンの位置と筆圧を細かく取れるので、描く感覚で機械を操る入力装置になりました。"},
- {era:"vr", year:"2013", sort:"2013-02-23", title:"全自動ネコジャラシ（ルンバ改造）", cat:"ロボット / ニコニコ動画",
+ {era:"vr", year:"2013", sort:"2013-02-23", title:"全自動ネコジャラシ（ルンバ改造）", cat:"ロボット / ニコニコ動画", img:"assets/nico-sm20164862.jpg", alt:"全自動ネコジャラシ（ルンバ改造）— Arduino を載せたルンバの映像（ニコニコ動画「Arduinoでルンバをレベルアップしてみた」の再生画面スクリーンショット）",
   desc:"お掃除ロボット ルンバを Arduino で改造する2本のニコニコ動画（2013年2月）。1本目でルンバに「レベルアップ」の仕掛けを入れ、2本目で改造したルンバにネコジャラシを取り付けて、飼い猫の運動不足を解消する全自動ネコジャラシにした。掃除機として売られた製品を、ペットと遊ぶロボットに作り替えた作品。",
   links:[["ニコニコ動画「Arduinoでルンバをレベルアップしてみた」","https://www.nicovideo.jp/watch/sm20164862"],["ニコニコ動画「全自動ネコジャラシを作ってみた」","https://www.nicovideo.jp/watch/sm20174200"]],
   col:"ルンバには、外部から信号を送って動きを制御するための端子が用意されていました。Arduino（小さなマイコンボード）を繋ぐと、掃除以外の動きをプログラムできます。市販品を分解して別の用途に作り替えるのは、この人の作品に通底するやり方です。"},
@@ -1001,7 +998,7 @@ var WORKS = [
   img:"assets/posts/1536215983513546753-1.jpg", imgs:["assets/posts/1536215983513546753-1.jpg","assets/posts/1536215983513546753-2.jpg","assets/posts/1536269776900993024-1.jpg"], alt:"トンカツの3Dスキャン — 合羽橋で買った食品サンプルのトンカツ（X の投稿写真）",
   desc:"合羽橋で買った食品サンプルのトンカツを iPhone で3Dスキャン（フォトグラメトリ）した作品（2022年6月）。「ポリゴン数やばいwww」のポストはいいね5,748、リポスト1,529と大きく広がった。きっかけは、トンカツ屋で実物をスキャンしようとして店に叱られたことで、怒られないよう食品サンプルを買ってきたという経緯がある。スキャンしたトンカツは AR で増殖させたり、ドローンで飛ばしたり（「トンカツ飛んだ」いいね835）、DMX で回転と照明を制御したりと、しばらく本人のアイコン的な素材になった。",
   links:[],
-  xs:[["https://x.com/GOROman/status/1536268789654093826","iPhone でトンカツの3Dスキャンできた！！！ポリゴン数やばいwww"],["https://x.com/GOROman/status/1536215983513546753","買ってきたトンカツ\nすげーリアル！！ これでスキャンしてても怒られない"],["https://x.com/GOROman/status/1536269776900993024","ARでトンカツが増殖できるのたのしいなww"],["https://x.com/GOROman/status/1539285236131188742","トンカツ飛んだ"]],
+  xs:[["https://x.com/GOROman/status/1536268789654093826","iPhone でトンカツの3Dスキャンできた！！！ポリゴン数やばいwww"],["https://x.com/GOROman/status/1536215983513546753","買ってきたトンカツ\nすげーリアル！！ これでスキャンしてても怒られない"],["https://x.com/GOROman/status/1536269776900993024","ARでトンカツが増殖できるのたのしいなww"],],
   col:"フォトグラメトリは、対象をいろいろな角度から撮った写真をもとに、コンピュータが立体の形を復元する技術です。衣の凹凸まで再現されたトンカツは、食べ物とは思えない情報量でした。2013年頃からの「唐揚げ実験」の系譜に連なる、食べ物をデジタル化する遊びの到達点のひとつです。"},
  {era:"scale", year:"2023", sort:"2023-03-02", title:"ChatGPT自分用秘書", cat:"AI / ChatGPT",
   img:"assets/posts/1631115949519826945-1.jpg", alt:"ChatGPT自分用秘書 — 動作の様子（X の投稿動画から）",
@@ -1141,13 +1138,13 @@ var WORKS = [
 img:"assets/posts/1703683239943262633-1.jpg", imgs:["assets/posts/1703683239943262633-1.jpg","assets/posts/2056149645643178399-1.jpg","assets/posts/2053465535401394318-1.jpg","assets/posts/2051900014117683668-1.jpg"], alt:"スタックチャン改造 — 口パク対応したズゴックチャンの様子（X の投稿動画から）",
 desc:"M5Stack のデスクトップロボット「スタックチャン」の改造の系譜。2023年9月、タカオ版キットと PWM サーボの実験から組み立てに入り、ズゴック風の外装で「口パク対応してみた」（いいね339）。AIスタックチャン化（ChatGPT 連携）も動かし、表情エディタのアイデア、シリアルサーボ化、ターンテーブル連動を試した。2026年には Kickstarter 版（KS版）が届き、回路図の読み解き、頭部 NFC の活用案、サーボ換装、塗装、消費電力の計測（待機時0.79W／サーボ3.3W）、LLM Module と FAN Module の装着、表情の自作、音楽のテンポに合わせてノる調整、筋電位バンドからの制御、Even G2（スマートグラス）連携まで広がった。KS版の1台は、自分の AI エージェント「ナルエビちゃん」の体として使われている（別項目）。",
 links:[],
-xs:[["https://x.com/GOROman/status/1703683239943262633","口パク対応してみた。\n\n#ｽﾀｯｸﾁｬﾝ #ｽﾞｺﾞｯｸﾁｬﾝ"],["https://x.com/GOROman/status/1708477737202294822","AIｽﾀｯｸﾁｬﾝ 無事動きました！！ありがとうございます！ バッテリーアイコンだしたり、NTPから現在時刻取ってみたり色々試し中。"],["https://x.com/GOROman/status/1708803730534211686","誕生日プレゼントで ｽﾀｯｸﾁｬﾝ みんなで作った！"],["https://x.com/GOROman/status/1905569652023169363","なるほどコイルの電磁誘導で非接触給電で360度回転できるサーボ搭載な ｽﾀｯｸﾁｬﾝ"],["https://x.com/GOROman/status/2053465535401394318","ナルエビちゃん のｽﾀｯｸﾁｬﾝ表示用に表情を作った"],["https://x.com/GOROman/status/2056149645643178399","ｽﾀｯｸﾁｬﾝ に LLM MODULE と FAN MODULEを装着 顔が伸びた ナルエビちゃん"],["https://x.com/GOROman/status/2055451418497261746","ｽﾀｯｸﾁｬﾝ の消費電力計測\n\n待機時 0.79W\nサーボ 3.3W"],["https://x.com/GOROman/status/2058711166965453267","エスパー！！\n筋電位バンドから ナルエビちゃん制御可能にした！！\n\n#ｽﾀｯｸﾁｬﾝ #MRBD DAT仕様"]],
+xs:[["https://x.com/GOROman/status/1708477737202294822","AIｽﾀｯｸﾁｬﾝ 無事動きました！！ありがとうございます！ バッテリーアイコンだしたり、NTPから現在時刻取ってみたり色々試し中。"],["https://x.com/GOROman/status/1708803730534211686","誕生日プレゼントで ｽﾀｯｸﾁｬﾝ みんなで作った！"],["https://x.com/GOROman/status/1905569652023169363","なるほどコイルの電磁誘導で非接触給電で360度回転できるサーボ搭載な ｽﾀｯｸﾁｬﾝ"],["https://x.com/GOROman/status/2053465535401394318","ナルエビちゃん のｽﾀｯｸﾁｬﾝ表示用に表情を作った"],["https://x.com/GOROman/status/2056149645643178399","ｽﾀｯｸﾁｬﾝ に LLM MODULE と FAN MODULEを装着 顔が伸びた ナルエビちゃん"],["https://x.com/GOROman/status/2055451418497261746","ｽﾀｯｸﾁｬﾝ の消費電力計測\n\n待機時 0.79W\nサーボ 3.3W"],["https://x.com/GOROman/status/2058711166965453267","エスパー！！\n筋電位バンドから ナルエビちゃん制御可能にした！！\n\n#ｽﾀｯｸﾁｬﾝ #MRBD DAT仕様"]],
 col:"スタックチャンは、M5Stack（小型マイコン）を使ったオープンソースのデスクトップロボットで、顔の液晶と2つのサーボで首を振ります。設計が公開されているため、外装・表情・ファームウェアを各自が改造する文化があります。本人の改造は、サーボや給電といった足回りから、AI 連携やモジュールの追加まで、ほぼ全方位に及んでいます。"},
 {era:"ai", year:"2024", sort:"2024-08-11", title:"Atom JoyStick ファームウェア解析（ESP32搭載ジョイパッド）", cat:"ジョイパッド / ESP32",
 img:"assets/posts/1822430021346329054-1.jpg", imgs:["assets/posts/1822430021346329054-1.jpg","assets/posts/1822469893113131422-1.jpg","assets/posts/1823174980596609465-1.png"], alt:"Atom JoyStick — 開封の儀の写真（X の投稿写真）",
 desc:"M5Stack のドローン StampFly 用ジョイパッド「Atom JoyStick」（ATOM Lite＝ESP32 搭載）のファームウェア解析（2024年8月）。開封の儀から始めて、起動音をゼビウス風に変え（いいね140）、充電 IC TP4067 の中国語データシートを ChatGPT に読ませて回路を調べ、公式サンプルを使わずにボタンとスティックを読むコードを自作した。さらに内部の STM32 側ファームウェアを吸い出してビルドに成功し、吸い出したものとビルドした HEX が同一であることまで確認した。「StampFly と AtomJoyStick のファームウェアをゼロから書いてみよう」という企画「#SuperSimpleM5StampFly」（いいね99）の一部で、操縦側の土台作りにあたる。",
 links:[["GitHub（Atom-JoyStick）","https://github.com/GOROman/Atom-JoyStick"],["GitHub（Atom-JoyStick-Internal-FW）","https://github.com/GOROman/Atom-JoyStick-Internal-FW"]],
-xs:[["https://x.com/GOROman/status/1822430021346329054","開封の儀 #AtomJoyStick"],["https://x.com/GOROman/status/1822469893113131422","とりあえず起動音をゼビウス風にしてみた\n\n#StampFly #AtomJoyStick"],["https://x.com/GOROman/status/1822907695449649419","#SuperSimpleM5StampFly\nM5Stack社が発売した StampFly と AtomJoyStick のファームウェアをゼロから書いてみよう！！という無謀な試み。飛んだら成功！飽きたら終了！\n\nとりあえずREADMEを書いた"],["https://x.com/GOROman/status/1823174980596609465","ついにM5 AtomJoyStick のInternal ファームウェア（STM32）のビルド成功！！！\n\n@Haruka_Imgr さんのお陰です！！\n特攻隊長→@necobut\n#AtomJoyStick"],["https://x.com/GOROman/status/1822585919150665933","M5 Atom Joy Stick のボタンとかジョイスティックの値をゲットする例を書いた↓↓↓\n\n#AtomJoyStick"],["https://x.com/GOROman/status/1862785470394171847","AtomJoyStickの充電を制御可能にしてみるテスト"]],
+xs:[["https://x.com/GOROman/status/1822430021346329054","開封の儀 #AtomJoyStick"],["https://x.com/GOROman/status/1822469893113131422","とりあえず起動音をゼビウス風にしてみた\n\n#StampFly #AtomJoyStick"],["https://x.com/GOROman/status/1823174980596609465","ついにM5 AtomJoyStick のInternal ファームウェア（STM32）のビルド成功！！！\n\n@Haruka_Imgr さんのお陰です！！\n特攻隊長→@necobut\n#AtomJoyStick"],["https://x.com/GOROman/status/1822585919150665933","M5 Atom Joy Stick のボタンとかジョイスティックの値をゲットする例を書いた↓↓↓\n\n#AtomJoyStick"],["https://x.com/GOROman/status/1862785470394171847","AtomJoyStickの充電を制御可能にしてみるテスト"]],
 col:"Atom JoyStick は、ドローン操縦用の小さなジョイパッドで、中には ESP32（ATOM Lite）と、スティック読み取り用の STM32 という2つのマイコンが入っています。本人の作業は「使う」ではなく「中身を全部理解して書き直す」で、ファームウェアを吸い出して自前ビルドと一致を確かめるのは、改造の土台として正確なやり方です。"},
 {era:"ai", year:"2026", sort:"2026-04-11", title:"ナルエビちゃん（AIエージェント／キャラクター）", cat:"AIエージェント / キャラクター",
 img:"assets/posts/2058071549882839361-1.jpg", imgs:["assets/posts/2058071549882839361-1.jpg","assets/posts/2058470970923638957-1.jpg","assets/posts/2044536748416627059-1.jpg","assets/posts/2108090752807105001-1.jpg","assets/posts/2057378949081313328-1.jpg","assets/posts/2051647536121966660-1.jpg","assets/posts/2055830255731195968-1.jpg"], alt:"ナルエビちゃん — 肩乗りで頭の動きに連動する様子（X の投稿動画から）",
@@ -1209,6 +1206,10 @@ col:"星新一の『肩の上の秘書』は、肩に乗った小さな秘書が
   links:[],
   xs:[["https://x.com/GOROman/status/1564447436877492224","AtomFLY Github上のサンプルコード 動作した"],["https://x.com/GOROman/status/1659149983755665408","AtomFly2 + ELRS化！ チューニングしたらめちゃくちゃ飛ばしやすくなった"],["https://x.com/GOROman/status/1659160502491295745","やっと飛ばせた！！！ 日本で飛ばせるドローンを作ろう！ M5StackのAtomFlyプロジェクト"],["https://x.com/GOROman/status/1660596756575567872","魔改造AtomFly 飛んだ？！"]],
   col:"ドローンの無線は、日本では技適（技術基準適合証明）のあるモジュールを使う必要があります。ELRS（ExpressLRS）は、長距離・低遅延の無線制御プロトコルです。「日本で飛ばせる」という条件を守りながら、海外発の小型ドローンキットを飛ばしやすく改造していく過程そのものが作品です。"},
+ {era:"scale", year:"2023", sort:"2023-05-31", title:"ExpressLRS（ELRS）まわりの実験", cat:"Drone / 無線（ELRS）",
+  desc:"AtomFly2 の ELRS 化（別項目）と並行して進めた、無線制御プロトコル ExpressLRS（ELRS）そのものへの取り組み。2023年5月末に ELRS 対応バックパック用ファームウェアのフォーク「Backpack」を、6月に ELRS 本体のフォーク「ExpressLRSHack」を GitHub に用意し、AtomFly2 の無線まわりをプロトコル側からも触れる体制を作った。AtomFly／AtomFly2 の ELRS 化から StampFly へ続くドローン系譜の、無線レイヤーを担う部分にあたる。",
+  links:[["GitHub（ExpressLRSHack）","https://github.com/GOROman/ExpressLRSHack"],["GitHub（Backpack）","https://github.com/GOROman/Backpack"]],
+  col:"ExpressLRS（ELRS）は、オープンソースの長距離・低遅延な無線制御プロトコルで、ドローンやラジコンの送信機・受信機に使われます。Backpack は、送信機と FPV ゴーグルなどを連携させる拡張モジュール用のファームウェアです。既製品のモジュールを使うだけでなく、プロトコル側のコードをフォークして手元に置くことで、機体側の改造（AtomFly2 の ELRS 化）と対で実験できるようになります。"},
  {era:"vr", year:"2018", sort:"2018-11-29", title:"ドローン自作（Betaflight／BETA65X魔改造）", cat:"Drone / 自作",
   desc:"自作ドローンに取り組んだ2018年の記録。8月に「ドローン自作の前に買ったもの」と部品集めから始まり、11月にはフライトコントローラのファームウェア Betaflight 4.0.0 を GitHub から取ってきて Cygwin 上でビルドし、独自に改造したファームウェアを作れるようにした。小型機 BETA65X の魔改造版を組み上げ、「ドローン完成！」（いいね139）まで進んだ。2022年以降の AtomFly／StampFly（別項目）へ続く、自作ドローンの起点である。",
   links:[],
@@ -1226,7 +1227,7 @@ col:"星新一の『肩の上の秘書』は、肩に乗った小さな秘書が
   links:[],
   xs:[["https://x.com/GOROman/status/1018075585027833857","ドローンでTHETAを飛ばすテスト"],["https://x.com/GOROman/status/1018073680549576704","ドローンとTHETAのライブストリーミングテスト"]],
   col:"THETA は、1回の撮影で全方向を写せる360度カメラです。ドローンに載せれば、空の一点から周囲すべてを見渡す映像が撮れます。VR ゴーグルで見れば、空中に浮いて周りを見回す体験になります。2018年時点では、ドローンも360度カメラもまだ珍しかった組み合わせです。"},
- {era:"scale", year:"2021", sort:"2021-05-27", title:"脳波ドローン（NextMind）", cat:"Drone / 脳波（BCI）", status:"MoguLive（Mogura VR）に記事あり",
+ {era:"scale", year:"2021", sort:"2021-05-27", title:"脳波ドローン（NextMind）", cat:"Drone / 脳波（BCI）", status:"MoguLive（Mogura VR）に記事あり", img:"assets/nextmind-mogura.jpg", alt:"脳波ドローン（NextMind）— 送信機と MacBook Pro、ドローンを並べた実験の様子（MoguLive（Mogura VR）記事のスクリーンショット）",
   desc:"脳波デバイス「NextMind」とドローンを組み合わせた実験。2021年5月27日に実験動画を投稿した。ドローンの送信機と PC を USB で接続し、Unity から制御しながら、脳波でドローンを動かせるかを試している。VR専門メディア Mogura VR のニュースサイト『MoguLive』が「脳波でドローンを動かせるのか？ YouTubeで実験動画が公開」として報じた。",
   links:[["MoguLive（Mogura VR）記事「脳波でドローンを動かせるのか？」","https://www.moguravr.com/nextmind-drone-movie/"]],
   col:"NextMind は、後頭部に装着して、見ているものへの脳の反応（脳波）を読み取る BCI デバイスです。手もコントローラも使わず「念じて動かす」入力を、Unity 経由でドローンの送信機につないだのがこの実験です。BCI（ブレイン・コンピュータ・インターフェース）の入口として、当時話題になりました。"},
@@ -1688,10 +1689,14 @@ document.getElementById("hudNext").addEventListener("click",function(){
   location.hash="#stream";
 });
 /* ---- stream: curated + archive picks, batched loading ---- */
+/* posts embedded in portfolio works live only in the works (no double-listing in the stream) */
+var WORK_TWEET_IDS={};
+WORKS.forEach(function(w){ var urls=[]; if(w.x) urls.push(w.x); (w.xs||[]).forEach(function(pr){ urls.push(pr[0]); }); urls.forEach(function(u){ var mm=/status\/(\d+)/.exec(u||""); if(mm) WORK_TWEET_IDS[mm[1]]=true; }); });
+var workExcluded={};
 var ALL=POSTS.map(function(p){
   var e=POST_EXTRA[p.url]||{};
   return {date:p.date, dname:e.d||p.dname, text:p.text, fav:p.fav, rt:p.rt, url:p.url, note:p.note, av:e.a||null, ph:e.p||null};
-}).concat(MORE_POSTS);
+}).concat(MORE_POSTS).filter(function(p){ var id=(p.url||"").split("/").pop(); if(WORK_TWEET_IDS[id]){ workExcluded[id]=true; return false; } return true; });
 var seenIds={}; ALL.forEach(function(p){ seenIds[(p.url||"").split("/").pop()]=true; });
 function avFor(date){ var y=parseInt(date.slice(0,4),10), m=parseInt(date.slice(5,7),10);
   if(y<=2012) return "assets/avatars/av1.jpg";
@@ -1702,8 +1707,10 @@ function avFor(date){ var y=parseInt(date.slice(0,4),10), m=parseInt(date.slice(
   if(y<=2025) return "assets/avatars/av6.jpg";
   if(m<=6) return "assets/avatars/av7.jpg";
   return "assets/avatars/av8.jpg"; }
+var extDup=0;
 EXTRACTED.forEach(function(e){
-  if(seenIds[e[1]]) return; seenIds[e[1]]=true;
+  if(WORK_TWEET_IDS[e[1]]){ workExcluded[e[1]]=true; return; }
+  if(seenIds[e[1]]){ extDup++; return; } seenIds[e[1]]=true;
   var phs=[]; for(var i=1;i<=e[5];i++) phs.push("assets/posts/"+e[1]+"-"+i+".jpg");
   ALL.push({date:e[0], dname:"GOROman", text:e[2], fav:e[3], rt:e[4], url:"https://x.com/GOROman/status/"+e[1], av:avFor(e[0]), phs:phs});
 });
@@ -1714,7 +1721,8 @@ var stEl=document.getElementById("streamTotal"); if(stEl) stEl.textContent="全"
 var st2El=document.getElementById("streamTotal2"); if(st2El) st2El.textContent=ALL.length.toLocaleString();
 var dExtEl=document.getElementById("dExt"); if(dExtEl) dExtEl.textContent=EXTRACTED.length.toLocaleString();
 var dCurEl=document.getElementById("dCur"); if(dCurEl) dCurEl.textContent=(POSTS.length+MORE_POSTS.length).toLocaleString();
-var dDupEl=document.getElementById("dDup"); if(dDupEl) dDupEl.textContent=((POSTS.length+MORE_POSTS.length)+EXTRACTED.length-ALL.length).toLocaleString();
+var dDupEl=document.getElementById("dDup"); if(dDupEl) dDupEl.textContent=extDup.toLocaleString();
+var dWorkEl=document.getElementById("dWork"); if(dWorkEl) dWorkEl.textContent=Object.keys(workExcluded).length.toLocaleString();
 ALL.forEach(function(p){
   var id=(p.url||"").split("/").pop();
   if(PHOTOS_MAP[id]) p.phs=PHOTOS_MAP[id];

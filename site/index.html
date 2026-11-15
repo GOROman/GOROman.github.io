@@ -159,6 +159,8 @@ button,[role="button"],select,summary,input{min-height:2.5rem}
 .yt-facade .yt-title{font-weight:700;font-size:.9rem;text-align:center;max-width:44ch;line-height:1.6}
 .yt-facade .yt-sub{font-size:.74rem;color:#c9c2b2;line-height:1.5;text-align:center}
 .yt iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;display:block;background:#000}
+.nico{margin-top:12px}
+.nico iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;display:block;background:#000}
 .x-embed{margin-top:14px}
 .x-embed .twitter-tweet{margin:0 auto!important}
 .x-note{font-size:.76rem;color:var(--ink3);margin-top:6px;line-height:1.6}
@@ -784,6 +786,7 @@ var WORKS = [
   desc:"中学1年でパソコン通信を始め、ホストプログラムを自作してホスト局「GORO-NET」を開局。フロッピー破損で全データを失い、フルスクラッチで書き直して「GORO-NET2」として復活させた。写真は当時の GORO-NET のチャットログ（1993年）。当時の利用者 Q さんが、誤って初期化しかけて30年「封印」していた MO ディスクを2024年に復元し、SysOp の「ゴロ」と『ナイトストライカー』について語り合う会話が残っていた。本人も X で引用ポストして反応している。",
   links:[["note 自伝「サンクコストブレイカー」","https://note.com/goroman/n/n3fa8785c5d0a"],["電ファミニコゲーマー 川上量生×GOROman 対談","https://news.denfaminicogamer.jp/interview/180806/4"],["X 投稿（Q さん「ゴロネッツのログ、あります」2024年）","https://x.com/Qman/status/1851539138958459187"],["ねとらぼ「封印された記録媒体を30年越しに復元」","https://nlab.itmedia.co.jp/nl/spv/2411/07/news055.html"]]},
  {era:"dawn", year:"高校時代", title:"ストリートうっきーIV（仮）", cat:"ゲーム制作", status:"自伝中の言及", img:"assets/ukki4.jpg", alt:"ストリートうっきーIV（仮）— ニコニコ動画に投稿された動画のサムネイル",
+  nico:[{id:"sm2983996", title:"ストリートうっきーIV（仮）の動画（2008年投稿）"}],
   desc:"『ストリートファイターII』と『珍遊記』を合体させたような格闘ゲームを X68000 で作り始めた、という本人の自伝中の言及。完成・公開されたかは不明。",
   links:[["note 自伝","https://note.com/goroman/n/n3fa8785c5d0a"],["ニコニコ動画（2008年投稿）","https://www.nicovideo.jp/watch/sm2983996"]]},
  {era:"dawn", year:"1995", title:"GORO-NETs／net-kick", cat:"パソコン通信", imgs:["assets/goro-nets-1.jpg","assets/goro-nets-2.jpg"], alt:"GORO-NETs／net-kick が動く画面（2022年 #MI68 で撮影された X の投稿写真）",
@@ -804,6 +807,7 @@ var WORKS = [
  {era:"vr", year:"2013", title:"Mikulus", cat:"VRアプリ", status:"VRクリエイティブアワード2017 個人部門最優秀賞", img:"assets/mikulus.jpg", alt:"VRアプリ Mikulus の画面",
   desc:"Oculus Rift DK1 で初音ミクと会える VR アプリ。DK1 入手直後に公開され、日本の VR 黎明期を代表する個人作になった。のち「VR時代のワークスペース／OS」へ発展し、VRクリエイティブアワード2017 個人部門最優秀賞を受賞。2016年には、VR の中から Unity をリアルタイムに編集できる「VR内Unityリアルタイムエディタ」も作った（下の埋め込み）。",
   yt:{id:"fCRnpD8YcRY", title:"Mikulus PV"},
+  nico:[{id:"sm20786059", title:"Oculus Riftでミクさんを触ってきた（2013年）"}],
   xs:[["https://x.com/GOROman/status/797280939533475840","「VR内Unityリアルタイムエディタ」つくった！\n\n#mikulus"]],
   links:[["インサイド インタビュー","https://www.inside-games.jp/article/2017/04/17/106593.html"],["ITmedia 体験レポート","https://www.itmedia.co.jp/news/spv/1706/20/news012.html"],["ニコニコ動画（2013年・Oculus Riftでミクさんを触ってきた）","https://www.nicovideo.jp/watch/sm20786059"],["VRクリエイティブアワード2017 公式結果","https://xrc.or.jp/html/archives/award/award2017.html"],["ASCII 最終審査結果","https://ascii.jp/elem/000/001/492/1492966/"]]},
  {era:"vr", year:"2013", title:"MikuMikuAkushu（ミクミク握手）", cat:"VR × 触覚", img:"assets/miku-akushu.jpg", alt:"ミクミク握手 — シリコンの手と触覚デバイス",
@@ -980,6 +984,7 @@ var WORKS = [
   col:"アケコンは、アーケードゲームの操作パネルを家庭用に再現したコントローラのことです。バーチャファイター2 はレバーと3ボタン（ガード／パンチ／キック）だけで全ての技が出せる設計なので、ボタンはこの3つに絞れます。3Dプリント製の筐体に、実在しない街「NULL CITY」の量産機という設定と型番 NC-03 を与えた、実用品でありながら世界観のある一台です。"},
 {era:"dawn", year:"2008", sort:"2008-06-08", title:"ARToolKitで部屋にフィギュアを出現させてみた", cat:"AR実験 / ニコニコ動画", img:"assets/nico-sm3594805.jpg", alt:"ARToolKitで部屋にフィギュアを出現させてみた — 机の上のマーカーに CG のフィギュアが出現する映像（ニコニコ動画の再生画面スクリーンショット）",
   desc:"AR（拡張現実）の開発キット ARToolKit を使い、実写の部屋の映像に CG のフィギュアを合成する実験（2008年6月、ニコニコ動画）。「どこまでリアルに CG を実写合成できるか」への挑戦で、同じ日に発表した AR Paper Famicom（別項目）と並ぶ AR の初期作。当時はスマートフォンも AR という言葉自体も一般的でなく、Web カメラと紙のマーカーで現実に CG を重ねる実験が個人でできるようになったばかりの時期だった。",
+  nico:[{id:"sm3594805", title:"ARToolKitで部屋にフィギュアを出現させてみた"}],
   links:[["ニコニコ動画「ARToolKitで部屋にフィギュアを出現させてみた」","https://www.nicovideo.jp/watch/sm3594805"]],
   col:"ARToolKit は、カメラ映像の中の四角いマーカー（目印）の位置を読み取り、その場所に CG を重ねて表示する仕組みです。今ではスマホの AR 機能として当たり前になりましたが、2008年当時は研究者と一部の作り手だけの道具でした。紙ファミコンと同じ日に、フィギュアでも試しているのが初期の実験らしいところです。"},
 {era:"dawn", year:"2008頃", sort:"2008-06-09", title:"PRT実写合成（ARToolKit × Precomputed Radiance Transfer）", cat:"AR実験 / ニコニコ動画",
@@ -988,14 +993,17 @@ var WORKS = [
   col:"PRT（Precomputed Radiance Transfer）は、物に光が当たってできる陰影や、物同士の光の反射をあらかじめ計算しておく描画の仕組みです。実写に CG を重ねるときに使うと、CG がその場の明かりで照らされているように見え、合成の浮き方が減ります。ARToolKit が「どこに重ねるか（マーカーの位置と姿勢）」を決め、PRT が「どう照らすか」を決める、という分担の実験でした。"},
  {era:"dawn", year:"2008", sort:"2008-05-31", title:"WiiリモコンでVRヘッドトラッキング", cat:"VR実験 / ニコニコ動画", img:"assets/nico-sm3506246.jpg", alt:"WiiリモコンでVRヘッドトラッキング — 頭の動きに連動して視点が変わる映像（ニコニコ動画「WiiでVRシステムをやってみた」の再生画面スクリーンショット）",
   desc:"Johnny Chung Lee 氏が公開した手法を追試し、Wii リモコンの赤外線カメラで頭の位置を読み取って、画面の中の視点を頭の動きに連動させる実験（2008年5月、ニコニコ動画）。背景を付けた「その２」まで制作した。市販のゲーム機のコントローラを VR の入力装置に転用する発想で、2013年の Mikulus へ続く VR 実験の起点にあたる。",
+  nico:[{id:"sm3506246", title:"WiiでVRシステムをやってみた"},{id:"sm3506952", title:"WiiでVRシステムをやってみた その２"}],
   links:[["ニコニコ動画「WiiでVRシステムをやってみた」","https://www.nicovideo.jp/watch/sm3506246"],["ニコニコ動画「WiiでVRシステムをやってみた その２」","https://www.nicovideo.jp/watch/sm3506952"]],
   col:"ヘッドトラッキングは、頭の動きに合わせて画面の見え方を変える技術です。頭を右に動かせば画面の中も右を向くので、平面のモニタでも「窓から3Dの世界を覗いている」ような立体感が出ます。Wii リモコンには赤外線カメラが内蔵されていて、頭に付けた赤外線 LED の位置を測ることができました。"},
  {era:"dawn", year:"2008", sort:"2008-05-04", title:"ニンテンドーDSでPCと通信／ iTunes リモコン", cat:"組み込み / ニコニコ動画", img:"assets/nico-sm3189804.jpg", alt:"ニンテンドーDSでPCと通信 — DS を手に持ち、ノートPC と通信している映像（ニコニコ動画「ＤＳでＰＣと通信するプログラムを作ってみた」の再生画面スクリーンショット）",
   desc:"ニンテンドーDS の Wi-Fi 機能を使い、PC 側のプログラムと通信する仕組みを自作した実験（2008年5月、ニコニコ動画）。翌日には応用編として、DS から PC の iTunes をリモートコントロールする動画も公開した。ゲーム機を汎用の入力・表示デバイスとして使う、後のガジェットハックの原型のような作品。",
+  nico:[{id:"sm3189804", title:"ＤＳでＰＣと通信するプログラムを作ってみた"},{id:"sm3201704", title:"ＤＳでｉＴｕｎｅｓをリモートコントロールしてみた"}],
   links:[["ニコニコ動画「ＤＳでＰＣと通信するプログラムを作ってみた」","https://www.nicovideo.jp/watch/sm3189804"],["ニコニコ動画「ＤＳでｉＴｕｎｅｓをリモートコントロールしてみた」","https://www.nicovideo.jp/watch/sm3201704"]],
   col:"ニンテンドーDS は本来、ゲーム以外のプログラムを動かすことを想定していません。それでも自作プログラムを動かす方法が当時の作り手の間で共有されていて、Wi-Fi で PC と通信できれば、DS が2画面のリモコンや情報端末に化けます。今のスマホ連携の感覚を、ゲーム機で先取りしていた実験です。"},
  {era:"dawn", year:"2012", sort:"2012-10-13", title:"iPhoneで鉛筆を削ってみた（WeMo遠隔コンセント）", cat:"ホームオートメーション / ニコニコ動画", img:"assets/nico-sm19108041.jpg", alt:"iPhoneで鉛筆を削ってみた — iPhone の操作で鉛筆削りが動く映像（ニコニコ動画の再生画面スクリーンショット）",
   desc:"遠隔操作できるコンセント WeMo を買い、iPhone からコンセントのオン・オフで鉛筆削りを動かす実験（2012年10月、ニコニコ動画）。EOS M で撮影して公開した。ネット経由で家電を操作する「スマートホーム」の道具が一般向けに売られ始めた時期の作例で、2013〜14年の Pebble での家電コントロール（別項目）へつながる。",
+  nico:[{id:"sm19108041", title:"iPhoneで鉛筆を削ってみた"}],
   links:[["ニコニコ動画「iPhoneで鉛筆を削ってみた」","https://www.nicovideo.jp/watch/sm19108041"]],
   col:"WeMo は、コンセントと家電の間に挟むと、スマホから電源の入り切りができるようになる道具です。仕組みは単純でも、「ネット越しに物理的なものが動く」体験は当時まだ新しく、鉛筆削りのような日常の道具で試すところに、この人の作風が出ています。"},
  {era:"vr", year:"2013", sort:"2013-02-17", title:"3Dman（ペンタブで3Dプリンタを動かす）", cat:"3Dプリンタ / ペンタブ",
@@ -1006,6 +1014,7 @@ var WORKS = [
   col:"3Dプリンタは通常、モデリングしたデータを読み込ませて自動で造形します。3Dman はその工程を飛ばして、ペンタブのペンを動かすとプリンタのヘッドがそのまま追いかける、いわば「手で描く3Dプリンタ」です。ペンタブはペンの位置と筆圧を細かく取れるので、描く感覚で機械を操る入力装置になりました。"},
  {era:"vr", year:"2013", sort:"2013-02-23", title:"全自動ネコジャラシ（ルンバ改造）", cat:"ロボット / ニコニコ動画", img:"assets/nico-sm20164862.jpg", alt:"全自動ネコジャラシ（ルンバ改造）— Arduino を載せたルンバの映像（ニコニコ動画「Arduinoでルンバをレベルアップしてみた」の再生画面スクリーンショット）",
   desc:"お掃除ロボット ルンバを Arduino で改造する2本のニコニコ動画（2013年2月）。1本目でルンバに「レベルアップ」の仕掛けを入れ、2本目で改造したルンバにネコジャラシを取り付けて、飼い猫の運動不足を解消する全自動ネコジャラシにした。掃除機として売られた製品を、ペットと遊ぶロボットに作り替えた作品。",
+  nico:[{id:"sm20164862", title:"Arduinoでルンバをレベルアップしてみた"},{id:"sm20174200", title:"全自動ネコジャラシを作ってみた"}],
   links:[["ニコニコ動画「Arduinoでルンバをレベルアップしてみた」","https://www.nicovideo.jp/watch/sm20164862"],["ニコニコ動画「全自動ネコジャラシを作ってみた」","https://www.nicovideo.jp/watch/sm20174200"]],
   col:"ルンバには、外部から信号を送って動きを制御するための端子が用意されていました。Arduino（小さなマイコンボード）を繋ぐと、掃除以外の動きをプログラムできます。市販品を分解して別の用途に作り替えるのは、この人の作品に通底するやり方です。"},
 
@@ -1442,6 +1451,14 @@ function ytFacade(yt){
     + '<span class="yt-caption"><span class="yt-title">'+esc(yt.title)+'</span>'
     + '<span class="yt-sub">YouTube — タップでこのページ内で再生</span></span></button></div>';
 }
+function nicoFacade(nv, thumb){
+  return '<div class="nico"><button type="button" class="yt-facade nico-facade" data-nico="'+nv.id+'" aria-label="ニコニコ動画をページ内で再生: '+esc(nv.title)+'">'
+    + (thumb ? '<img class="yt-thumb" src="'+thumb+'" alt="" loading="lazy" decoding="async">' : '')
+    + '<span class="yt-shade" aria-hidden="true"></span>'
+    + '<span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg></span>'
+    + '<span class="yt-caption"><span class="yt-title">'+esc(nv.title)+'</span>'
+    + '<span class="yt-sub">ニコニコ動画 — タップでこのページ内で再生</span></span></button></div>';
+}
 function xEmbed(url, text){
   var body = text ? esc(text) : '';
   return '<div class="x-embed" data-xurl="'+url+'"><div class="x-fallback">'
@@ -1470,6 +1487,7 @@ function workCard(w){
     + (links ? '<div class="work-links">'+links+'</div>' : '')
     + '<div class="narupo-row" data-narupo-row hidden><span class="narupo-total">累計 <b data-narupo-total>0</b> なるぽ</span><span class="narupo-btns" role="group" aria-label="この作品に なるぽ を投げる"><button type="button" class="narupo-tip" data-tip="1">+1 なるぽ</button></span><span class="narupo-msg" role="status"></span></div>'
     + (w.yt ? ytFacade(w.yt) : '')
+    + (w.nico ? w.nico.map(function(nv){ return nicoFacade(nv, allImgs[0]||null); }).join("") : '')
     + (w.x ? xEmbed(w.x, w.xt) : '')
     + (w.xs ? w.xs.map(function(pair){ return xEmbed(pair[0], pair[1]); }).join("") : '')
     + '</div></div></article>';
@@ -1488,7 +1506,7 @@ function renderTimeline(){
   ERAS.forEach(function(e){
     WORKS.filter(function(w){return w.era===e.id;}).slice().sort(byDate).forEach(function(w){
       w._no=++__n;
-      w._tags=tagsFor(w.title+" "+w.desc+" "+w.cat, !!(w.img||w.imgs), !!w.yt);
+      w._tags=tagsFor(w.title+" "+w.desc+" "+w.cat, !!(w.img||w.imgs), !!(w.yt||w.nico));
     });
   });
   ERAS.forEach(function(e){
@@ -1563,6 +1581,16 @@ document.addEventListener("click", function(e){
   var id = f.getAttribute("data-yt");
   var wrap = document.createElement("div");
   wrap.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0" title="YouTube動画プレーヤー" loading="lazy" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="no-referrer"></iframe>';
+  f.replaceWith(wrap.firstChild);
+});
+
+/* ================= niconico facade -> iframe ================= */
+document.addEventListener("click", function(e){
+  var f = e.target.closest ? e.target.closest(".nico-facade") : null;
+  if(!f) return;
+  var id = f.getAttribute("data-nico");
+  var wrap = document.createElement("div");
+  wrap.innerHTML = '<iframe src="https://embed.nicovideo.jp/watch/'+id+'" title="ニコニコ動画プレーヤー" loading="lazy" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>';
   f.replaceWith(wrap.firstChild);
 });
 

@@ -2125,7 +2125,7 @@ document.addEventListener("error", function(e){
    Points live on the Narupo API (Cloudflare Worker + D1). Nothing is stored
    in the browser; if the API is unreachable, only this UI stays disabled. */
 (function(){
-  var API = "https://goroman-narupo.hentai-naru-sensei.workers.dev";
+  var API = "https://goroman-narupo.goroman.workers.dev";
   var acct = document.getElementById("narupoAcct");
   var me = null;            /* /api/me payload when logged in */
   var worksTotals = {};     /* work_key -> {total, tippers} */

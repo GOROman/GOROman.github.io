@@ -63,8 +63,8 @@ button,[role="button"],select,summary,input{min-height:2.5rem}
 .tl-year::after{content:"";flex:1;height:2px;background:var(--line2);border-radius:2px}
 .logo-mark{width:36px;height:36px;flex:none;border-radius:9px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:"Noto Sans Mono",monospace;font-weight:700;font-size:.95rem}
 .logo small{font-weight:700;color:var(--accent);font-size:.72rem;letter-spacing:.12em}
-.topnav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
-.topnav a{text-decoration:none;font-size:.88rem;font-weight:700;color:var(--ink2);padding:8px 13px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center}
+.topnav{margin-left:auto;display:flex;gap:2px;flex-wrap:nowrap;justify-content:flex-end}
+.topnav a{text-decoration:none;font-size:.88rem;font-weight:700;color:var(--ink2);padding:8px 13px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap}
 .topnav a:hover{background:var(--surface2);color:var(--ink)}
 
 /* hero */
@@ -527,7 +527,7 @@ body{background:transparent}
   .year-block.naru .year-head{background:color-mix(in srgb, #8a6d00 48%, var(--bg))}
 }
 /* ===== なるぽ (Narupo) ===== */
-.narupo-acct{margin-left:auto;display:flex;align-items:center;min-height:40px}
+.narupo-acct{margin-left:0;display:flex;align-items:center;min-height:40px}
 .narupo-acct[hidden]{display:none}
 .narupo-login{appearance:none;border:1.5px solid #1a1917;background:#ffe14d;color:#1a1917;font:inherit;font-size:.82rem;font-weight:900;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;min-height:40px}
 .narupo-login:hover{background:var(--ink);color:#ffe14d}
@@ -564,7 +564,7 @@ body{background:transparent}
 .narupo-rank-no{font-family:"Noto Sans Mono",monospace;font-weight:700;font-size:.9rem;min-width:2ch;text-align:right;color:var(--accent);flex:none}
 .narupo-rank-title{font-weight:700;flex:1;min-width:0}
 .narupo-rank-total{font-size:.86rem;font-weight:900;white-space:nowrap}
-@media (max-width:720px){ .topbar-in{flex-wrap:wrap} .narupo-acct{margin-left:0} }
+@media (max-width:900px){ .topbar-in{flex-wrap:wrap} .topnav{order:3;flex-basis:100%;margin-left:0;justify-content:flex-start} .narupo-acct{margin-left:auto} }
 </style>
 </head>
 <body>
@@ -1457,11 +1457,11 @@ function workCard(w){
     + '<div class="work-body"><div class="work-top"><span class="work-cat">'+esc(w.cat)+'</span>'
     + (w.status ? '<span class="status">'+esc(w.status)+'</span>' : '')
     + '<span style="margin-left:auto;display:inline-flex;align-items:center;gap:2px"><a class="no-chip" href="#'+pid+'" title="この作品のパーマネントリンク">No.'+noStr+'</a><button type="button" class="copy-btn" data-copy="#'+pid+'" aria-label="作品 No.'+noStr+' のパーマネントリンクをコピー">'+COPY_ICON+'</button></span>'
-    + '</div><h3>'+esc(w.title)+'</h3><p class="desc">'+esc(w.desc)+'</p>' + (w.col?'<aside class="column"><span class="column-label">Muse のコラム</span><p>'+esc(w.col)+'</p></aside>':'')
+    + '</div><h3>'+esc(w.title)+'</h3><p class="desc">'+esc(w.desc)+'</p>' + (w.col?'<aside class="column"><span class="column-label">解説コラム</span><p>'+esc(w.col)+'</p></aside>':'')
     + tagRow(tags)
     + (allImgs.length>1 ? '<div class="work-gallery">'+allImgs.slice(1).map(function(src){return '<img src="'+src+'" alt="'+esc((w.alt||w.title)+' の写真')+'" loading="lazy" decoding="async" data-kind="photo" onerror="imgErr(this)">';}).join("")+'</div>' : '')
     + (links ? '<div class="work-links">'+links+'</div>' : '')
-    + '<div class="narupo-row" data-narupo-row hidden><span class="narupo-total">累計 <b data-narupo-total>0</b> なるぽ</span><span class="narupo-btns" role="group" aria-label="この作品に なるぽ を投げる"><button type="button" class="narupo-tip" data-tip="1">+1 なるぽ</button><button type="button" class="narupo-tip" data-tip="5">+5</button><button type="button" class="narupo-tip" data-tip="10">+10</button></span><span class="narupo-msg" role="status"></span></div>'
+    + '<div class="narupo-row" data-narupo-row hidden><span class="narupo-total">累計 <b data-narupo-total>0</b> なるぽ</span><span class="narupo-btns" role="group" aria-label="この作品に なるぽ を投げる"><button type="button" class="narupo-tip" data-tip="1">+1 なるぽ</button></span><span class="narupo-msg" role="status"></span></div>'
     + (w.yt ? ytFacade(w.yt) : '')
     + (w.x ? xEmbed(w.x, w.xt) : '')
     + (w.xs ? w.xs.map(function(pair){ return xEmbed(pair[0], pair[1]); }).join("") : '')
@@ -2147,7 +2147,7 @@ document.addEventListener("error", function(e){
     if(!me){
       var b = document.createElement("button");
       b.type = "button"; b.className = "narupo-login";
-      b.textContent = "Xでログインして なるぽ を使う";
+      b.textContent = "Xでログイン";
       b.addEventListener("click", function(){
         location.href = API + "/auth/x?return_to=" + encodeURIComponent(location.href);
       });

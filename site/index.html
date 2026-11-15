@@ -547,6 +547,34 @@ body{background:transparent}
 .narupo-balance{font-size:.82rem;font-weight:700;color:var(--ink2);white-space:nowrap}
 .narupo-logout{appearance:none;border:1px solid var(--line2);background:transparent;color:var(--ink3);font:inherit;font-size:.75rem;font-weight:700;padding:5px 10px;border-radius:999px;cursor:pointer;min-height:32px}
 .narupo-logout:hover{color:var(--ink);border-color:var(--ink)}
+.narupo-user{position:relative}
+.narupo-menu-btn{appearance:none;border:0;background:transparent;color:var(--ink);font:inherit;display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 6px;border-radius:999px;cursor:pointer;min-height:44px}
+.narupo-menu-btn:hover{background:var(--surface2)}
+.narupo-caret{font-size:.62rem;color:var(--ink3);flex:none;line-height:1}
+.narupo-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:90;background:var(--surface);border:1px solid var(--line2);border-radius:var(--radius-sm);box-shadow:0 12px 32px rgba(0,0,0,.18);min-width:210px;padding:6px}
+.narupo-menu[hidden]{display:none}
+.narupo-menu-item{appearance:none;border:0;background:transparent;color:var(--ink);font:inherit;font-size:.88rem;font-weight:700;display:flex;align-items:center;width:100%;text-align:left;padding:10px 12px;border-radius:8px;cursor:pointer;min-height:44px}
+.narupo-menu-item:hover{background:var(--surface2)}
+.narupo-dialog{border:1px solid var(--line2);border-radius:var(--radius);background:var(--surface);color:var(--ink);padding:0;width:min(430px,calc(100vw - 32px));max-width:calc(100vw - 32px)}
+.narupo-dialog::backdrop{background:rgba(10,9,7,.5)}
+.narupo-dialog-in{padding:22px}
+.narupo-dialog-title{font-size:1.15rem;margin:0 0 16px;line-height:1.4}
+.narupo-xacct{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface2);margin-bottom:18px}
+.narupo-avatar.lg{width:44px;height:44px}
+.narupo-xname{font-weight:900;font-size:.98rem;line-height:1.4}
+.narupo-xhandle{color:var(--ink3);font-size:.84rem;line-height:1.4}
+.narupo-field-label{display:block;font-weight:700;font-size:.88rem;margin-bottom:6px}
+.narupo-input{width:100%;box-sizing:border-box;font:inherit;font-size:1rem;padding:10px 12px;border:1.5px solid var(--line2);border-radius:var(--radius-sm);background:var(--surface);color:var(--ink);min-height:44px}
+.narupo-input:focus{border-color:var(--ink);outline:none}
+.narupo-note{font-size:.8rem;color:var(--ink3);margin:8px 0 0}
+.narupo-dialog-msg{font-size:.84rem;color:var(--accent);font-weight:700;margin:12px 0 0;min-height:1.2em}
+.narupo-dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.narupo-save{appearance:none;border:1.5px solid #1a1917;background:#ffe14d;color:#1a1917;font:inherit;font-size:.88rem;font-weight:900;padding:10px 20px;border-radius:999px;cursor:pointer;min-height:44px}
+.narupo-save:hover{background:var(--ink);color:#ffe14d}
+.narupo-save:disabled{opacity:.5;cursor:wait}
+.narupo-cancel{appearance:none;border:1px solid var(--line2);background:transparent;color:var(--ink2);font:inherit;font-size:.88rem;font-weight:700;padding:10px 18px;border-radius:999px;cursor:pointer;min-height:44px}
+.narupo-cancel:hover{color:var(--ink);border-color:var(--ink)}
+@media (prefers-color-scheme: dark){ .narupo-save{background:#ffd94d} .narupo-save:hover{background:var(--ink);color:#ffd94d} }
 @media (prefers-color-scheme: dark){
   .narupo-login{background:#ffd94d}
   .narupo-login:hover{background:var(--ink);color:#ffd94d}
@@ -2045,10 +2073,18 @@ var bgEl=document.getElementById("bgFade");
 var LIGHT=[[250,246,238],[253,240,231],[237,245,238],[234,241,248],[253,238,238],[247,241,227],[237,244,241],[253,243,227]];
 var DARK=[[23,21,18],[28,21,18],[19,26,21],[18,22,29],[29,19,20],[26,23,16],[18,26,24],[28,23,18]];
 var mq=window.matchMedia("(prefers-color-scheme: dark)");
+var bcCache=null;
 function baseColor(){
+  if(bcCache) return bcCache;
   var cs=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
   var m=/^#(..)(..)(..)$/.exec(cs);
-  return m ? [parseInt(m[1],16),parseInt(m[2],16),parseInt(m[3],16)] : [250,250,248];
+  bcCache = m ? [parseInt(m[1],16),parseInt(m[2],16),parseInt(m[3],16)] : [250,250,248];
+  return bcCache;
+}
+var yearBlockCache=null;
+function yearBlocks(){
+  if(!yearBlockCache) yearBlockCache=Array.prototype.slice.call(document.querySelectorAll(".year-block"));
+  return yearBlockCache;
 }
 function smooth(t){ t=t<0?0:(t>1?1:t); return t*t*(3-2*t); }
 var ticking=false;
@@ -2059,7 +2095,7 @@ function paint(){
   var bc=baseColor();
   var col=[bc[0],bc[1],bc[2]];
   var vh=window.innerHeight, center=vh/2, zone=vh*0.9;
-  document.querySelectorAll(".year-block").forEach(function(b){
+  yearBlocks().forEach(function(b){
     if(b.style.display==="none") return;
     var r=b.getBoundingClientRect();
     if(r.height===0 || r.bottom<-vh || r.top>vh*2) return;
@@ -2080,7 +2116,7 @@ function paint(){
 function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(paint); } }
 window.addEventListener("scroll", onScroll, {passive:true});
 window.addEventListener("resize", onScroll);
-if(mq.addEventListener) mq.addEventListener("change", onScroll);
+if(mq.addEventListener) mq.addEventListener("change", function(){ bcCache=null; onScroll(); });
 paint();
 /* ---- year block reveal ---- */
 var yio=("IntersectionObserver" in window) ? new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); yio.unobserve(en.target); } }); }, {threshold:.02}) : null;
@@ -2089,7 +2125,7 @@ function watchYears(){
 }
 watchYears();
 if(streamGrid && "MutationObserver" in window){
-  new MutationObserver(function(){ watchYears(); onScroll(); }).observe(streamGrid, {childList:true});
+  new MutationObserver(function(){ yearBlockCache=null; watchYears(); onScroll(); }).observe(streamGrid, {childList:true});
 }
 /* ---- X embeds: fallback-first. The fallback card (post text + link) is always in the DOM.
    The official embed is created with twttr.widgets.createTweet into a separate slot and
@@ -2111,43 +2147,118 @@ function loadTwitterWidgets(){
   });
   return twReadyPromise;
 }
+/* Virtualized embeds: only embeds near the viewport become real twitter iframes.
+   When one scrolls far away, its iframe is destroyed and the fallback card returns,
+   so iframes never accumulate while reading. At most X_MAX_LIVE live at once. */
+var X_MAX_LIVE=12;
+var xLive=new Set();
+function xEmbedRestore(el){
+  var slot=el.querySelector(".x-slot"); if(slot){ slot.innerHTML=""; slot.hidden=true; }
+  var fb=el.querySelector(".x-fallback"); if(fb) fb.hidden=false;
+  el.classList.remove("x-done");
+}
 function xEmbedFail(el){
+  xLive.delete(el);
+  el.setAttribute("data-xstate","failed");
   el.classList.add("x-failed");
   var st=el.querySelector(".x-state");
   if(st) st.textContent = el.querySelector(".x-compact") ? "Xの埋め込みは表示できませんでした" : "Xの公式埋め込みを表示できませんでした。ポスト本文と元ポストへのリンクはこのカードに掲載しています。";
   var slot=el.querySelector(".x-slot"); if(slot){ slot.hidden=true; slot.innerHTML=""; }
 }
+function xDist(el){
+  var r=el.getBoundingClientRect();
+  if(r.bottom<0) return -r.bottom;
+  if(r.top>window.innerHeight) return r.top-window.innerHeight;
+  return 0;
+}
+function xDemote(el){
+  var state=el.getAttribute("data-xstate");
+  if(state!=="live" && state!=="loading") return;
+  el._xgen=(el._xgen||0)+1; /* invalidate any in-flight render */
+  xLive.delete(el);
+  el.setAttribute("data-xstate","idle");
+  xEmbedRestore(el);
+}
+function xEnforceCap(keep){
+  while(xLive.size>X_MAX_LIVE){
+    var far=null, farD=-1;
+    xLive.forEach(function(el){ if(el===keep) return; var d=xDist(el); if(d>farD){ farD=d; far=el; } });
+    if(!far) break;
+    xDemote(far);
+  }
+}
 function xEmbedProcess(el){
+  var state=el.getAttribute("data-xstate");
+  if(state==="live" || state==="loading" || state==="failed") return;
   var url=el.getAttribute("data-xurl")||"";
   var m=/status\/(\d+)/.exec(url);
   if(!m){ xEmbedFail(el); return; }
   var id=m[1];
+  el.setAttribute("data-xstate","loading");
+  xLive.add(el);
+  var gen=(el._xgen||0)+1; el._xgen=gen;
+  xEnforceCap(el);
   loadTwitterWidgets().then(function(ok){
+    if(el._xgen!==gen) return; /* scrolled away while the script loaded: discard */
     if(!ok){ xEmbedFail(el); return; }
-    var slot=el.querySelector(".x-slot"); if(!slot) return;
+    var slot=el.querySelector(".x-slot"); if(!slot){ xLive.delete(el); el.setAttribute("data-xstate","idle"); return; }
     slot.hidden=false;
     var settled=false;
-    var timer=setTimeout(function(){ if(!settled){ settled=true; xEmbedFail(el); } }, 10000);
+    function fail(){ if(el._xgen===gen) xEmbedFail(el); }
+    var timer=setTimeout(function(){ if(!settled){ settled=true; fail(); } }, 10000);
     try{
       twttr.widgets.createTweet(id, slot, {lang:"ja", dnt:true, align:"center"}).then(function(elm){
         clearTimeout(timer); if(settled) return; settled=true;
-        if(elm){ var fb=el.querySelector(".x-fallback"); if(fb) fb.hidden=true; el.classList.add("x-done"); }
+        if(el._xgen!==gen){
+          /* scrolled away mid-render: discard the result unless a newer render owns the slot */
+          if(el.getAttribute("data-xstate")==="idle"){ slot.innerHTML=""; slot.hidden=true; }
+          return;
+        }
+        if(elm){ var fb=el.querySelector(".x-fallback"); if(fb) fb.hidden=true; el.classList.add("x-done"); el.setAttribute("data-xstate","live"); }
         else xEmbedFail(el);
-      }, function(){ clearTimeout(timer); if(!settled){ settled=true; xEmbedFail(el); } });
-    }catch(err){ clearTimeout(timer); if(!settled){ settled=true; xEmbedFail(el); } }
+      }, function(){ clearTimeout(timer); if(!settled){ settled=true; fail(); } });
+    }catch(err){ clearTimeout(timer); if(!settled){ settled=true; fail(); } }
   });
 }
 var xEmbedIO=("IntersectionObserver" in window) ? new IntersectionObserver(function(es){
-  es.forEach(function(en){ if(en.isIntersecting){ xEmbedIO.unobserve(en.target); xEmbedProcess(en.target); } });
-}, {rootMargin:"600px 0px"}) : null;
-function watchXEmbeds(){
-  document.querySelectorAll(".x-embed:not([data-xw])").forEach(function(el){
+  es.forEach(function(en){
+    if(en.isIntersecting) xEmbedProcess(en.target);
+    else xDemote(en.target);
+  });
+}, {rootMargin:"1000px 0px"}) : null;
+function watchXEmbedsIn(root){
+  if(!root || root.nodeType!==1) return;
+  var list=[];
+  if(root.classList && root.classList.contains("x-embed")) list.push(root);
+  if(root.querySelectorAll) root.querySelectorAll(".x-embed:not([data-xw])").forEach(function(el){ list.push(el); });
+  list.forEach(function(el){
+    if(el.hasAttribute("data-xw")) return;
     el.setAttribute("data-xw","1");
+    if(!el.hasAttribute("data-xstate")) el.setAttribute("data-xstate","idle");
     if(xEmbedIO) xEmbedIO.observe(el); else xEmbedProcess(el);
   });
 }
+function watchXEmbeds(){ watchXEmbedsIn(document.body); }
 watchXEmbeds();
-if("MutationObserver" in window){ new MutationObserver(function(){ watchXEmbeds(); }).observe(document.body, {childList:true, subtree:true}); }
+/* Watch only the containers embeds are added to, debounced via rAF, and register
+   just the added nodes — embed rendering itself must not retrigger full rescans. */
+if("MutationObserver" in window){
+  var xMoPending=false, xMoQueue=[];
+  var xMo=new MutationObserver(function(muts){
+    muts.forEach(function(mu){ mu.addedNodes.forEach(function(n){ xMoQueue.push(n); }); });
+    if(xMoPending) return;
+    xMoPending=true;
+    requestAnimationFrame(function(){
+      xMoPending=false;
+      var q=xMoQueue; xMoQueue=[];
+      q.forEach(function(n){ watchXEmbedsIn(n); });
+    });
+  });
+  ["timelineRoot","streamGrid"].forEach(function(id){
+    var c=document.getElementById(id);
+    if(c) xMo.observe(c, {childList:true, subtree:true});
+  });
+}
 /* ---- image fallback backstop: never leave a broken-image glyph ---- */
 document.addEventListener("error", function(e){
   var t=e.target;
@@ -2176,8 +2287,118 @@ document.addEventListener("error", function(e){
     if(me.user && me.user.balance != null) return me.user.balance;
     return 0;
   }
+  var acctBtn = null, acctMenu = null;
+  function closeAcctMenu(){
+    if(acctMenu) acctMenu.hidden = true;
+    if(acctBtn) acctBtn.setAttribute("aria-expanded", "false");
+  }
+  function doLogout(){
+    closeAcctMenu();
+    fetch(API + "/auth/logout", {method: "POST", credentials: "include"})
+      .then(function(){ me = null; renderAcct(); })
+      .catch(function(){ me = null; renderAcct(); });
+  }
+  /* ---- profile dialog: X account info + editable site display name ---- */
+  var profDlg = null, profEls = null;
+  function buildProfileDialog(){
+    var dlg = document.createElement("dialog");
+    dlg.className = "narupo-dialog";
+    dlg.setAttribute("aria-label", "プロフィール設定");
+    var inner = document.createElement("div"); inner.className = "narupo-dialog-in";
+    var h = document.createElement("h2"); h.className = "narupo-dialog-title"; h.textContent = "プロフィール設定";
+    var xbox = document.createElement("div"); xbox.className = "narupo-xacct";
+    var av = document.createElement("img"); av.className = "narupo-avatar lg"; av.alt = "";
+    var xtxt = document.createElement("div");
+    var xn = document.createElement("div"); xn.className = "narupo-xname";
+    var xh = document.createElement("div"); xh.className = "narupo-xhandle";
+    xtxt.appendChild(xn); xtxt.appendChild(xh);
+    xbox.appendChild(av); xbox.appendChild(xtxt);
+    var label = document.createElement("label");
+    label.className = "narupo-field-label"; label.htmlFor = "narupoDisplayName";
+    label.textContent = "サイトで使う表示名";
+    var input = document.createElement("input");
+    input.type = "text"; input.id = "narupoDisplayName"; input.className = "narupo-input";
+    input.maxLength = 50; input.autocomplete = "off";
+    var note = document.createElement("p"); note.className = "narupo-note";
+    note.textContent = "空欄で保存すると、X の表示名に戻ります。";
+    var msg = document.createElement("p"); msg.className = "narupo-dialog-msg"; msg.setAttribute("role", "status");
+    var actions = document.createElement("div"); actions.className = "narupo-dialog-actions";
+    var cancel = document.createElement("button");
+    cancel.type = "button"; cancel.className = "narupo-cancel"; cancel.textContent = "閉じる";
+    cancel.addEventListener("click", function(){ dlg.close(); });
+    var save = document.createElement("button");
+    save.type = "button"; save.className = "narupo-save"; save.textContent = "保存する";
+    save.addEventListener("click", function(){ saveProfile(); });
+    actions.appendChild(cancel); actions.appendChild(save);
+    inner.appendChild(h); inner.appendChild(xbox); inner.appendChild(label);
+    inner.appendChild(input); inner.appendChild(note); inner.appendChild(msg); inner.appendChild(actions);
+    dlg.appendChild(inner);
+    document.body.appendChild(dlg);
+    profDlg = dlg;
+    profEls = {av: av, xn: xn, xh: xh, input: input, msg: msg, save: save};
+  }
+  function openProfile(){
+    if(!me) return;
+    if(!profDlg) buildProfileDialog();
+    var u = me.user || {};
+    if(u.avatar_url && /^https:\/\//.test(u.avatar_url)){
+      profEls.av.src = u.avatar_url; profEls.av.hidden = false;
+    } else {
+      profEls.av.removeAttribute("src"); profEls.av.hidden = true;
+    }
+    profEls.xn.textContent = u.name || "";
+    profEls.xh.textContent = u.handle ? "@" + u.handle : "";
+    profEls.input.value = u.display_name || "";
+    profEls.msg.textContent = "";
+    if(profDlg.showModal) profDlg.showModal(); else profDlg.setAttribute("open", "");
+  }
+  function saveProfile(){
+    if(!profEls) return;
+    var val = profEls.input.value.trim();
+    var save = profEls.save, msg = profEls.msg;
+    save.disabled = true; msg.textContent = "保存中…";
+    fetch(API + "/api/profile", {
+      method: "POST", credentials: "include",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({display_name: val})
+    }).then(function(res){
+      return res.json().catch(function(){ return {}; }).then(function(j){ return {status: res.status, j: j}; });
+    }).then(function(r){
+      save.disabled = false;
+      if(r.status === 200){
+        if(me && me.user){
+          if(r.j && r.j.user){
+            ["display_name", "effective_name", "name", "handle", "avatar_url"].forEach(function(k){
+              if(typeof r.j.user[k] === "string") me.user[k] = r.j.user[k];
+            });
+          } else {
+            me.user.display_name = val;
+            me.user.effective_name = val || me.user.name || "";
+          }
+        }
+        renderAcct();
+        msg.textContent = "保存しました。";
+        setTimeout(function(){ if(profDlg && profDlg.open) profDlg.close(); }, 700);
+      } else if(r.status === 401){
+        me = null; renderAcct();
+        if(profDlg && profDlg.open) profDlg.close();
+      } else {
+        msg.textContent = "保存できませんでした。時間をおいて再度お試しください。";
+      }
+    }).catch(function(){
+      save.disabled = false;
+      msg.textContent = "通信エラーで保存できませんでした。";
+    });
+  }
+  document.addEventListener("click", function(e){
+    if(acctMenu && !acctMenu.hidden && !(e.target.closest && e.target.closest(".narupo-user"))) closeAcctMenu();
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeAcctMenu();
+  });
   function renderAcct(){
     if(!acct) return;
+    acctBtn = null; acctMenu = null;
     acct.innerHTML = "";
     if(!me){
       var b = document.createElement("button");
@@ -2190,19 +2411,29 @@ document.addEventListener("error", function(e){
     } else {
       var u = me.user || {};
       var wrap = document.createElement("span"); wrap.className = "narupo-user";
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "narupo-menu-btn";
+      btn.setAttribute("aria-haspopup", "menu");
+      btn.setAttribute("aria-expanded", "false");
+      btn.setAttribute("aria-label", "アカウントメニュー");
       if(u.avatar_url && /^https:\/\//.test(u.avatar_url)){
         var img = document.createElement("img");
         img.className = "narupo-avatar"; img.src = u.avatar_url; img.alt = "";
-        wrap.appendChild(img);
+        btn.appendChild(img);
       } else {
         var mono = document.createElement("span");
         mono.className = "narupo-avatar mono"; mono.setAttribute("aria-hidden", "true");
         mono.textContent = (String(u.name || u.handle || "N").trim().charAt(0) || "N");
-        wrap.appendChild(mono);
+        btn.appendChild(mono);
       }
       var nm = document.createElement("span"); nm.className = "narupo-name";
-      nm.textContent = u.name || (u.handle ? "@" + u.handle : "");
-      wrap.appendChild(nm);
+      nm.textContent = u.effective_name || u.display_name || u.name || (u.handle ? "@" + u.handle : "");
+      btn.appendChild(nm);
+      var caret = document.createElement("span");
+      caret.className = "narupo-caret"; caret.setAttribute("aria-hidden", "true");
+      caret.textContent = "▾";
+      btn.appendChild(caret);
+      wrap.appendChild(btn);
       if(u.is_subscriber === 1 || u.is_subscriber === true){
         var bd = document.createElement("span"); bd.className = "narupo-badge";
         bd.textContent = "サブスク加入者";
@@ -2211,14 +2442,24 @@ document.addEventListener("error", function(e){
       var bal = document.createElement("span"); bal.className = "narupo-balance";
       bal.textContent = "残高 " + fmt(myBalance()) + " なるぽ";
       wrap.appendChild(bal);
-      var lo = document.createElement("button");
-      lo.type = "button"; lo.className = "narupo-logout"; lo.textContent = "ログアウト";
-      lo.addEventListener("click", function(){
-        fetch(API + "/auth/logout", {method: "POST", credentials: "include"})
-          .then(function(){ me = null; renderAcct(); })
-          .catch(function(){ me = null; renderAcct(); });
+      var menu = document.createElement("div");
+      menu.className = "narupo-menu"; menu.setAttribute("role", "menu"); menu.hidden = true;
+      var itemP = document.createElement("button");
+      itemP.type = "button"; itemP.className = "narupo-menu-item"; itemP.setAttribute("role", "menuitem");
+      itemP.textContent = "プロフィール設定";
+      itemP.addEventListener("click", function(){ closeAcctMenu(); openProfile(); });
+      var itemL = document.createElement("button");
+      itemL.type = "button"; itemL.className = "narupo-menu-item"; itemL.setAttribute("role", "menuitem");
+      itemL.textContent = "ログアウト";
+      itemL.addEventListener("click", function(){ doLogout(); });
+      menu.appendChild(itemP); menu.appendChild(itemL);
+      wrap.appendChild(menu);
+      acctBtn = btn; acctMenu = menu;
+      btn.addEventListener("click", function(){
+        var open = menu.hidden;
+        if(open){ menu.hidden = false; btn.setAttribute("aria-expanded", "true"); }
+        else closeAcctMenu();
       });
-      wrap.appendChild(lo);
       acct.appendChild(wrap);
     }
     acct.hidden = false;

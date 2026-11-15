@@ -1,0 +1,1431 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafaf8">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141311">
+<link rel="icon" href="data:,">
+<title>GOROman.org — 作ってみた、38年分</title>
+<meta name="description" content="GOROman（Yoshihito Kondoh）の作品年表。小学生のファミコン改造と中学1年で始めたパソコン通信「GORO-NET」から Mikulus、AniCast、StampFly、Vibe Watch まで、作ったものを時系列でまとめました。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fafaf8; --bg2:#f1f0eb; --surface:#ffffff; --surface2:#f4f3ef;
+  --ink:#1a1917; --ink2:#45423c; --ink3:#6f6a5e;
+  --line:#e3ded2; --line2:#cbc3ae;
+  --accent:#d63d14; --accent-ink:#fff; --accent-soft:#fdeee9;
+  --teal:#0d6e5f; --teal-soft:#e2efeb;
+  --gold:#8a6508; --gold-soft:#faf0d3;
+  --chip:#1a1917; --chip-ink:#fafaf8;
+  --shadow:0 1px 2px rgba(26,25,23,.05),0 10px 30px rgba(26,25,23,.07);
+  --shadow-lg:0 2px 6px rgba(26,25,23,.06),0 20px 44px rgba(26,25,23,.10);
+  --radius:16px; --radius-sm:10px;
+  --header-h:60px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#141311; --bg2:#1b1a17; --surface:#1f1e1b; --surface2:#292723;
+    --ink:#f4f1e9; --ink2:#d3ccbd; --ink3:#a39a87;
+    --line:#33302a; --line2:#4d483d;
+    --accent:#ff6a3d; --accent-ink:#1a120e; --accent-soft:#3a2118;
+    --teal:#57c9b3; --teal-soft:#1e3330;
+    --gold:#e8b84a; --gold-soft:#332a14;
+    --chip:#f4f1e9; --chip-ink:#1a1917;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.35),0 20px 44px rgba(0,0,0,.45);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 76px)}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{animation:none!important; transition:none!important} }
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP",system-ui,-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;font-size:16px;line-height:1.85;letter-spacing:.01em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+button,[role="button"],select,summary,input{min-height:2.5rem}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+.mono{font-family:"Noto Sans Mono",monospace}
+
+/* header */
+.topbar{position:sticky;top:0;z-index:60;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;gap:16px;min-height:var(--header-h);padding:6px 0}
+.logo{font-weight:900;font-size:1.2rem;letter-spacing:.01em;text-decoration:none;display:flex;align-items:center;gap:10px;flex:none}
+.logo-mark{width:36px;height:36px;flex:none;border-radius:9px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:"Noto Sans Mono",monospace;font-weight:700;font-size:.95rem}
+.logo small{font-weight:700;color:var(--accent);font-size:.72rem;letter-spacing:.12em}
+.topnav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
+.topnav a{text-decoration:none;font-size:.88rem;font-weight:700;color:var(--ink2);padding:8px 13px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center}
+.topnav a:hover{background:var(--surface2);color:var(--ink)}
+
+/* hero */
+.hero{padding:56px 0 12px}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:44px;align-items:start}
+.hero-kicker{display:inline-flex;align-items:center;gap:10px;font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--teal)}
+.hero-kicker::before{content:"";width:28px;height:3px;border-radius:2px;background:var(--accent);flex:none}
+.hero h1{font-size:clamp(2.35rem,5.6vw,3.7rem);line-height:1.18;font-weight:900;margin:.3em 0 .25em;letter-spacing:.01em}
+.hero h1 .dot{color:var(--accent)}
+.hero .aka{font-size:1.02rem;font-weight:500;color:var(--ink2);line-height:1.7;margin:0}
+.hero .aka b{color:var(--ink);font-weight:900;font-size:1.08rem}
+.hero-lede{margin:20px 0 0;color:var(--ink2);font-size:1rem;line-height:1.9;max-width:60ch}
+.hero-lede p{margin:0 0 .9em}
+.hero-lede p:last-child{margin-bottom:0}
+.hero-lede strong{color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0 0}
+.stat{padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface)}
+.stat b{display:block;font-size:1.5rem;line-height:1.15;font-weight:900;letter-spacing:-.01em}
+.stat span{font-size:.78rem;color:var(--ink3);font-weight:500;line-height:1.5;display:block;margin-top:3px}
+.sns{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.sns a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:700;font-size:.86rem;padding:9px 16px;min-height:42px;border-radius:999px;border:1.5px solid var(--line2);background:var(--surface);transition:border-color .15s ease,background .15s ease}
+.sns a.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sns a:hover{border-color:var(--ink);background:var(--surface2)}
+.sns a.primary:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.sns svg{width:15px;height:15px;flex:none}
+.hero-media{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hero-media figure{margin:0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);position:relative;background:var(--surface2)}
+.hero-media figure:first-child{grid-column:1/-1}
+.hero-media img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/9}
+.hero-media figure:not(:first-child) img{aspect-ratio:4/3}
+.hero-media figcaption{position:absolute;left:10px;bottom:10px;background:rgba(12,11,9,.82);color:#fff;font-size:.73rem;font-weight:700;padding:5px 11px;border-radius:999px;line-height:1.4}
+.profile-card{margin-top:44px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;box-shadow:var(--shadow)}
+.profile-card h2{margin:0 0 10px;font-size:1.25rem;font-weight:900;line-height:1.4}
+.profile-card>p{margin:0;color:var(--ink2);font-size:.96rem;line-height:1.9;max-width:78ch}
+.profile-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
+.fact{border-top:3px solid var(--teal);padding-top:10px}
+.fact:nth-child(2){border-color:var(--accent)} .fact:nth-child(3){border-color:var(--gold)}
+.fact b{display:block;font-size:.92rem;margin-bottom:4px}
+.fact span{font-size:.86rem;color:var(--ink2);line-height:1.75;display:block}
+
+/* controls */
+.controls{position:sticky;top:var(--header-h);z-index:50;background:color-mix(in srgb, var(--bg) 92%, transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:16px 0 12px;margin-top:48px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.controls-in{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.era-btns{display:flex;gap:6px;flex-wrap:wrap}
+.era-btn{border:1.5px solid var(--line2);background:var(--surface);color:var(--ink2);font:inherit;font-weight:700;font-size:.86rem;padding:8px 15px;border-radius:999px;cursor:pointer;min-height:42px;line-height:1.4}
+.era-btn:hover{border-color:var(--ink);color:var(--ink)}
+.era-btn[aria-pressed="true"]{background:var(--chip);color:var(--chip-ink);border-color:var(--chip)}
+.searchbox{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--line2);border-radius:999px;padding:0 16px;min-height:42px;flex:1;max-width:320px}
+.searchbox:focus-within{border-color:var(--ink)}
+.searchbox svg{width:16px;height:16px;color:var(--ink3);flex:none}
+.searchbox input{border:0;background:transparent;font:inherit;font-size:.92rem;color:var(--ink);width:100%;outline:none;min-height:40px}
+.result-line{font-size:.82rem;color:var(--ink3);margin:10px 2px 0;line-height:1.5}
+
+/* timeline */
+.era-head{display:flex;align-items:baseline;gap:12px 16px;flex-wrap:wrap;margin:56px 0 4px}
+.era-head .era-years{font-family:"Noto Sans Mono",monospace;font-weight:700;color:var(--accent);font-size:.92rem;white-space:nowrap}
+.era-head h2{font-size:clamp(1.45rem,3vw,1.9rem);margin:0;font-weight:900;line-height:1.35}
+.era-head p{margin:0;color:var(--ink2);font-size:.92rem;line-height:1.7}
+.era-rule{height:1px;background:var(--line);margin:14px 0 24px;position:relative}
+.era-rule::after{content:"";position:absolute;left:0;top:-1.5px;width:64px;height:4px;border-radius:2px;background:var(--accent)}
+.timeline{position:relative;padding-left:32px;display:grid;gap:20px}
+.timeline::before{content:"";position:absolute;left:9px;top:10px;bottom:10px;width:2px;background:var(--line2);border-radius:2px;opacity:.7}
+.work{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.work::before{content:"";position:absolute;left:-29px;top:28px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3.5px solid var(--accent);z-index:2}
+.work-grid{display:grid;grid-template-columns:290px 1fr}
+.work-media{position:relative;min-height:100%;background:var(--surface2)}
+.work-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.work-media .noimg{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center}
+.noimg .big-year{font-family:"Noto Sans Mono",monospace;font-size:2.3rem;font-weight:700;color:var(--ink3);line-height:1.1}
+.noimg .big-word{font-weight:900;color:var(--ink2);margin-top:6px;font-size:.92rem}
+.noimg .noimg-note{margin-top:10px;font-size:.74rem;font-weight:700;color:var(--ink3);border:1px solid var(--line2);border-radius:999px;padding:3px 11px;display:inline-block;line-height:1.5}
+.work-body{padding:22px 24px 20px;min-width:0}
+.work-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.work-year{font-family:"Noto Sans Mono",monospace;font-weight:700;font-size:.83rem;background:var(--chip);color:var(--chip-ink);padding:3px 10px;border-radius:6px;line-height:1.5}
+.work-cat{font-size:.76rem;font-weight:700;letter-spacing:.06em;color:var(--teal)}
+.status{font-size:.73rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--gold-soft);color:var(--gold);line-height:1.5}
+.work h3{margin:8px 0 6px;font-size:1.22rem;font-weight:900;line-height:1.45}
+.work .desc{margin:0;color:var(--ink2);font-size:.93rem;line-height:1.85}
+.work-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.work-links a{display:inline-flex;align-items:center;gap:6px;font-size:.81rem;font-weight:700;text-decoration:none;border:1.5px solid var(--line2);padding:6px 13px;border-radius:999px;min-height:36px;line-height:1.4;background:var(--surface)}
+.work-links a:hover{border-color:var(--ink);background:var(--surface2)}
+.work-links a svg{width:13px;height:13px;flex:none}
+.work-links a.xlink{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.yt{margin-top:16px}
+.yt-facade{position:relative;border-radius:12px;overflow:hidden;background:#111110;color:#fff;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;border:0;width:100%;font:inherit;padding:16px}
+.yt-facade .play{width:56px;height:56px;border-radius:50%;background:var(--accent);display:grid;place-items:center;transition:transform .15s ease;flex:none}
+.yt-facade:hover .play{transform:scale(1.07)}
+.yt-facade .play svg{width:22px;height:22px;color:#fff;margin-left:3px}
+.yt-facade .yt-title{font-weight:700;font-size:.9rem;text-align:center;max-width:44ch;line-height:1.6}
+.yt-facade .yt-sub{font-size:.74rem;color:#c9c2b2;line-height:1.5;text-align:center}
+.yt iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;display:block;background:#000}
+.x-embed{margin-top:14px}
+.x-embed .twitter-tweet{margin:0 auto!important}
+.x-note{font-size:.76rem;color:var(--ink3);margin-top:6px;line-height:1.6}
+.reveal{transform:translateY(14px);transition:transform .5s ease}
+.reveal.in{transform:none}
+@media (prefers-reduced-motion: reduce){ .reveal{opacity:1;transform:none} }
+.empty{display:none;text-align:center;padding:56px 20px;color:var(--ink2);line-height:1.8}
+.empty b{display:block;font-size:1.12rem;color:var(--ink);margin-bottom:6px}
+
+/* stream */
+.stream-head{margin:72px 0 8px;max-width:760px}
+.stream-head h2{font-size:clamp(1.55rem,3.4vw,2.1rem);margin:.25em 0 .3em;font-weight:900;line-height:1.35}
+.stream-head p{color:var(--ink2);margin:0;line-height:1.9;font-size:.96rem}
+.stream-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+.post-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0}
+.post-head{display:flex;align-items:center;gap:11px}
+.avatar{width:42px;height:42px;border-radius:50%;flex:none;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:900;font-size:.8rem;font-family:"Noto Sans Mono",monospace}
+.post-head .who{min-width:0}
+.post-head .dname{font-weight:900;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4}
+.post-head .handle{color:var(--ink3);font-size:.8rem;line-height:1.4}
+.post-date{margin-left:auto;font-family:"Noto Sans Mono",monospace;font-size:.76rem;color:var(--ink3);flex:none}
+.post-text{margin:12px 0 0;font-size:.95rem;line-height:1.85;white-space:pre-line}
+.post-meta{display:flex;gap:16px;margin-top:12px;color:var(--ink2);font-size:.82rem;font-weight:700}
+.post-meta span{display:inline-flex;align-items:center;gap:6px}
+.post-meta svg{width:15px;height:15px;flex:none}
+.post-actions{margin-top:auto;padding-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:700;font-size:.84rem;padding:8px 15px;border-radius:999px;min-height:40px;border:1.5px solid var(--ink);line-height:1.4}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn svg{width:14px;height:14px;flex:none}
+details.embed-details{margin-top:12px}
+details.embed-details summary{cursor:pointer;font-weight:700;font-size:.84rem;color:var(--teal);padding:6px 0;min-height:40px;display:flex;align-items:center;line-height:1.5}
+details.embed-details .twitter-tweet{margin:8px auto!important}
+
+/* footer */
+footer{margin-top:88px;background:var(--ink);color:var(--bg);padding:56px 0 40px}
+footer .f-title{font-size:1.65rem;font-weight:900;margin:0 0 8px;line-height:1.35}
+footer p{color:color-mix(in srgb, var(--bg) 74%, transparent);max-width:62ch;margin:0;line-height:1.9;font-size:.95rem}
+footer .sns a{border-color:color-mix(in srgb, var(--bg) 40%, transparent);color:var(--bg);background:transparent}
+footer .sns a.primary{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+footer .sns a:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+footer .fine{margin-top:32px;padding-top:18px;border-top:1px solid color-mix(in srgb, var(--bg) 20%, transparent);font-size:.79rem;color:color-mix(in srgb, var(--bg) 58%, transparent);display:flex;gap:8px 18px;flex-wrap:wrap;line-height:1.7}
+footer .fine a{text-decoration:underline}
+
+
+/* ===== swipe feed / lock / i18n additions ===== */
+html{scroll-snap-type:y proximity}
+@media (prefers-reduced-motion: reduce){ html{scroll-snap-type:none} }
+.lang-switch{display:flex;gap:4px;margin-left:8px;flex:none}
+.readbar{position:fixed;top:0;left:0;right:0;height:4px;z-index:90}
+.readbar span{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+.controls.locked .controls-in{filter:blur(3px);opacity:.45;pointer-events:none}
+.lock-overlay{display:flex;gap:14px;align-items:flex-start;background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.lock-overlay svg{width:22px;height:22px;flex:none;margin-top:4px;color:var(--accent)}
+.lock-title{font-weight:900;margin:0;line-height:1.5}
+.lock-text{margin:2px 0 0;font-size:.86rem;color:var(--ink2);line-height:1.7}
+.lock-bar{height:8px;background:var(--surface);border-radius:99px;overflow:hidden;margin-top:10px;max-width:440px}
+.lock-bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+.lock-count{font-size:.8rem;color:var(--ink3);margin:6px 0 0}
+.feed-intro{margin-top:44px;max-width:800px}
+.feed-intro h2{font-size:clamp(1.5rem,3.2vw,2rem);margin:.25em 0 .3em;font-weight:900;line-height:1.35}
+.feed-intro p{color:var(--ink2);margin:0;line-height:1.9;font-size:.95rem}
+.feed-intro .feed-progress{margin-top:10px;font-weight:700;color:var(--teal);font-size:.9rem}
+.timeline{max-width:800px;margin-left:auto;margin-right:auto}
+.work{scroll-snap-align:start;scroll-margin-top:140px}
+.work-count{font-family:"Noto Sans Mono",monospace;font-size:.74rem;color:var(--ink3);margin-left:auto}
+.read-badge{display:none;width:22px;height:22px;border-radius:50%;background:var(--teal);color:#fff;place-items:center;font-size:.8rem;font-weight:900;flex:none}
+.work.read{border-color:var(--teal)}
+.work.read .read-badge{display:grid}
+.hud{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:80;display:flex;gap:10px;align-items:center;background:var(--ink);color:var(--bg);padding:7px 7px 7px 16px;border-radius:999px;box-shadow:var(--shadow-lg);font-size:.84rem;font-weight:700;max-width:calc(100vw - 20px);white-space:nowrap}
+.hud-next{background:var(--accent);color:#fff;border:0;border-radius:999px;padding:8px 15px;font:inherit;font-size:.84rem;font-weight:700;cursor:pointer;min-height:38px}
+.hud-next:hover{filter:brightness(1.1)}
+.hud-state{opacity:.85;font-size:.76rem}
+.toast{position:fixed;left:50%;transform:translate(-50%,16px);bottom:76px;z-index:81;background:var(--teal);color:#fff;padding:12px 22px;border-radius:12px;font-weight:700;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.end-gate{margin-top:64px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;box-shadow:var(--shadow)}
+.end-gate h2{margin:0 0 8px;font-size:1.35rem;font-weight:900;line-height:1.4}
+.end-gate p{margin:0;color:var(--ink2);line-height:1.9;font-size:.95rem;max-width:70ch}
+.end-gate .btn{margin-top:16px}
+.profile-facts{grid-template-columns:repeat(2,1fr)}
+.fact:nth-child(4){border-color:var(--teal)}
+@media (max-width:520px){ .hud{font-size:.78rem;padding-left:12px;gap:7px} }
+
+/* responsive */
+@media (max-width:1020px){
+  .hero-grid{grid-template-columns:1fr;gap:28px}
+  .hero-media{max-width:640px}
+  .work-grid{grid-template-columns:250px 1fr}
+}
+@media (max-width:860px){
+  .wrap{padding:0 18px}
+  .hero{padding:36px 0 8px}
+  .topnav a{padding:7px 9px;font-size:.82rem}
+  .logo small{display:none}
+  .profile-card{padding:22px 20px}
+  .profile-facts{grid-template-columns:1fr;gap:16px}
+  .work-grid{grid-template-columns:1fr}
+  .work-media{min-height:0}
+  .work-media img{position:static;aspect-ratio:16/9;height:auto}
+  .work-media .noimg{position:static;padding:26px 20px}
+  .work-body{padding:18px 18px 16px}
+  .stream-grid{grid-template-columns:1fr}
+  .controls{top:var(--header-h)}
+  .searchbox{margin-left:0;max-width:none;width:100%;flex-basis:100%}
+  .timeline{padding-left:22px}
+  .timeline::before{left:5px}
+  .work::before{left:-21px;top:24px;width:10px;height:10px}
+  .stats{grid-template-columns:repeat(3,1fr);gap:8px}
+  .stat{padding:12px 12px}
+  .stat b{font-size:1.3rem}
+}
+@media (max-width:520px){
+  body{font-size:15.5px}
+  .topbar-in{gap:8px}
+  .topnav{margin-left:auto}
+  .topnav a{padding:6px 7px;font-size:.79rem}
+  .hero h1{font-size:2.3rem}
+  .hero-media{grid-template-columns:1fr 1fr;gap:8px}
+  .stats{grid-template-columns:1fr 1fr 1fr}
+  .stat span{font-size:.72rem}
+  .era-btn{font-size:.82rem;padding:7px 12px}
+  .era-head{margin-top:44px}
+  .post-card{padding:18px 16px}
+  footer{padding:44px 0 32px}
+}
+
+
+/* ===== mobile-first pass (smartphone primary) ===== */
+.controls.gated{display:none}
+.wrap{max-width:720px}
+body{font-size:16.5px}
+.hero-grid{grid-template-columns:1fr;gap:26px}
+.hero-media{max-width:none}
+.work-grid{grid-template-columns:1fr}
+.work-media{min-height:0}
+.work-media img{position:static;aspect-ratio:16/9;height:auto}
+.work-media .noimg{position:static;padding:28px 20px}
+.work-body{padding:20px}
+.work h3{font-size:1.3rem}
+.work .desc{font-size:.97rem;line-height:1.9}
+.profile-facts{grid-template-columns:1fr}
+.stream-grid{grid-template-columns:1fr}
+.post-photo{width:100%;border-radius:12px;margin-top:12px}
+.avatar{overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.stream-more{text-align:center;margin-top:24px}
+.stream-count{color:var(--ink3);font-size:.85rem;margin:0 0 10px}
+.era-btn{min-height:44px}
+.work-links a{min-height:40px}
+@media (min-width:721px){ .profile-facts{grid-template-columns:1fr 1fr} }
+
+/* ===== v6: margins / UX polish / modern web guidance ===== */
+:root{color-scheme:light dark;--gutter:clamp(22px,6vw,40px)}
+html,body{overflow-x:clip}
+html{scroll-padding-bottom:104px}
+body{line-height:1.85}
+::selection{background:var(--accent);color:#fff}
+[hidden]{display:none!important}
+.wrap{padding-left:max(var(--gutter),env(safe-area-inset-left));padding-right:max(var(--gutter),env(safe-area-inset-right))}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+.topnav a{min-height:44px;padding-inline:12px}
+.topnav a[aria-current="page"]{background:var(--surface2);color:var(--ink)}
+/* works-first top */
+.top-works{padding-top:20px}
+.works-title{font-size:clamp(2.05rem,8.6vw,3rem);line-height:1.22;font-weight:900;margin:24px 0 10px;letter-spacing:.01em}
+.works-title .dot{color:var(--accent)}
+.works-lead{color:var(--ink2);line-height:1.9;margin:0;max-width:60ch}
+.works-profile-link{margin:10px 0 0}
+.works-profile-link a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:var(--teal);text-decoration:none}
+.works-profile-link a:hover{text-decoration:underline;text-underline-offset:4px}
+.feed-intro{margin-top:34px}
+/* timeline: drop the side rail so cards get the full readable width with real side margins */
+.timeline{padding-left:0;gap:22px}
+.timeline::before{display:none}
+.work::before{display:none}
+.work-body{padding:22px}
+.post-card{padding:22px}
+@media (max-width:520px){ .work-body{padding:20px 20px 18px} .post-card{padding:20px} }
+/* tap targets */
+.btn,.sns a,.work-links a,details.embed-details summary{min-height:44px}
+.hud{bottom:calc(12px + env(safe-area-inset-bottom))}
+.hud-next{min-height:44px}
+footer{padding-bottom:110px}
+/* photos: works gallery + stream multi-photo grid (all photos, lazy) */
+.work-gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.work-gallery img{width:100%;height:100%;object-fit:cover;border-radius:10px;aspect-ratio:4/3}
+.work-gallery img:only-child{grid-column:1/-1;aspect-ratio:16/9}
+.post-photos{display:grid;gap:8px;margin-top:12px}
+.post-photos img{width:100%;height:100%;object-fit:cover;border-radius:12px;aspect-ratio:16/10}
+.post-photos.multi{grid-template-columns:1fr 1fr}
+.post-photos.multi img{aspect-ratio:4/3}
+.post-photos.multi img:first-child{grid-column:1/-1;aspect-ratio:16/9}
+/* YouTube facade: real thumbnail, in-page embed on tap */
+.yt-facade{display:block;padding:0;text-align:left;background:#111110}
+.yt-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.yt-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.06) 42%,rgba(0,0,0,.8))}
+.yt-facade .play{position:absolute;top:50%;left:50%;translate:-50% -50%;z-index:2;transition:scale .15s ease}
+.yt-facade:hover .play{scale:1.08}
+.yt-caption{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;display:flex;flex-direction:column;gap:1px;text-align:left}
+.yt-caption .yt-title{max-width:none}
+.yt-caption .yt-sub{color:#e8e2d4}
+@media (prefers-reduced-motion: reduce){ .yt-facade .play{transition:none} }
+/* stream year headings */
+.year-head{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;margin:26px 0 2px;padding-top:20px;border-top:2px solid var(--line)}
+.year-head:first-child{margin-top:2px;padding-top:0;border-top:0}
+.year-num{font-family:"Noto Sans Mono",monospace;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2}
+.year-count{font-size:.85rem;font-weight:700;color:var(--accent)}
+/* profile view */
+.profile-page{padding-top:26px}
+.back-link{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:var(--teal);text-decoration:none}
+.back-link:hover{text-decoration:underline;text-underline-offset:4px}
+.profile-title{font-size:clamp(1.9rem,7vw,2.6rem);font-weight:900;margin:8px 0 12px;line-height:1.3}
+.profile-page .aka{font-size:1.02rem;font-weight:500;color:var(--ink2);line-height:1.7;margin:0}
+.profile-page .aka b{color:var(--ink);font-weight:900;font-size:1.08rem}
+.profile-page .profile-card{margin-top:28px}
+.profile-back-bottom{margin-top:26px}
+/* container query: card type scales to its container, not just the viewport */
+#timelineRoot{container-type:inline-size}
+@container (max-width:560px){ .work h3{font-size:1.18rem} }
+/* cross-document / same-document view transitions where supported */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.22s}
+@media (prefers-reduced-motion: reduce){ ::view-transition-old(root),::view-transition-new(root){animation:none} }
+
+/* ===== v10: scroll optimization / year flow / permalinks / tags / popularity ===== */
+html{scroll-snap-type:none;background:var(--bg)}
+body{background:transparent}
+.work{scroll-snap-align:none}
+#bgFade{position:fixed;inset:0;z-index:-1;background:var(--bg);pointer-events:none}
+.work,.post-card{content-visibility:auto;contain-intrinsic-size:auto 340px}
+.post-card{scroll-margin-top:132px}
+.year-block{scroll-margin-top:104px}
+/* stream: one section per year, sticky year label, cards stack inside */
+.stream-grid{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+.year-cards{display:grid;grid-template-columns:1fr;gap:16px}
+.year-head{position:sticky;top:calc(var(--header-h) + 8px);z-index:6;border-top:0;border-bottom:2px solid var(--line);margin:8px 0 14px;padding:10px 6px 12px;background:color-mix(in srgb, var(--bg) 84%, transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:0 0 10px 10px}
+.year-block:first-child .year-head{margin-top:0}
+.year-head .year-num{display:inline-block;transition:transform .55s ease,opacity .55s ease}
+.year-block:not(.in) .year-head .year-num{opacity:.2;transform:translateY(10px)}
+@media (prefers-reduced-motion: reduce){ .year-head .year-num{transition:none} .year-block:not(.in) .year-head .year-num{opacity:1;transform:none} }
+/* numbers + permalink copy */
+.no-chip{font-family:"Noto Sans Mono",monospace;font-size:.74rem;font-weight:700;color:var(--ink3);text-decoration:none;padding:4px 7px;border-radius:6px;line-height:1.5}
+.no-chip:hover{color:var(--accent);background:var(--surface2)}
+.copy-btn{display:inline-grid;place-items:center;width:38px;height:38px;min-height:38px;border-radius:50%;border:1px solid var(--line2);background:var(--surface);color:var(--ink3);cursor:pointer;padding:0;flex:none}
+.copy-btn:hover{color:var(--ink);border-color:var(--ink)}
+.copy-btn svg{width:15px;height:15px}
+@keyframes plflash{0%,55%{box-shadow:0 0 0 3px var(--accent),var(--shadow-lg)}100%{box-shadow:var(--shadow)}}
+.permalink-flash{animation:plflash 2.2s ease}
+@media (prefers-reduced-motion: reduce){ .permalink-flash{animation:none;outline:3px solid var(--accent);outline-offset:2px} }
+/* smaller, quieter original-post link */
+.post-actions{align-items:center}
+.btn.mini{min-height:38px;padding:6px 13px;font-size:.78rem;border:1px solid var(--line2);background:transparent;color:var(--ink2);margin-left:auto}
+.btn.mini:hover{border-color:var(--ink);color:var(--ink);background:var(--surface2)}
+.btn.mini svg{width:12px;height:12px}
+/* popularity tiers */
+.post-card.pop1{background:color-mix(in srgb, var(--surface) 93%, var(--gold-soft))}
+.post-card.pop2{border-color:var(--gold);background:color-mix(in srgb, var(--surface) 89%, var(--gold-soft))}
+.post-card.pop2 .post-text{font-weight:500}
+.post-card.pop3{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow-lg)}
+.post-card.pop3 .post-text{font-weight:700}
+.pop-badge{font-size:.7rem;font-weight:900;color:var(--accent-ink);background:var(--accent);padding:3px 9px;border-radius:999px;line-height:1.5;white-space:nowrap;flex:none}
+.pop-badge.soft{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold)}
+/* tags: one fixed color per tag */
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tag{--tagbg:#eceae4;--tagink:#4a463d;font:inherit;font-size:.72rem;font-weight:700;line-height:1.5;padding:3px 10px;border-radius:999px;border:1.5px solid transparent;background:var(--tagbg);color:var(--tagink);cursor:pointer;min-height:30px}
+.tag:hover{text-decoration:underline;text-underline-offset:2px}
+.tag[aria-pressed="true"]{border-color:var(--tagink)}
+.tag[data-tag="VR"]{--tagbg:#dbeafe;--tagink:#1d4ed8}
+.tag[data-tag="AR"]{--tagbg:#cffafe;--tagink:#0e7490}
+.tag[data-tag="MR"]{--tagbg:#ccfbf1;--tagink:#0f766e}
+.tag[data-tag="Drone"]{--tagbg:#ffedd5;--tagink:#c2410c}
+.tag[data-tag="NES"]{--tagbg:#fee2e2;--tagink:#b91c1c}
+.tag[data-tag="Famicom"]{--tagbg:#ffe4e6;--tagink:#9f1239}
+.tag[data-tag="X68000"]{--tagbg:#e2e8f0;--tagink:#334155}
+.tag[data-tag="Game"]{--tagbg:#ecfccb;--tagink:#4d7c0f}
+.tag[data-tag="Music"]{--tagbg:#fef9c3;--tagink:#a16207}
+.tag[data-tag="Synthesizer"]{--tagbg:#ede9fe;--tagink:#6d28d9}
+.tag[data-tag="AI"]{--tagbg:#e0e7ff;--tagink:#4338ca}
+.tag[data-tag="Robot"]{--tagbg:#d1fae5;--tagink:#047857}
+.tag[data-tag="3Dプリンタ"]{--tagbg:#ffd9d2;--tagink:#9f2d20}
+.tag[data-tag="電子工作"]{--tagbg:#eef0d8;--tagink:#5b6420}
+.tag[data-tag="Web"]{--tagbg:#e0f2fe;--tagink:#0369a1}
+.tag[data-tag="Video"]{--tagbg:#fae8ff;--tagink:#a21caf}
+.tag[data-tag="Photo"]{--tagbg:#ece7dd;--tagink:#5c5546}
+.tag[data-tag="Book"]{--tagbg:#f3e5d8;--tagink:#7b4b21}
+.tag[data-tag="PlayStation"]{--tagbg:#e3e0ff;--tagink:#3730a3}
+.tag[data-tag="Chromatic"]{--tagbg:#fef3c7;--tagink:#92400e}
+.tag[data-tag="FPGA"]{--tagbg:#dcfce7;--tagink:#166534}
+.tag[data-tag="VST"]{--tagbg:#e6ead9;--tagink:#556b2f}
+.tag[data-tag="Oscilloscope"]{--tagbg:#dbeafe;--tagink:#1e40af}
+@media (prefers-color-scheme: dark){
+  .tag[data-tag="VR"]{--tagbg:#1e3a5f;--tagink:#93c5fd}
+  .tag[data-tag="AR"]{--tagbg:#164e63;--tagink:#67e8f9}
+  .tag[data-tag="MR"]{--tagbg:#134e4a;--tagink:#5eead4}
+  .tag[data-tag="Drone"]{--tagbg:#431407;--tagink:#fdba74}
+  .tag[data-tag="NES"]{--tagbg:#450a0a;--tagink:#fca5a5}
+  .tag[data-tag="Famicom"]{--tagbg:#4c0519;--tagink:#fda4af}
+  .tag[data-tag="X68000"]{--tagbg:#1e293b;--tagink:#cbd5e1}
+  .tag[data-tag="Game"]{--tagbg:#1a2e05;--tagink:#bef264}
+  .tag[data-tag="Music"]{--tagbg:#451a03;--tagink:#fcd34d}
+  .tag[data-tag="Synthesizer"]{--tagbg:#2e1065;--tagink:#c4b5fd}
+  .tag[data-tag="AI"]{--tagbg:#1e1b4b;--tagink:#a5b4fc}
+  .tag[data-tag="Robot"]{--tagbg:#022c22;--tagink:#6ee7b7}
+  .tag[data-tag="3Dプリンタ"]{--tagbg:#431407;--tagink:#fda4af}
+  .tag[data-tag="電子工作"]{--tagbg:#2a2e12;--tagink:#d9e021}
+  .tag[data-tag="Web"]{--tagbg:#082f49;--tagink:#7dd3fc}
+  .tag[data-tag="Video"]{--tagbg:#4a044e;--tagink:#f0abfc}
+  .tag[data-tag="Photo"]{--tagbg:#292524;--tagink:#d6d3d1}
+  .tag[data-tag="Book"]{--tagbg:#3a2410;--tagink:#e8b98a}
+  .tag[data-tag="PlayStation"]{--tagbg:#312e81;--tagink:#c7d2fe}
+  .tag[data-tag="Chromatic"]{--tagbg:#451a03;--tagink:#fde68a}
+  .tag[data-tag="FPGA"]{--tagbg:#052e16;--tagink:#86efac}
+  .tag[data-tag="VST"]{--tagbg:#2c331e;--tagink:#c3d69b}
+  .tag[data-tag="Oscilloscope"]{--tagbg:#172554;--tagink:#93c5fd}
+}
+/* tag filter bars */
+.tagbar{display:none;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;margin:18px 0 6px;font-size:.86rem;font-weight:700;box-shadow:var(--shadow)}
+.tagbar.show{display:flex}
+.tagbar button{margin-left:auto;border:1px solid var(--line2);background:var(--surface2);color:var(--ink);border-radius:999px;padding:6px 13px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;min-height:36px;flex:none}
+/* avatar fallback: monogram sits behind the photo */
+.avatar{position:relative;overflow:hidden}
+.avatar .av-txt{position:absolute;inset:0;display:grid;place-items:center;color:var(--bg);font-weight:900;font-size:.8rem;font-family:"Noto Sans Mono",monospace}
+.avatar img{position:relative;width:100%;height:100%;object-fit:cover}
+/* FAX tag */
+.tag[data-tag="FAX"]{--tagbg:#e7e5e4;--tagink:#44403c}
+@media (prefers-color-scheme: dark){ .tag[data-tag="FAX"]{--tagbg:#44403c;--tagink:#e7e5e4} }
+/* X embed: fallback card is always rendered; official embed replaces it only on success */
+.x-fallback{border:1px solid var(--line2);border-radius:12px;padding:14px 16px;background:var(--surface2)}
+.x-fallback-text{margin:0;font-size:.92rem;line-height:1.8;white-space:pre-line}
+.x-fallback-meta{margin:8px 0 0;font-size:.8rem;color:var(--ink3)}
+.x-fallback-meta a{color:var(--teal);font-weight:700}
+.x-state{margin:8px 0 0;font-size:.78rem;color:var(--ink3);line-height:1.6}
+.x-embed.x-failed .x-state{color:var(--accent);font-weight:700}
+.x-slot iframe{margin:0 auto!important;display:block}
+/* interviews */
+.interview-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:16px}
+.interview-list li{border-top:2px solid var(--line);padding-top:12px}
+.iv-media{display:block;font-size:.78rem;font-weight:900;color:var(--teal);letter-spacing:.04em;margin-bottom:2px}
+.interview-list>li>a{font-weight:700;line-height:1.7}
+.iv-note{display:block;font-size:.85rem;color:var(--ink2);margin-top:3px;line-height:1.7}
+</style>
+</head>
+<body>
+<div id="bgFade" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="logo" href="#top" data-nav="works"><span class="logo-mark">G_</span>GOROman<small>.ORG</small></a>
+    <nav class="topnav" aria-label="ページ内メニュー">
+      <a href="#top" data-nav="works">作品集</a>
+      <a href="#stream" data-nav="works">作ってみた</a>
+      <a href="#profile" data-nav="profile">プロフィール</a>
+    </nav>
+    
+  </div>
+</header>
+<div class="readbar" aria-hidden="true"><span id="readBarFill"></span></div>
+
+<main id="top">
+<div id="viewWorks">
+  <!-- ================= TOP: works first ================= -->
+  <section class="wrap top-works" aria-label="作品集">
+    <div class="hero-media" aria-label="代表作の写真">
+      <figure><img src="assets/vibe-watch.jpg" alt="Vibe Watch — AIエージェントの状態を表示する腕時計型コントローラ" fetchpriority="high" decoding="async"><figcaption>2026 — Vibe Watch</figcaption></figure>
+      <figure><img src="assets/stampfly.jpg" alt="手のひらサイズのドローン StampFly" loading="lazy" decoding="async"><figcaption>2023–25 — StampFly</figcaption></figure>
+      <figure><img src="assets/mikulus.jpg" alt="VRアプリ Mikulus — バーチャル空間に立つ初音ミク" loading="lazy" decoding="async"><figcaption>2013 — Mikulus</figcaption></figure>
+    </div>
+    <h1 class="works-title">作ってみた、<br>38年分<span class="dot">。</span></h1>
+    <p class="works-lead">GOROman（Yoshihito Kondoh）の作品集です。小学生のファミコン改造から Vibe Watch まで、作ったものを時系列で並べました。そのまま下へ、1枚ずつ読み進められます。</p>
+    <p class="works-profile-link"><a href="#profile">プロフィールはこちら</a></p>
+  </section>
+
+  <!-- ================= CONTROLS ================= -->
+  <div class="controls gated" id="works">
+    <div class="wrap">
+      <div class="controls-in">
+        <div class="era-btns" role="group" aria-label="時代で絞り込む">
+          <button class="era-btn" data-era="all" aria-pressed="true">すべて</button>
+          <button class="era-btn" data-era="dawn" aria-pressed="false">黎明期 1988–2012</button>
+          <button class="era-btn" data-era="vr" aria-pressed="false">VR期 2013–2019</button>
+          <button class="era-btn" data-era="scale" aria-pressed="false">量産期 2020–2023</button>
+          <button class="era-btn" data-era="ai" aria-pressed="false">AI期 2024–2026</button>
+        </div>
+        <label class="searchbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
+          <input id="search" type="search" placeholder="作品名・キーワードで検索" aria-label="作品を検索">
+        </label>
+      </div>
+      <p class="result-line" id="resultLine" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- ================= TIMELINE (rendered by JS) ================= -->
+  <section class="wrap feed-intro" id="feedIntro"><span class="hero-kicker" id="feedKicker">スワイプで読み進める年表</span><h2 id="feedH">止まらない年表 — 1枚ずつ、38年分</h2><p id="feedP">作品は1枚ずつのカードで並んでいます。画面下のボタンで次の作品へジャンプできます。そのまま下へ、のんびり読み進めてください。</p><p class="feed-progress" id="feedCount"></p></section>
+  <div class="wrap" id="timelineRoot"></div>
+  <div class="wrap"><div class="empty" id="emptyState"><b>見つかりませんでした</b>検索する言葉を変えるか、絞り込みを「すべて」に戻してください。</div></div>
+
+  <!-- ================= STREAM ================= -->
+  <section class="wrap" id="stream">
+    <div class="stream-head">
+      <span class="hero-kicker">Xアーカイブ 665,121件から抽出・精査</span>
+      <h2>「作ってみた」ストリーム <span id="streamTotal"></span></h2>
+      <p>X の全アーカイブ（2007〜2026年・665,121件）を走査し、「作ってみた」「やってみた」「つくった」「作った」「作りました」など、本人が自分の制作を完了形で報告したポストを年別に並べました。掲載数の数え方は次のとおりです。全アーカイブの実測では、完了形のポストはリツイートを除いて794件が上限でした。そこからキーワード抽出と下記の除外規則で絞り込み、さらに「3Dプリンタ」「3Dプリント」を含むポストから、具体的に何をプリントしたか分かるものも同じ基準で発掘して加えた<span id="dExt"></span>件と、別途厳選した<span id="dCur"></span>件を統合し、両方に含まれる重複<span id="dDup"></span>件を除いた全<span id="streamTotal2"></span>件が、このストリームの掲載数です。794件すべてを載せているわけではありません。除外規則は、リツイートと引用、記事や他人の動画の共有、「やってみたい」「作りたかった」といった願望表現、他人が作り手のポスト、伝聞と仮定、失敗・未完了の報告、登録や認証といった手続きだけのポスト、対象が特定できない短文、文脈のない返信や「昔作った」といった曖昧な言及だけのポスト、そして他人へのメンションで始まる返信ポストです。各ポストには通し番号とパーマネントリンク、内容に合うタグ（VR、Drone、Synthesizer、電子工作、3Dプリンタ、Famicom、PlayStation、Chromatic、FPGA、Oscilloscope、VST、FAX など）が付いていて、タグを押すと同じタグのポストに絞り込めます。アイコンは年代ごとの当時のものを使い、写真はアーカイブに残っていたものを付けています。2021年はアーカイブ自体に欠落があり、この条件に合うポストが残っていません。スクロールに合わせて少しずつ読み込むので、そのまま下へ読み進められます。各カードから元のポストを開けます。</p>
+    </div>
+    <div class="stream-grid" id="streamGrid"></div>
+    <div class="stream-more" id="streamMore"><p class="stream-count" id="streamCount"></p><button class="btn" id="streamMoreBtn" type="button">もっと見る</button></div>
+  </section>
+  <section class="wrap end-gate" id="endGate"><h2 id="gateH">最後まで読みました</h2><p id="gateP">ここまでが年表の全部です。年表の上にある検索と時代タグから、気になる作品を探せます。</p><a class="btn solid" id="gateBtn" href="#works">検索とタグへ（年表の上部）</a></section>
+</div><!-- /viewWorks -->
+
+  <!-- ================= PROFILE (separate view) ================= -->
+  <section id="viewProfile" hidden aria-label="プロフィール">
+    <div class="wrap profile-page">
+      <a class="back-link" href="#top">← 作品集へ戻る</a>
+      <h2 class="profile-title">プロフィール</h2>
+      <p class="aka"><b>GOROman</b>（Yoshihito Kondoh）／ 別名「ナル先生」<br>株式会社エクシヴィ（XVI Inc.）Founder CEO</p>
+      <div class="hero-lede">
+        <p>ものづくりのルーツは小学生のときです。『バックアップ活用テクニック』を読んでファミコンを改造したのが始まりでした。中学1年でパソコン通信を始め、1988年にはホストプログラムを自作してホスト局「GORO-NET」を開局しました。</p>
+        <p>2013年には Oculus Rift DK1 向けに <strong>「Mikulus」</strong> を公開しました。Mikulus は <strong>VRクリエイティブアワード2017で個人部門最優秀賞</strong>を受賞しています。著書に『ミライのつくり方 2020-2045 僕がVRに賭けるわけ』（西田宗千佳との共著、2018年）などがあります。</p>
+        <p>今は、M5Stack や基板、ドローン、3Dプリンタと AI エージェントを組み合わせたものづくりに取り組んでいます。</p>
+      </div>
+      <div class="stats" role="list" aria-label="数字で見るGOROman">
+        <div class="stat" role="listitem"><b>小学生</b><span>ファミコン改造からスタート</span></div>
+        <div class="stat" role="listitem"><b id="statWorks">–</b><span>年表に載せた主な作品</span></div>
+        <div class="stat" role="listitem"><b id="statPosts">–</b><span>抽出した「作ってみた」投稿</span></div>
+      </div>
+      <div class="sns" id="links">
+        <a class="primary" href="https://x.com/GOROman" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.3 22h-6.3l-4.9-6.4L6.5 22H3.4l7.3-8.3L1 2h6.5l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg>X @GOROman</a>
+        <a href="https://www.nicovideo.jp/user/1037576" target="_blank" rel="noopener">ニコニコ動画</a>
+        <a href="https://www.youtube.com/@GOROman" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://github.com/GOROman" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.instagram.com/goroman/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com/in/goroman" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://note.com/goroman" target="_blank" rel="noopener">note</a>
+        <a href="https://www.xvi.co.jp" target="_blank" rel="noopener">XVI Inc.</a>
+      </div>
+      <div class="profile-card" id="profile">
+        <h2>自己紹介</h2>
+        <p>小学生のときに『バックアップ活用テクニック』を読んでファミコンを改造したのが、ものづくりの始まりです。中学1年で始めたパソコン通信の時代から、VR、ドローン、AI エージェントまで、新しい技術が出るたびにまず自分で作って確かめてきました。個人で作った「Mikulus」は、VR のワークスペースや OS の原型として評価されました。XVI では、バーチャルプロダクションの仕組みである AniCast などを作りました。最近は、M5Stack を中心とした小さなハードウェアと LLM を組み合わせ、AI と一緒に作ること自体を作品にしています。</p>
+        <div class="profile-facts">
+          <div class="fact"><b>受賞</b><span>VRクリエイティブアワード2017 個人部門最優秀賞（Mikulus）／ M5Stack Global Innovation Contest 2026 Special Mentions、Best AI Application（Vibe Watch） ほか。下の「受賞歴」にまとめています。</span></div>
+          <div class="fact"><b>著書</b><span>『ミライのつくり方 2020-2045 僕がVRに賭けるわけ』（2018年、星海社新書、西田宗千佳と共著）／ 増補版『ミライをつくろう！』（2020年、翔泳社）</span></div>
+          <div class="fact"><b>今取り組んでいること</b><span>AI エージェントとハードウェアの組み合わせです。M5Stack、基板設計、ドローン、3Dプリンタ、そして AI と作るロボット「せっけんロボ ミューズ」に取り組んでいます。</span></div>
+          <div class="fact"><b>職歴・肩書き</b><span>2010年に XVI Inc. を創業し、Founder CEO。2025年からは Manus Fellow（Japan）。それ以前は Facebook／Oculus でパートナーエンジニアを務めました。Tech Evangelist、ハードウェア／ソフトウェアエンジニアとしても活動しています。</span></div>
+        </div>
+      </div>
+      <div class="profile-card" id="awards">
+        <h2>受賞歴</h2>
+        <p>出典を確認できた受賞だけを載せています。</p>
+        <div class="profile-facts">
+          <div class="fact"><b>2017年 — VRクリエイティブアワード2017 個人部門 最優秀賞（Mikulus）</b><span>VRコンソーシアム主催。全128作品・ファイナリスト15作品の中から選出。<a href="#w-009">作品「Mikulus」を見る</a> ／ <a href="https://xrc.or.jp/html/archives/award/award2017.html" target="_blank" rel="noopener">公式結果（XRコンソーシアム）</a> ／ <a href="https://ascii.jp/elem/000/001/492/1492966/" target="_blank" rel="noopener">ASCII.jp 報道</a></span></div>
+          <div class="fact"><b>2016年 — Japan VR Award 2016 読者投票で最多得票（Mikulus）</b><span>Mogura VR 主催の Japan VR Award 2016 で、読者から最多得票を得たと同メディアが報じています。<a href="https://www.moguravr.com/vrc-award-2017/" target="_blank" rel="noopener">Mogura VR 記事</a></span></div>
+          <div class="fact"><b>2026年 — M5Stack Global Innovation Contest 2026 Special Mentions／Best AI Application（Vibe Watch）</b><span>M5Stack 公式結果ページに @GOROman の Vibe Watch が Special Mentions（Best AI Application）として掲載。<a href="https://www.m5stack.com/global-innovation-contest-2026/results" target="_blank" rel="noopener">M5Stack 公式結果</a></span></div>
+          <div class="fact"><b>2026年 — Grok Bot Tokyo Hackathon 優勝（チーム）</b><span>人間がコードを書かず Grok Bot 群への音声指示だけで開発したチームで優勝。本人はスライド／進行／時間管理を担当。<a href="https://dev.to/goroman/how-we-won-a-hackathon-without-writing-a-single-line-of-code-part-1-three-people-grok-bot-six-184j" target="_blank" rel="noopener">DEV 連載 Part 1</a></span></div>
+        </div>
+      </div>
+      <div class="profile-card" id="interviews">
+        <h2>インタビュー記事</h2>
+        <p>本人がインタビューや対談で登場した記事のうち、実在を確認できたものだけを載せています。</p>
+        <ul class="interview-list">
+          <li><span class="iv-media">インサイド（2017年）</span><a href="https://www.inside-games.jp/article/2017/04/17/106593.html" target="_blank" rel="noopener">VRの伝道師、GOROmanこと株式会社エクシヴィ代表取締役社長 近藤義仁氏が語る、国内におけるVR向けHMDムーブメントのこれまでとこれから</a><span class="iv-note">Mikulus や MikuMikuAkushu の頃のインタビュー。作品「<a href="#top">Mikulus</a>」からもリンクしています。</span></li>
+          <li><span class="iv-media">電ファミニコゲーマー（2018年）</span><a href="https://news.denfaminicogamer.jp/interview/180806/4" target="_blank" rel="noopener">川上量生×GOROman 対談</a><span class="iv-note">パソコン通信時代からの歩みを語る対談。作品「GORO-NET／GORO-NET2」からもリンクしています。</span></li>
+          <li><span class="iv-media">DTMステーション（2023年）</span><a href="https://www.dtmstation.com/archives/62146.html" target="_blank" rel="noopener">楽器を弾けない人でも楽器演奏を存分に楽しめるKANTAN Playが無料で公開</a><span class="iv-note">KANTAN Play の開発者インタビュー（ゆーいちさんとの共同）。作品「かんぷれ -KANTAN Play core-」からもリンクしています。</span></li>
+          <li><span class="iv-media">エンジニアtype（2025年・前編）</span><a href="https://type.jp/et/feature/28605/" target="_blank" rel="noopener">日本のVR第一人者・GOROmanはなぜ「消滅」したのか</a><span class="iv-note">GOROman から「ナル先生」へ。ロングインタビューの前編。</span></li>
+          <li><span class="iv-media">エンジニアtype（2025年・後編）</span><a href="https://type.jp/et/feature/28625/" target="_blank" rel="noopener">プライドも、サンクコストも捨てろ「健康診断」しないエンジニアは死滅する</a><span class="iv-note">LLM 時代のエンジニアの生き方を語る後編。</span></li>
+        </ul>
+      </div>
+      <p class="profile-back-bottom"><a class="btn solid" href="#top">作品集へ戻る</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="f-title">GOROman.org</p>
+    <p>小学生のファミコン改造から続く「作ってみた」の記録です。最新の作品は X と GitHub で公開しています。</p>
+    <div class="sns">
+      <a class="primary" href="https://x.com/GOROman" target="_blank" rel="noopener">X @GOROman</a>
+      <a href="https://www.nicovideo.jp/user/1037576" target="_blank" rel="noopener">ニコニコ動画</a>
+      <a href="https://www.youtube.com/@GOROman" target="_blank" rel="noopener">YouTube @GOROman</a>
+      <a href="https://github.com/GOROman" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.instagram.com/goroman/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/goroman" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://note.com/goroman" target="_blank" rel="noopener">note</a>
+      <a href="https://www.xvi.co.jp" target="_blank" rel="noopener">XVI Inc.</a>
+    </div>
+    <div class="fine">
+      <a href="#profile">プロフィール</a>
+      <span>GOROman — Yoshihito Kondoh / XVI Inc.</span>
+      <span>作品年表は公開記事・GitHub・本人の記録に基づきます。状態が「開発中」「未検証」の作品はその旨を明記しています。</span>
+    </div>
+  </div>
+</footer>
+
+<div class="hud" id="hud"><span class="hud-count" id="hudCount"></span><button class="hud-next" id="hudNext" type="button">次の作品へ ↓</button></div>
+<script>
+/* ================= DATA: works (verified sources only) ================= */
+var ERAS = [
+  {id:"dawn", years:"1988 — 2012", title:"黎明期", sub:"ファミコン改造からパソコン通信、シェアウェア、初期の AR 実験"},
+  {id:"vr", years:"2013 — 2019", title:"VR期", sub:"Mikulus から AniCast まで、VR の作品が中心の時期"},
+  {id:"scale", years:"2020 — 2023", title:"量産期", sub:"ブラウザで動く X68000 の再現と、ドローンの製品化"},
+  {id:"ai", years:"2024 — 2026", title:"AI期", sub:"LLM と小さなハードウェアを組み合わせた作品が中心の時期"}
+];
+var WORKS = [
+ {era:"dawn", year:"小学生時代", title:"ファミコン改造", cat:"ものづくりのルーツ",
+  desc:"小学生のときに『バックアップ活用テクニック』を読んでファミコンを改造したのが、ものづくりのルーツ。中学1年でパソコン通信を始め、GORO-NET の開局へつながった。",
+  links:[]},
+ {era:"dawn", year:"1988", title:"GORO-NET／GORO-NET2", cat:"パソコン通信",
+  desc:"中学1年でパソコン通信を始め、ホストプログラムを自作してホスト局「GORO-NET」を開局。フロッピー破損で全データを失い、フルスクラッチで書き直して「GORO-NET2」として復活させた。",
+  links:[["note 自伝「サンクコストブレイカー」","https://note.com/goroman/n/n3fa8785c5d0a"],["電ファミニコゲーマー 川上量生×GOROman 対談","https://news.denfaminicogamer.jp/interview/180806/4"]]},
+ {era:"dawn", year:"高校時代", title:"ストリートうっきーIV（仮）", cat:"ゲーム制作", status:"自伝中の言及", img:"assets/ukki4.jpg", alt:"ストリートうっきーIV（仮）— ニコニコ動画に投稿された動画のサムネイル",
+  desc:"『ストリートファイターII』と『珍遊記』を合体させたような格闘ゲームを X68000 で作り始めた、という本人の自伝中の言及。完成・公開されたかは不明。",
+  links:[["note 自伝","https://note.com/goroman/n/n3fa8785c5d0a"],["ニコニコ動画（2008年投稿）","https://www.nicovideo.jp/watch/sm2983996"]]},
+ {era:"dawn", year:"1995", title:"GORO-NETs／net-kick", cat:"パソコン通信", imgs:["assets/goro-nets-1.jpg","assets/goro-nets-2.jpg"], alt:"GORO-NETs／net-kick が動く画面（2022年 #MI68 で撮影された X の投稿写真）",
+  desc:"X68000 XVI 上でホストプログラムを再度フルスクラッチし、当時流行の net-cock 互換として「net-kick」を制作、「GORO-NETs」としてホスト局を再開した。",
+  links:[["note 自伝（その2）","https://note.com/goroman/n/n74b59841a138"]]},
+ {era:"dawn", year:"1996", title:"SOHOman", cat:"シェアウェア（作者名「ゴロ」）", img:"assets/sohoman.jpg", alt:"SOHOman Ver.1.40 の画面（『インターネットマガジン』1998年7月号 p.326 の誌面に掲載された実物スクリーンショット）",
+  desc:"ISDNルーター MN128-SOHO／オムロン MT128-NET をテレホーダイ時間帯だけ接続しっぱなしにする Delphi 製シェアウェア。当時はシェアウェア作者「ゴロ」として活動していた。500円で発売後、Vector や窓の杜への掲載と『インターネットマガジン』への掲載を機に1,000円へ値上げし、約3,000本売れた。Vector には v1.46（1999年4月13日公開）の紹介ページと作者ページ「ゴロ」が今も残っている。左の画面写真は『インターネットマガジン』1998年7月号（p.326）の誌面に掲載された Ver.1.40 の実物スクリーンショットで、B1／B2 の回線状態と接続時間を表示する小さなウィンドウが写っている。",
+  links:[["Vector SOHOman 紹介ページ","https://www.vector.co.jp/soft/win95/net/se058599.html"],["Vector 作者ページ「ゴロ」","https://www.vector.co.jp/vpack/browse/person/an010525.html"],["窓の杜 今週の掲載ソフト（v1.43）","https://forest.watch.impress.co.jp/addition/1998073.html"],["Internet Watch ダイジェスト（v1.41）","https://internet.watch.impress.co.jp/www/digest/backno/9806/24.htm"],["インターネットマガジン 1998年7月号（紹介PDF）","https://iwparchives.jp/wp-content/themes/twentytwelve/bn/pdf/im199807-326-ReadMe.pdf"],["note 自伝（その2）","https://note.com/goroman/n/n74b59841a138"]]},
+ {era:"dawn", year:"1996–99", title:"「ゴロ」名義のシェアウェア群（IPsend ほか）", cat:"シェアウェア",
+  desc:"SOHOman と同じ作者名「ゴロ」で Vector に登録されていた同時期のソフト群。現在の IP アドレスをホームページへ貼り付ける「IPsend for Win32」（自伝では、SOHOman の前に作ったが売れなかったと語られる）、メーラー MessageManager のメールを Becky! 形式へ変換する「MessageManager to Becky!」、実行すると間髪いれずに Windows を終了する「ShutDown」の3本が、Vector の作者ページに SOHOman と並んで掲載されている。",
+  links:[["Vector IPsend for Win32","https://www.vector.co.jp/soft/win95/net/se043831.html"],["Vector MessageManager to Becky!","https://www.vector.co.jp/soft/win95/net/se042721.html"],["Vector ShutDown","https://www.vector.co.jp/soft/win95/util/se042742.html"],["Vector 作者ページ「ゴロ」","https://www.vector.co.jp/vpack/browse/person/an010525.html"]]},
+ {era:"dawn", year:"2008", title:"AR Paper Famicom", cat:"AR実験",
+  desc:"紙のコンピュータでファミコンを模したAR実験。カメラ越しに紙がゲーム機になる、のちの MRFamicom（2017）の源流にあたる作品。",
+  yt:{id:"Je0Y2Hhu3Nk", title:"AR Papar Famicom (AR 紙コンピュータ)"}, links:[["ニコニコ動画「ARToolKitで紙ファミコンを作ってみた」","https://www.nicovideo.jp/watch/sm3598815"]]},
+ {era:"dawn", year:"2010", title:"iPhone版 MDXプレイヤー", cat:"音楽 / X68000",
+  desc:"X68000 の MDX 音楽形式を iPhone で再生するプレイヤー。2020年の WASM 版プレーヤーの、10年前の前身。",
+  yt:{id:"UVRqLPIdgdc", title:"iPhoneで動くMDXプレイヤー (X68000)"}, links:[["ニコニコ動画（2010年投稿）","https://www.nicovideo.jp/watch/sm10974105"]]},
+ {era:"vr", year:"2013", title:"Mikulus", cat:"VRアプリ", status:"VRクリエイティブアワード2017 個人部門最優秀賞", img:"assets/mikulus.jpg", alt:"VRアプリ Mikulus の画面",
+  desc:"Oculus Rift DK1 で初音ミクと会える VR アプリ。DK1 入手直後に公開され、日本の VR 黎明期を代表する個人作になった。のち「VR時代のワークスペース／OS」へ発展し、VRクリエイティブアワード2017 個人部門最優秀賞を受賞。2016年には、VR の中から Unity をリアルタイムに編集できる「VR内Unityリアルタイムエディタ」も作った（下の埋め込み）。",
+  yt:{id:"fCRnpD8YcRY", title:"Mikulus PV"},
+  xs:[["https://x.com/GOROman/status/797280939533475840","「VR内Unityリアルタイムエディタ」つくった！\n\n#mikulus"]],
+  links:[["インサイド インタビュー","https://www.inside-games.jp/article/2017/04/17/106593.html"],["ITmedia 体験レポート","https://www.itmedia.co.jp/news/spv/1706/20/news012.html"],["ニコニコ動画（2013年・Oculus Riftでミクさんを触ってきた）","https://www.nicovideo.jp/watch/sm20786059"],["VRクリエイティブアワード2017 公式結果","https://xrc.or.jp/html/archives/award/award2017.html"],["ASCII 最終審査結果","https://ascii.jp/elem/000/001/492/1492966/"]]},
+ {era:"vr", year:"2013", title:"MikuMikuAkushu（ミクミク握手）", cat:"VR × 触覚", img:"assets/miku-akushu.jpg", alt:"ミクミク握手 — シリコンの手と触覚デバイス",
+  desc:"Novint Falcon（3D感触デバイス）＋シリコンの手模型で、VR内の初音ミクと実際に握手できるシステム。「一夜漬け」で完成し、2013年9月23日の Oculus Festival in Japan で初披露、デジタルコンテンツEXPO 2013 でも展示された。",
+  yt:{id:"HnmgUgPKijc", title:"MikuMikuAkushu"},
+  links:[["ねとらぼ 記事","https://nlab.itmedia.co.jp/cont/articles/3231597/"]]},
+ {era:"vr", year:"2014–16", title:"XVI時代の代表作群（受託VR／ARコンテンツ）", cat:"XVIの仕事",
+  desc:"角川アスキー総研の講座プロフィール（2017年）で、Mikulus、MikuMikuAkushu と並んで本人の「代表作」として挙げられている XVI 時代の仕事群——「初音ミク VR Special LIVE -ALIVE-」「ロート デジアイ」「DMM GAMES VR × 刀剣乱舞ONLINE 三日月宗近Ver.」など。各作品の個別の年は未確認のため、まとめて掲載する。",
+  links:[["週刊アスキー 講座案内（講師プロフィール）","https://weekly.ascii.jp/elem/000/001/456/1456729/"]]},
+ {era:"vr", year:"2017", sort:"2017-03-19", title:"MRFamicom", cat:"MR実験",
+  desc:"ファミコン実機の RAM を FPGA で傍受し、ESP32 と WiFi／UDP 経由で Unity／HoloLens へ送って、ゲーム内の出来事を現実側のエフェクトとして出す MR 実験。SRAM トレーサーボードは @FIssiki さんが開発した。2017年3〜4月にハッシュタグ #MRファミコン で制作経過を投稿し、Maker Faire Tokyo 2017 に出展（出展名義 KOALAB.）。2008年の AR Paper Famicom から続く「現実にゲーム機を重ねる」系譜の一作。以前この項目に載せていた写真は本人のものではなかったため外した。本人の制作風景は、下の埋め込み（本人の #MRファミコン 関連ポスト）の動画・写真で確認できる。下の埋め込みは、その関連ポストを時系列で並べたもの。",
+  links:[],
+  xs:[["https://x.com/GOROman/status/843599597876400129","魔改造 #MRファミコン"],["https://x.com/GOROman/status/846708683878924289","ファミコン>FPGA>ESP32>Wifi>UDP>Unity\n\n#MRファミコン"],["https://x.com/GOROman/status/846917610130202626","#MRファミコン 進捗。ファミコン実機のRAM内容にUnityからアクセス可能になったぞ！！\n\nこのUnityアプリをHoloLensに対応させると。。。"],["https://x.com/GOROman/status/848198976893370372","#MRファミコン 進捗\nマリオのX/Y座標をRAMから読む事に成功！"],["https://x.com/GOROman/status/848328375391232000","#MRファミコン 遂にHoloLensに繋がった！\n\nファミコン実機>FPGA>ESP32>>>(Wifi)>>>UDP>HoloLens"],["https://x.com/GOROman/status/848331730255728640","#MRファミコン　もう少し衝撃的な感じの動画。\n実機ファミコンで遊んでブロック壊すとMRでリアル側にブロックが降ってくる！"],["https://x.com/GOROman/status/912678573734903809","#MRファミコン FPGAで傍受してるのでRAMの内容がリアルタイムでわかる"]]},
+ {era:"vr", year:"2018", title:"AniCast／AniCast Maker", cat:"バーチャルプロダクション", img:"assets/anicast.jpg", alt:"AniCast — VR空間でキャラクターになりきる配信システム",
+  desc:"Oculus Rift＋Touch だけで 3D キャラクターになりきって生配信できるシステムを XVI が開発・発表。バーチャルSHOWROOMER「東雲めぐ」に採用され、エイベックスと共同で「AniCast Lab.」を設立。VR空間で一人でアニメ制作ができる AniCast Maker へ発展した。",
+  yt:{id:"Ef-en9Z3I6g", title:"バーチャルSHOWROOMER 東雲めぐ（Gugenka公式）"},
+  links:[["PANORA 記事","https://panora.tokyo/51321"],["Mogura VR 記事","https://www.moguravr.com/anicast-vr/"]]},
+ {era:"vr", year:"2018", title:"著書『ミライのつくり方 2020-2045 僕がVRに賭けるわけ』", cat:"著書", img:"assets/mirai-book.jpg", alt:"著書『ミライのつくり方 2020-2045』の表紙",
+  desc:"西田宗千佳との共著（星海社新書）。VRに賭ける理由と、来るべきバーチャル創世記を描いた代表著書。2020年には増補版『ミライをつくろう！ VRで紡ぐバーチャル創世記』（翔泳社）が刊行された。",
+  links:[["翔泳社（増補版）","https://www.shoeisha.co.jp/book/detail/9784798165967"]]},
+ {era:"vr", year:"2018–19", title:"学生GOプロジェクト", cat:"社会活動", img:"assets/student-go.jpg", alt:"学生GOプロジェクト — 学生へ配布された Oculus Go",
+  desc:"自著の売上などを原資に、学生へ Oculus Go を無償配布するプロジェクト。2019年には Facebook 本社の VR 教育担当から預かった100台の配布を告知し、約1,260件のリプライが集まった。",
+  links:[["Mogura VR 記事","https://www.moguravr.com/student-go-project/"]]},
+ {era:"scale", year:"2020", title:"WASM MDXプレーヤー「聴いてみよう！MDX！」", cat:"Web / WebAssembly",
+  desc:"X68000 の MDX 音楽形式をブラウザで再生する WebAssembly プレーヤー。FM音源8ch＋ADPCM8ch のビジュアライザーや Web MIDI 対応を備える。基盤デコーダ portable_mdx は yosshin4004 氏の作で、本人の作はその WASM 化とプレーヤー側。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/GOROman.github.io"],["プレーヤーを開く","https://goroman.github.io/"]]},
+ {era:"scale", year:"2022", title:"MDXツール群（MDXVST／mdxtools／VS Code拡張）", cat:"音楽ツール / X68000", imgs:["assets/mdx-vst-1.jpg","assets/mdx-vst-2.jpg"], alt:"MDXVST のデバッグ中の画面（X の投稿写真）",
+  desc:"X68000 MDX 形式まわりの自作ツール群。VST3 プラグイン版プレーヤー MDXVST、MDX 取り扱いツール集、VS Code 用 MML シンタックスハイライトと MDX プレビュー拡張を2022年4〜5月に相次いで公開した。",
+  links:[["GitHub MDXVST","https://github.com/GOROman/MDXVST"],["GitHub vscode-mdxmml","https://github.com/GOROman/vscode-mdxmml"],["GitHub mxp-mac（Mac版MDXプレイヤー）","https://github.com/GOROman/mxp-mac"]],
+  xs:[["https://x.com/GOROman/status/1514929237756882946","X68000のMDXファイルをロードしてトラック別にリアルタイム再生できるVSTプラグインできた！\n\n #はじめてのVST開発"],["https://x.com/GOROman/status/1519862913582141440","好きなMDXファイルで演奏するやつができた。源平討魔伝キーボード。\n\n#MDXVST #はじめてのVST開発"]]},
+ {era:"scale", year:"2023–25", title:"StampFly", cat:"OSSドローン", img:"assets/stampfly.jpg", alt:"手のひらサイズのドローン StampFly",
+  desc:"M5Stamp S3 を使う手のひらサイズのオープンソースドローン StampFly のコア開発。ChatGPT を設計ドキュメントや PID 調整に活用し、製品としては2024年8月に M5Stamp Fly として発売された。",
+  yt:{id:"919VGdPmd2Q", title:"StampFly Practice（TAKASU 高須正和）"},
+  links:[["drone.jp 発売記事","https://drone.jp/news/2024080222055494456.html"],["Hackster プロジェクト","https://www.hackster.io/stampfly/stamp-fly-an-open-source-diy-drone-kit-from-japan-shenzhen-93d099"]]},
+ {era:"ai", year:"2024", title:"GOROman's TR-808 Cowbell", cat:"OSSハードウェア", img:"assets/tr808-cowbell.jpg", alt:"TR-808 カウベル回路の基板", status:"回路未検証・Ongoing",
+  desc:"Roland TR-808 のカウベル回路をサービスマニュアルの回路図から忠実に書き起こしたオープンソースハードウェア。回路図の書き起こしは完了しているが、回路の動作テストは未実施（プロジェクトページの記述どおり）。",
+  links:[["OSHWLab プロジェクト","https://oshwlab.com/goroman/tr-808-cowbell_2024-05-26_11-33-44"]]},
+ {era:"ai", year:"2025", title:"LLM Cardputer", cat:"AIガジェット", img:"assets/llm-cardputer.jpg", alt:"LLM Cardputer — Cardputer と Module LLM の合体マシン",
+  desc:"M5Stack Cardputer に Module LLM を合体させ、手のひらサイズでオフライン LLM チャットが動くコンピュータにした作例。ケース加工や UART 接続の作り方まで公開した。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/LLMCardputer"],["DEV 記事","https://dev.to/goroman/building-a-palm-sized-local-llm-with-m5stack-cardputer-and-modulellm-2hpf"]]},
+ {era:"ai", year:"2025", title:"AI-Mini4WD（しゃべるAIミニ四駆）", cat:"AI × 玩具", img:"assets/ai-mini4wd.jpg", alt:"AI-Mini4WD — マイコンとバッテリーを載せたミニ四駆のシャーシ（X の投稿動画サムネイル）",
+  desc:"OpenAI Realtime API Embedded SDK を ESP32 系に載せ、音声で話せる AI ミニ四駆を作るプロジェクト。2025年3月の WebRTC Meetup Tokyo #29 で「しゃべるAIミニ四駆をつくる」と題して LT 登壇した。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/AI-Mini4WD"]]},
+ {era:"ai", year:"2025", title:"かんぷれ -KANTAN Play core-", cat:"音楽ガジェット", img:"assets/kantan-play.jpg", alt:"かんぷれ -KANTAN Play core- 本体",
+  desc:"InstaChord の「誰でも弾ける」思想から生まれたワンボタン音楽ガジェット。本人は Web 版 KANTAN Play の開発とコンセプトデベロッパーとして関与。ハード版「かんぷれ」はクラウドファンディングで成功を収めた。",
+  yt:{id:"EpE7xJE2ono", title:"「かんぷれ」携帯ゲーム機みたいな楽器 — KANTAN Play core（InstaChord公式）"},
+  links:[["PR TIMES（開発チーム紹介）","https://prtimes.jp/main/html/rd/p/000000006.000058517.html"],["DTMステーション KANTAN Play インタビュー","https://www.dtmstation.com/archives/62146.html"]]},
+ {era:"ai", year:"2026", sort:"2026-01-09", title:"TATEX", cat:"Webツール", img:"assets/tatex.jpg", alt:"TATEX — 縦長画像4分割ツールの画面", 
+  desc:"「投稿タップしたら縦になる」画像を作るため、縦長画像を4分割するツールを Manus で作って無料公開した小ツール。下は告知ポストの公式埋め込み。",
+  x:"https://x.com/GOROman/status/2010319432720228491", links:[]},
+ {era:"ai", year:"2026", title:"famicom-rf-hackrf-decoder", cat:"SDR / レトロ", img:"assets/famicom-rf.jpg", alt:"famicom-rf-hackrf-decoder — RF信号から復号したファミコンの画面",
+  desc:"実機ファミコンの RF 出力を HackRF One（SDR）で受け、NTSC-J カラー復号をソフトウェアで行って表示するデコーダ。CRT の歪みやノイズまで再現し、要望に応えて「テレビを叩くと直る」演出まで追加。海外メディアに大きく取り上げられた。",
+  links:[["Tom's Hardware 記事","https://www.tomshardware.com/video-games/retro-gaming/ex-sega-engineer-creates-super-realistic-crt-monitor-emulator-incredible-retro-offering-even-includes-tv-screen-tapping-to-fix-picture"],["XDA 記事","https://www.xda-developers.com/an-ex-sega-engineer-made-a-crt-monitor-emulator-so-realistic-you-can-hit-it-to-fix-visual-problems/"],["GitHub リポジトリ","https://github.com/GOROman/famicom-rf-hackrf-decoder"]]},
+ {era:"ai", year:"2026", sort:"2026-08-08", title:"Vibe Watch", cat:"AIガジェット", status:"M5Stack Global Innovation Contest 2026 Special Mentions（Best AI Application）", img:"assets/vibe-watch.jpg", alt:"Vibe Watch — AIエージェントの状態を表示する腕時計型コントローラ",
+  desc:"M5Stack StopWatch を、並行して動く複数の AI コーディングエージェントの状態表示・承認／却下・プッシュトゥトークができる腕時計型タクタイルコントローラにした作品。M5Stack Global Innovation Contest 2026 で Special Mentions（Best AI Application）を受賞。",
+  yt:{id:"Wta_rQDcs74", title:"Vibe Watch: A Wearable AI Controller for Vibe Coding"},
+  links:[["Hackster プロジェクト","https://www.hackster.io/GOROman/vibe-watch-a-tactile-controller-for-vibe-coding-1c16eb"],["GitHub リポジトリ","https://github.com/GOROman/vibewatch"],["M5Stack 公式結果ページ","https://www.m5stack.com/global-innovation-contest-2026/results"]]},
+ {era:"ai", year:"2026", title:"SLIC基板（m5stamp-slic-fxs）", cat:"自作基板", img:"assets/slic-board.jpg", alt:"SLIC基板 — 2ポートFXS回線シミュレータ基板",
+  desc:"M5StampS3＋KS0835F（AG1171）SLIC モジュール2個で作る、2ポート FXS 回線シミュレータ／ミニ PBX 基板。公衆回線なしで FAX／モデムの T.30 テストができるようにする自作基板プロジェクト。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/m5stamp-slic-fxs"]]},
+ {era:"ai", year:"2024", title:"HAH Dev-Flow", cat:"開発ワークフロー",
+  desc:"GitHub Actions と OpenAI で PR テンプレート、コードレビュー、タスク振り分けを自動生成する「Human–AI–Human」ワークフローのデモ。本人の GitHub プロフィールに Highlighted Project として記載されたプロジェクト。",
+  links:[["GitHub プロフィール","https://github.com/GOROman"]]},
+ {era:"ai", year:"2025", title:"SubtractProxy", cat:"AIプロキシ",
+  desc:"LLM で Web コンテンツをフィルタリング／書き換え／ブロックする AI 支援 HTTP プロキシ（Node.js、Ollama／OpenAI API、MITライセンス）。「情報の引き算（Subtract）」がコンセプトで、X のクソリプ回避などが要件に挙げられている。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/SubtractProxy"]]},
+ {era:"ai", year:"2026", title:"Grok Bot Tokyo Hackathon 優勝チーム作品", cat:"ハッカソン",
+  desc:"人間がコードを1文字も書かず、Grok Bot 群に音声指示だけで開発させて Grok Bot Tokyo Hackathon で優勝したチームプロジェクト（iPad のレストラン注文モック＋バックエンド＋ボット間連携）。本人はスライド／進行／時間管理を担当した。",
+  links:[["DEV 連載 Part 1","https://dev.to/goroman/how-we-won-a-hackathon-without-writing-a-single-line-of-code-part-1-three-people-grok-bot-six-184j"],["DEV 連載 Part 2","https://dev.to/goroman/how-we-won-a-hackathon-without-writing-a-single-line-of-code-part-2-ai-judging-the-pitch-and-3nmf"]]},
+ {era:"ai", year:"2026", sort:"2026-10-30", title:"自作 FIDO2 セキュリティキー", cat:"自作ハードウェア", status:"完成報告ポストを確認", img:"assets/fido2-key.jpg", alt:"自作 FIDO2 セキュリティキー — 画面に NULL FIDO2 と表示された本体（X の投稿動画サムネイル）",
+  desc:"マイコンを使ってパスキー（FIDO2 セキュリティキー）を自作。2026年10月30日に「自作 FIDO2 セキュリティキー完成しました」と本人が X で報告した（Ar-Ray 氏の記事がポストを引用）。実装の詳細リポジトリは未確認。",
+  links:[["引用記事（Ar-Ray）","https://ar-ray.hatenablog.com/entry/2026/10/31/211500"]]},
+ {era:"ai", year:"2026", sort:"2026-10-07", title:"Muse Gadgets関連（muse-gadget-sdk）", cat:"SDKリポジトリ", status:"関与形態は要確認", img:"assets/muse-gadget-sdk.png", alt:"muse-gadget-sdk — GitHub リポジトリのイメージ画像",
+  desc:"「Muse gadgets を作るためのオープンソース SDK」と説明された GitHub リポジトリ（2026-10-07作成）。本人が SDK の作者なのか、利用・適応側なのかはリポジトリ説明文だけでは判別できないため、年表ドラフトでも「要確認」として記録されている項目。そのままの注記付きで掲載する。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/muse-gadget-sdk"]]},
+ {era:"ai", year:"2026", title:"せっけんロボ ミューズ", cat:"ロボット", status:"開発中",
+  desc:"RDK X5 を使う2輪倒立振子ロボット。カメラで人を検出して追従し、Wi-Fi 経由で指示できる構成を目指す。ボディは 3D プリント製。RDK Challenge 2026 Winter 向けのプロジェクトで、現在はシミュレーション検証済みの制御骨格から実機化を進めている段階。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/sekken-rover-muse"]]},
+ {era:"vr", year:"2017", sort:"2017-02-19", title:"オーグメンテッドジョイスティック", cat:"自作コントローラ", img:"assets/posts/833292507110715392-1.jpg", alt:"オーグメンテッドジョイスティックの有機ELモニタ（完成ポストの動画から）",
+  desc:"ジョイスティックの入力を Arduino に通して「オーグメント（拡張）」し、JAMMA で基板側へ返す自作コントローラ。VSync 同期連射や、VF2 の台湾ステップ／千本パンチといった技の1ボタン発動をファームウェアでアシストする。有機ELモニタと入力モニタ、押したボタンが光るギミックを搭載し、2017年2月に完成を報告した。高校時代に買った電波新聞社のインテリジェントジョイスティック XE-1 SFC が「あんまりインテリジェンスではなかった」ことへの回答として作られた。8年後の2025年にも、VF2 で自動で千本パンチするジョイスティックを作っている。下の埋め込みは、着想から完成、2025年の続報までの関連ポスト。",
+  links:[],
+  xs:[["https://x.com/GOROman/status/830936749266268160","ジョイスティックの入力を一旦Arduinoに入れてオーグメントして基板側にJAMMAで返すというオーグメンテッドジョイスティックをおもいついた。AJ。VSync同期連射もオーグメンテッドの一種だ。"],["https://x.com/GOROman/status/832804731290411009","オーグメンテッドジョイスティック\n有機ELモニタ搭載完了"],["https://x.com/GOROman/status/833292507110715392","技をアシストするジョイスティック完成！\n\n#オーグメンテッドジョイスティック"],["https://x.com/GOROman/status/833303841755967489","VF2の台湾ステップをオーグメントした\n\n#オーグメンテッドジョイスティック"],["https://x.com/GOROman/status/1922061879452561564","バーチャファイター2で自動で千本パンチするジョイスティックつくったよ"]]},
+ {era:"vr", year:"2017", sort:"2017-03-16", title:"NESBot-mini", cat:"GitHub / ファミコン", img:"assets/nesbot-mini.jpg", alt:"NESBot-mini — ファミコン本体に Arduino Uno を組み込み、スーパーマリオブラザーズのカセットを挿した実機",
+  desc:"ファミコン実機でスーパーマリオを全自動クリアする NESBot を最小構成で再現した GitHub プロジェクト（2017年3月公開、リポジトリ作成は同年3月16日）。パッドをハックして実機で TAS を再生する。下の埋め込みは、元ネタの NESBot 紹介ポスト（2017年3月13日）から完成報告、簡略化とソース公開、パッドデータ圧縮の進捗、ESP32 版の続報まで、関連ポストを時系列で並べたもの。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/NESBot-mini"]],
+  xs:[["https://x.com/GOROman/status/841417853676920834","Arduinoでファミコン全自動クリアシステム\n\nNESBot: Arduino Powered Robot Beating Super Mario Bros for the NES"],["https://x.com/GOROman/status/842198750789427200","ファミコン実機スーパーマリオ全自動クリアプログラム。\n\nNESBotを最小限構成。Arduinoでパッドをハックして実機TAS再生。"],["https://x.com/GOROman/status/842201171100020736","NESBotもっとシンプルにした。電源はファミコン側から取得。CPUリセットもArduinoからやるので同期も完璧。\nあとファミコンTASのパッドデータはランレングスか差分で変化分だけ圧縮すればSDカード使わなくても乗りそう。"],["https://x.com/GOROman/status/842317325541949441","NESBotの超シンプル版ソースコード\n\nGOROman/NESBot-mini"],["https://x.com/GOROman/status/842492776092639233","ファミコン自動化の進捗\nパッドデータ圧縮のため、TASのスーパーマリオクリアデータの傾向を分析。\nランレングスで圧縮した。RLE用のビットに1ビット使った。使用頻度がほぼないSELECTボタンはUP+DOWNにリアサイン(FM-TOWNのジョイパッド的）して1bit確保。"],["https://x.com/GOROman/status/842560832525361154","スーパーマリオ ファミコン実機でTAS自動再生\n謎の三角飛びがヤバイ"],["https://x.com/GOROman/status/842563119331270656","NESBotでSDカード使わずにTASデータを置くのを考案した。\n\nフルスクラッチで書いたソースコードはこちら。"],["https://x.com/GOROman/status/843255532811042816","ESP32 DevkitCでもファミコン操作自動再生\nスーパーマリオ全自動クリア(TAS)\n\nNESBot"]]},
+ {era:"vr", year:"2019", sort:"2019-07-02", title:"PremaidAIHack", cat:"GitHub / ロボット", img:"assets/premaidaihack.jpg", alt:"プリメイドAI の VRマスタースレイブ実験（関連ポストの動画サムネイル）",
+  desc:"プリメイドAI（デスクトップロボット）をハックする GitHub プロジェクト（2019年7月公開）。モーション変換ツール csv2pma の作成から、モーションキャプチャ、IK、VRマスタースレイブの完成まで、実験の経過は X でハッシュタグ #プリメイドAIハック を付けて投稿された。解析メモとコマンド調査メモは Google スプレッドシートにも残っている（下のリンク参照）。下の埋め込みはその関連ポストを時系列で並べたもの（いずれもストリームに掲載）。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/PremaidAIHack"],["『楽しく遊ぶプリメイドAI』 解析メモ","https://docs.google.com/spreadsheets/d/1c6jqMwkBroCuF74viU_q7dgSQGzacbUW4mJg-957_Rs/edit?usp=drivesdk"],["PreMaidAIコマンドゴリ押し調査メモ","https://docs.google.com/spreadsheets/d/1kCUVsyzr76AQP9mA2tqbC8s86z9-obSYKmteX1tRD3M/edit?usp=drivesdk"]],
+  xs:[["https://x.com/GOROman/status/1146078746195050498","csv2pma というツール作った"],["https://x.com/GOROman/status/1149973589573042176","モーションキャプチャつくってみた\n\n#プリメイドAIハック"],["https://x.com/GOROman/status/1150382780502573056","IK動いた!! これで勝つる\n\n#プリメイドAIハック"],["https://x.com/GOROman/status/1151046658354032640","念願のＶＲマスタースレイブが完成しました!!\n\n#プリメイドAIハック"],["https://x.com/GOROman/status/1151320747479953409","プリメイドAIで #ペットボトルチャレンジ\n\n#ペットボトルキャップチャレンジ\n#プリメイドAIハック"],["https://x.com/GOROman/status/1155768026458836992","本体の基板ボタンでファームウェアの挙動が変わる機能つくってみた。モードに応じてフルカラーLEDの色も変わる\n\n(改造ファームじゃないなら押しちゃダメ絶対！サーボトリムぶっ壊れる\n\n#プリメイドAIハック"]]},
+ {era:"vr", year:"2019", sort:"2019-05-09", title:"GoodbyeGeocitiesJP", cat:"GitHub / Chrome拡張",
+  desc:"サービス終了した Yahoo!ジオシティーズ のページを Web Archive（archive.org）へ自動リダイレクトする Chrome 拡張（2019年5月公開）。消えゆくWebを残すための小さな道具。公開直後に ねとらぼ と INTERNET Watch（やじうまWatch）で紹介された。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/GoodbyeGeocitiesJP"],["ねとらぼ 記事「サービス終了の「Yahoo!ジオシティーズ」発掘に役立つChrome拡張が登場」","https://nlab.itmedia.co.jp/cont/articles/3290680/amp/"],["INTERNET Watch やじうまWatch「Yahoo!ジオシティーズにアクセスすると自動的にアーカイブを表示するChrome拡張機能」","https://internet.watch.impress.co.jp/docs/yajiuma/1183454.html"]]},
+ {era:"ai", year:"2025", sort:"2025-03-18", title:"XKusoRepFilter", cat:"GitHub / Chrome拡張",
+  desc:"X のクソリプをフィルタする Chrome 拡張（2025年3月公開、GitHub）。SubtractProxy と同じ「情報の引き算」の系譜にあるブラウザ側の実装。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/XKusoRepFilter"]]},
+ {era:"ai", year:"2026", sort:"2026-08-24", title:"PlayStation FPGA実験（ps1-ode-fpga）", cat:"GitHub / PlayStation / FPGA", img:"assets/posts/2101855979998748892-1.jpg", alt:"初代プレステ SCPH-3500 と SCPH-7500 の基板（X の投稿写真）",
+  desc:"初代 PlayStation の光学ドライブエミュレータを FPGA（Sipeed Tang Primer 20K／Gowin GW2A）に移植する GitHub プロジェクト ps1-ode-fpga（picostation の FPGA 移植、2026年8月公開）。あわせて、PlayStation の BIOS をステレオ音声 OFDM で吸い出す実験 ps1-bios-audio-ripper も公開している。同じ時期には、初代プレステの通信対戦ポートを FPGA で傍受し、AI が運転する相手と対戦できる「接待レーサーレボリューション」も作った。下の埋め込みはその関連ポスト。",
+  links:[["GitHub ps1-ode-fpga","https://github.com/GOROman/ps1-ode-fpga"],["GitHub ps1-bios-audio-ripper","https://github.com/GOROman/ps1-bios-audio-ripper-sx-burst-edition"]],
+  xs:[["https://x.com/GOROman/status/2091771236057747928","FPGAでPS1でODEなんかできてた。動くかはしらん。"],["https://x.com/GOROman/status/2101870310626857423","初代プレステの通信ポートを基板からぶっこぬきました。"],["https://x.com/GOROman/status/2102448051801747470","我ながらスゲーものができたwww\n\nプレステのリッジレーサーの通信対戦をFPGAで傍受してWebRTCでスマホでリアルタイムで見れるwww 2P側はAIが操縦www\n\n#生成AIなんでも展示会"]]},
+ {era:"ai", year:"2026", sort:"2026-07-22", title:"claude-famicom-emu", cat:"GitHub / Famicom", img:"assets/claude-famicom-emu.jpg", alt:"claude-famicom-emu の画面 — ピン接触不良シミュレーションとデバッガを備えたブラウザ版ファミコンエミュレータ（X の投稿動画から）",
+  desc:"ブラウザで動くファミコンエミュレータ（2026年7月公開）。C++コアを WebAssembly 化し、60ピンコネクタの接触不良シミュレーション（ピンを壊す、カセットを斜めに傾ける、息を吹きかける）、任意のピンに当てられるオシロスコープ、電源を入れたままのカセット交換、TAS再生、可変クロック（1Hz〜1.79MHz）などを備える。AIと作った2026年夏のファミコン実験の一つ。プロジェクト名は claude-famicom-emu、GitHub のリポジトリ名は cluade-famicom-emu。",
+  links:[["GitHub リポジトリ（cluade-famicom-emu）","https://github.com/GOROman/cluade-famicom-emu"],["ブラウザで遊ぶ（GitHub Pages）","https://goroman.github.io/cluade-famicom-emu/"]],
+  xs:[["https://x.com/GOROman/status/2079819137308881305","ファミコンの斜め差しシミュレータを作りました。"],["https://x.com/GOROman/status/2080079464416067857","自作ファミコンエミュにオシロスコープとプロアクションリプレイ的なメモリ書き換え追加"]]},
+ {era:"ai", year:"2026", sort:"2026-07-22", title:"nes-rom-reader", cat:"GitHub / Famicom", img:"assets/posts/2079762417094135820-1.jpg", alt:"nes-rom-reader — ファミコンカセット吸い出し機の実機（X の投稿写真）",
+  desc:"M5Stamp S3＋自作基板でファミコンカセット（FC 60ピン）を吸い出すツール（2026年7月公開）。基板設計（EasyEDA Pro）とファームウェア、Web UI は Claude Code（Fable）に作らせ、部品の注文とハンダ付けは本人が担当した。吸い出しは Python CLI とブラウザ Web UI（WebSerial）の両方から行える。関連リポジトリ famicom-cartridge-tool もあわせて公開されている。下は完成報告の代表ポストの公式埋め込み。",
+  x:"https://x.com/GOROman/status/2079762417094135820", xt:"ついにClaude Code Fableに頼んで作ったファミコンROM吸い出し機が完成しました！ 基板設計とファームウェアとWeb UIはAIです。部品の注文とハンダ付けは人間(オレ)がやりました！！！！ スーパーモンキー大冒険のCGROMチェックできます！",
+  links:[["GitHub リポジトリ（nes-rom-reader）","https://github.com/GOROman/nes-rom-reader"],["Web UI（GitHub Pages）","https://goroman.github.io/nes-rom-reader/web/"],["GitHub famicom-cartridge-tool","https://github.com/GOROman/famicom-cartridge-tool"]],
+  xs:[["https://x.com/GOROman/status/2075014416903577795","ファミコンのカートリッジ吸い出しツールと基板\n\n1行もコード書かずにFableで作りました。基板設計もFableで作りました。\n\nファミコン(FC 60ピン)カセット吸い出しツール — M5Stamp S3 + EasyEDA Pro基板 + Python CLI"]]},
+ {era:"ai", year:"2026", sort:"2026-10-22", title:"SH02フィラメントドライヤー用 iPhone／Apple Watchアプリ", cat:"アプリ / 3Dプリンタ", img:"assets/posts/2113189159208890745-1.jpg", alt:"SH02フィラメントドライヤー用アプリの画面（X の投稿写真）",
+  desc:"3Dプリンタ用フィラメントドライヤー SH02 を操作する iPhone アプリと Apple Watch アプリを自作（2026年10月）。外出中でもドライヤーを停止できる。下は公開ポストの公式埋め込み（ストリームにも掲載）。",
+  x:"https://x.com/GOROman/status/2113189159208890745", xt:"暇だったのでフィラメントドライヤーSH02のiPhoneアプリとApple Watch アプリを作った。外出中でも停止できる。",
+  links:[]},
+ {era:"ai", year:"2026", sort:"2026-07-09", title:"2151-808（ブラウザFMシンセ）", cat:"GitHub / Synthesizer", img:"assets/2151-808.png", alt:"2151-808（YM-808）の画面 — GitHub リポジトリのスクリーンショット",
+  desc:"YM2151（FM音源）で TR-808 風 UI のシンセをブラウザで動かす GitHub プロジェクト（2026年7月公開）。ファミコン音源版と並んで、2026年夏の「Vibe Coding でシンセを作る」実験の公開リポジトリ。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/2151-808"],["GitHub YM2151-Claude（FM音源エミュレータ）","https://github.com/GOROman/YM2151-Claude-3.7-Sonnet"]]},
+ {era:"ai", year:"2026", sort:"2026-09-25", title:"null-net-cock", cat:"GitHub / パソコン通信",
+  desc:"1990年代のパソコン通信ホスト「NET-COCK」互換のホストプログラムを C／SQLite で実装した GitHub プロジェクト（2026年9月公開）。1995年の GORO-NETs／net-kick から31年越しで、同じ題材に帰ってきた作品。",
+  links:[["GitHub リポジトリ","https://github.com/GOROman/null-net-cock"]]}, {era:"vr", year:"2016", sort:"2016-01-15", title:"FaceRig→MMDプラグイン", cat:"フェイストラッキング", desc:"FaceRig のパラメータを取得して、MikuMikuMoving（MMM）側の MMD モデルへ反映するプラグイン。2016年1月のポストはいいね682／RT632と大きな反響があった。FaceRig のパラメータを Unity へ適用する版も作っている。下の埋め込みはその関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/687939400672636929","Facerigのパラメータを取得してMMDに反映するMMM用プラグインをつくった。"],["https://x.com/GOROman/status/687278840142495744","FaceRigからパラメータ取得してUnityに適用するのをつくった。"]]},
+ {era:"vr", year:"2017", sort:"2017-01-07", title:"バルス（家中の電気を消すコマンド）", cat:"スマートホーム", img:"assets/posts/817712142535139329-1.jpg", alt:"バルス — Apple Watch の Siri が「お望みどおりにいたします」と応えた画面（X の投稿写真）", desc:"声のコマンド「バルス」で家中の電気を一斉に消す仕組み。Siri が受け付けて実行し、Apple Watch には「お望みどおりにいたします」と応答が出る。2017年1月の報告ポストは RT1,089 と大きく拡散した。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/817712142535139329", xt:"家中の電気を消すコマンド「バルス」を作った。Siriがちゃんと対応して消してくれる。", links:[]},
+ {era:"vr", year:"2018", sort:"2018-05-18", title:"Oculus Go サザビー風カスタム", cat:"VRハードカスタム", img:"assets/posts/997316207521943552-1.jpg", alt:"Oculus Go サザビー風カスタム — 真紅に塗られた Oculus Go（X の投稿写真）", desc:"Oculus Go をサザビー風に仕上げたカスタム機。真紅のボディに金色のジオンマークをあしらった。2018年5月の完成ポストはいいね500。下は完成ポストの埋め込み。", x:"https://x.com/GOROman/status/997316207521943552", xt:"Oculus Go サザビー風 完成！", links:[]},
+ {era:"scale", year:"2020", sort:"2020-10-19", title:"マリオカートハック", cat:"ゲームハック / ドローン", img:"assets/posts/1318494713163313153-1.jpg", alt:"マリオカートハック — ルイージのフィギュアとカート基板を載せたドローン（X の投稿写真）", desc:"『マリオカート ライブ ホームサーキット』のカート基板をドローンに載せて空を飛ばす魔改造。Logicool のハンドルなどのコントローラも使えるようにした。「飛んだｗｗｗ」のポストはいいね6,106で、ストリームの中でも最大級の反響だった。下の埋め込みは関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/1318163382780874752","#マリオカートハック\n\nLogicool のハンドルとかが使えるようになったw"],["https://x.com/GOROman/status/1318492551360307202","飛んだｗｗｗ\n\n#マリオカートハック"]]},
+ {era:"scale", year:"2022", sort:"2022-05-11", title:"baseDQ2", cat:"エンコーダ / レトロ", img:"assets/posts/1524254790204944384-1.jpg", alt:"baseDQ2 — ターミナルで baseDQ2.js を実行している画面（X の投稿写真）", desc:"base2048 のソースコードを読んでいて、ファミコン版『ドラゴンクエスト』の「復活の呪文」が base64 っぽいことに気づき、改造して生まれたエンコーダ。2022年5月のポストはいいね681。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/1524254790204944384", xt:"base2048のソースコードを読んでて、そう言えばファミコン版ドラクエの復活の呪文ってbase64っぽいなーと思って改造してたらbaseDQ2ができた。", links:[]},
+ {era:"ai", year:"2025", sort:"2025-05-22", title:"さわやか待ち時間アプリ／MCPサーバー", cat:"アプリ / AI連携", img:"assets/posts/1925398351077679248-1.jpg", alt:"さわやか待ち時間アプリ「さわやか待ち時間ナビ」の画面（X の投稿写真）", desc:"炭焼きレストラン「さわやか」の待ち時間を GPS 対応で確認できる Web アプリを Vibe Coding で制作（2025年5月、いいね2,196）。同年11月には、ChatGPT から呼べる「さわやか」の MCP サーバーも作った。下の埋め込みは関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/1925398351077679248","Vibe CodingでGPS対応のさわやか待機時間アプリつくった"],["https://x.com/GOROman/status/1993223058304422338","さわやかのMCPサーバーつくってみた ChatGPTから呼べる"]]},
+ {era:"ai", year:"2025", sort:"2025-12-22", title:"Claude Code用Apple Watchアプリ", cat:"AIガジェット", img:"assets/posts/2003057993500475674-1.jpg", alt:"Claude Code用Apple Watchアプリ — 承認画面を表示した Apple Watch と Mac 上の Claude Code（X の投稿写真）", desc:"Claude Code の承認操作を Apple Watch から行えるアプリ。「トイレでもどこでも承認できる」ようにしたもので、2025年12月のポストはいいね499。「AI エージェントを手首で操作する」という点で、後の Vibe Watch へつながる系譜の一作。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2003057993500475674", xt:"Claude Code用のApple Watchアプリを作ってみた！ トイレ🚽でもどこでも承認できるw", links:[]},
+ {era:"ai", year:"2025", sort:"2025-12-26", title:"SAM2セグメンテーションツール（Macローカル）", cat:"AIツール", desc:"Meta の SAM2 を使った画像セグメンテーションツールを、Mac のローカルで動く形で自作したもの。2025年12月のポストはいいね1,172。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2004499227691700388", xt:"Meta の SAM2 を使ったセグメンテーションツールを作ってみた。(Macのローカルで動く)", links:[]},
+ {era:"ai", year:"2026", sort:"2026-01-08", title:"クルクルミラクル", cat:"AIツール", desc:"マウスカーソルをクルクル回すと、その範囲を AI が要約してくれるツール。メールの返信文も書いてもらえる。2026年1月のポストはいいね412。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2009250960867041584", xt:"マウスカーソルをクルクルすると、その範囲をAIが要約してくれるやつを作った。メールの返信も書いてもらえる。  #クルクルミラクル", links:[]},
+ {era:"ai", year:"2026", sort:"2026-08-18", title:"X68000 PIC→MP4変換／柳沢PICツール", cat:"X68000 / 画像ツール", desc:"X68000 の PIC フォーマット画像を MP4 にする変換ツール（稲妻レンダリング）。2026年8月のポストはいいね2,564と大きな反響があった。続いて、任意の画像を X68K 柳沢PIC 表示にするツールも作った。下の埋め込みは関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/2089544728291442876","暇なのでX68000のPICフォーマットをMP4にするやつ作った。稲妻レンダリング。"],["https://x.com/GOROman/status/2089618087784091662","任意の画像をX68K柳沢PIC表示にするツールを作りました！  『キミだけの稲妻を堪能しよう！』"]]},
+ {era:"ai", year:"2026", sort:"2026-09-19", title:"青空文庫をXポスト風に読むやつ", cat:"Webツール / 読書", desc:"青空文庫の文章を、X のポスト風の見た目で読めるリーダー。2026年9月のポストはいいね1,044。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2100989510813446342", xt:"青空文庫をXポスト風に読むやつを作ってみた。", links:[]},
+ {era:"ai", year:"2026", sort:"2026-09-25", title:"FAX受信AI判別システム", cat:"FAX / 回線ハック", desc:"FAXモデム2台を繋いで PC で FAX を受信できるようにし、受信が完了したら自動で OpenAI の API に画像認識させて、誰宛の FAX か判別する仕組み。公衆回線なしで FAX／モデムの T.30 テストができる SLIC基板（別項目）と同じ、「電話回線を自前で扱う」系譜の作品。下の埋め込みは関連ポスト。", links:[], xs:[["https://x.com/GOROman/status/2103461740575088971","FAXモデム２台繋げて、FAX受信するの作った。"],["https://x.com/GOROman/status/2103469143655932104","パソコンでFAX受信できるようにして、受信完了したら自動でOpenAIのAPIで画像認識させて誰宛か判別するのを作ってみた。"]]},
+ {era:"ai", year:"2026", sort:"2026-10-06", title:"Visit Japan Web AIエージェント＋電子ペーパーQR", cat:"AIエージェント", img:"assets/posts/2107208164915700031-1.jpg", alt:"Visit Japan Web の税関申告QRコードを表示した電子ペーパー端末（X の投稿写真）", desc:"入国手続きサイト「Visit Japan Web」への記入を AI エージェントに行わせ、発行された QR コードを電子ペーパー端末（バッテリーが切れても表示が残る）へ転送する仕組み。2026年10月のポストはいいね702。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2107208164915700031", xt:"あのクソ面倒な Visit Japan WebにAIエージェントが記入し、QRは電子ペーパー(バッテリ無くなっても表示できる)に転送するやつを作った", links:[]},
+ {era:"ai", year:"2026", sort:"2026-11-01", title:"reSpeaker Clip カスタムファームウェア", cat:"ファームウェア", status:"完成報告ポストを確認", desc:"ウェアラブル録音デバイス reSpeaker Clip のカスタムファームウェア（CFW）。家に帰ると BLE で Mac Studio を検知して自動で Wi-Fi を開き、録音ファイルを自動転送（HotSync）し、RE-USE でノイズキャンセルして自動文字起こしまで行い、吸い出したファイルは自動で消す。2026年11月に完成を報告した。下は報告ポストの埋め込み。", x:"https://x.com/GOROman/status/2116749370670657918", xt:"reSpeaker Clip の CFW作った。家に帰ったらBLEでMac Studio検知して、勝手にWifi開いて録音ファイルを自動でHotSync。勝手にRE-USEでノイズキャンセルして自動文字起こし。吸い出したファイルは自動で消す。", links:[]}
+];
+
+/* ================= DATA: archive stream (posts.json verified) ================= */
+var POSTS = [
+ {date:"2012-01-21", dname:"GOROman - SKB01", text:"早速iBooks Authorで本作ってみた。", fav:5, rt:1, url:"https://x.com/GOROman/status/160606132669390848", note:"アーカイブ最古級の一作。電子書籍オーサリングに飛びつく姿勢はこの頃から。"},
+ {date:"2019-06-19", dname:"GOROman", text:"MR Mikulus 出来た", fav:1240, rt:602, url:"https://x.com/GOROman/status/1141315655859240967", note:"Mikulus が MR（Mixed Reality）へ進化した報告。いいね1,240。"},
+ {date:"2019-07-16", dname:"GOROman", text:"念願のＶＲマスタースレイブが完成しました!!\n\n#プリメイドAIハック", fav:3905, rt:1963, url:"https://x.com/GOROman/status/1151046658354032640", note:"VRマスタースレイブ完成の報告。アーカイブ屈指の反響（いいね3,905）。"},
+ {date:"2020-10-20", dname:"GOROman", text:"飛んだｗｗｗ\n\n#マリオカートハック", fav:6106, rt:2691, url:"https://x.com/GOROman/status/1318492551360307202", note:"マリオカートハックで「飛んだ」瞬間。いいね6,106は抜粋中トップ。"},
+ {date:"2022-06-13", dname:"GOROman", text:"iPhone でトンカツの3Dスキャンできた！！！ポリゴン数やばいwww", fav:5748, rt:1529, url:"https://x.com/GOROman/status/1536268789654093826", note:"トンカツの3Dスキャン。食べ物のスキャンは2013年の唐揚げ実験からの系譜。"},
+ {date:"2023-10-19", dname:"GOROman", text:"コレが未来の電子工作だ！！\nARオシロスコープ\n\nXReal Air + RIGOL DHO914S", fav:2908, rt:651, url:"https://x.com/GOROman/status/1714829926946545943", note:"ARグラス×オシロスコープ。計測器まで空間に重ねる電子工作。"},
+ {date:"2025-01-10", dname:"GOROman", text:"カメラで撮った画像をMacに送ってローカルLLM(VLM)で認識させて翻訳するまではできた！\n\nローカルなのでメチャクチャ認識が速いw", fav:1320, rt:175, url:"https://x.com/GOROman/status/1877649758367482057", note:"ローカルVLM翻訳。LLM Cardputer と同じ「手元で動くAI」の流れ。"},
+ {date:"2025-12-26", dname:"GOROman", text:"Meta の SAM2 を使ったセグメンテーションツールを作ってみた。(Macのローカルで動く)", fav:1172, rt:120, url:"https://x.com/GOROman/status/2004499227691700388", note:"SAM2 のセグメンテーションツールを Mac ローカルで。"},
+ {date:"2026-07-22", dname:"GOROman", text:"ついにClaude Code Fableに頼んで作ったファミコンROM吸い出し機が完成しました！ 基板設計とファームウェアとWeb UIはAIです。部品の注文とハンダ付けは人間(オレ)がやりました！！！！ スーパーモンキー大冒険のCGROMチェックできます！", fav:1058, rt:254, url:"https://x.com/GOROman/status/2079762417094135820", note:"設計はAI、ハンダ付けは人間。2026年の「作ってみた」の形そのもの。"},
+ {date:"2026-07-27", dname:"GOROman", text:"ファミコン用自動スプライトツクール完成！", fav:1537, rt:192, url:"https://x.com/GOROman/status/2081535459470270605", note:"ファミコン制作支援ツールの完成報告。famicom-rf と並ぶ2026年のレトロ×AIライン。"}
+];
+
+/* ================= render helpers ================= */
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+var LINK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';
+var X_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.3 22h-6.3l-4.9-6.4L6.5 22H3.4l7.3-8.3L1 2h6.5l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg>';
+var HEART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20.7C6.4 17 3 13.6 3 9.9 3 7.2 5 5 7.6 5c1.7 0 3.4.9 4.4 2.4C13 5.9 14.7 5 16.4 5 19 5 21 7.2 21 9.9c0 3.7-3.4 7.1-9 10.8z"/></svg>';
+var REPOST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 2l3 3-3 3"/><path d="M3 11V9a3 3 0 0 1 3-3h14M7 22l-3-3 3-3"/><path d="M21 13v2a3 3 0 0 1-3 3H4"/></svg>';
+
+var COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7.1 0l2.4-2.4a5 5 0 0 0-7.1-7.1L11 5.9"/><path d="M14 10a5 5 0 0 0-7.1 0L4.5 12.4a5 5 0 0 0 7.1 7.1L13 18.1"/></svg>';
+function imgErr(el){
+  var p = el.parentNode;
+  el.remove();
+  if(p && p.classList && (p.classList.contains("post-photos") || p.classList.contains("work-gallery")) && !p.querySelector("img")) p.remove();
+}
+var TAG_ORDER=["3Dプリンタ","Drone","VR","AR","MR","Famicom","NES","PlayStation","Chromatic","FPGA","Oscilloscope","FAX","X68000","VST","Synthesizer","Music","Game","Robot","AI","電子工作","Web","Book","Video","Photo"];
+function tagsFor(text, hasPhoto, hasVideo){
+  var t = text||""; var hit = {};
+  function m(re, tag){ if(re.test(t)) hit[tag]=1; }
+  m(/[3３][DＤ]プリン|[3３][DＤ]プリンタ/, "3Dプリンタ");
+  m(/ドローン|Drone|StampFly|クアッドコプター|DJI FPV|ELRS/, "Drone");
+  m(/VR|バーチャル|Oculus|Mikulus|ミクミク握手|プリメイドAI|HMD|デジアイ|Quest/, "VR");
+  m(/AR(?![a-zA-Z])|拡張現実|ARToolKit|AR\.Drone|AR 紙/, "AR");
+  m(/MR(?![a-zA-Z])|Mixed Reality|複合現実|MRFamicom|MRファミコン/, "MR");
+  m(/ファミコン|Famicom|ファミカセ/, "Famicom");
+  m(/PlayStation|プレステ|プレイステーション|PS2|PS3|PS1|PSP版/, "PlayStation");
+  m(/Chromatic|CHROMATIC|クロマティック/, "Chromatic");
+  m(/FPGA/, "FPGA");
+  m(/オシロ|Oscilloscope|DSO138|ファンクションジェネレータ/, "Oscilloscope");
+  m(/FAX|ファクス|モデム|回線シミュレータ/, "FAX");
+  m(/\bNES\b|NESBot/, "NES");
+  m(/X68000|MDX|MML/, "X68000");
+  m(/MDXVST|VSTプラグイン|VST開発|VST3|はじめてのVST|VSTが|VSTを|VSTで|VSTの|VSTに/, "VST");
+  m(/シンセ|TR-808|カウベル|FM音源|YM2151|FM-1|nanoKEY|SAM2695/, "Synthesizer");
+  m(/音楽|楽器|演奏|ピアノ|ギター|サウンド|ミュージック/, "Music");
+  m(/ゲーム|格ゲー|マリオ|ドラクエ|テトリス|パチンコ|パチスロ/, "Game");
+  m(/ロボット|ロボ|倒立振子|Segway|セグウェイ|マスタースレイブ/, "Robot");
+  m(/AI(?![a-zA-Z])|LLM|ChatGPT|GPT|Claude|Grok|Codex|機械学習|VLM|OpenAI|Devin|Manus|Suno|Veo 3|Sora|生成AI/, "AI");
+  m(/電子工作|基板|ハンダ|半田|回路|マイコン|Arduino|ESP32|ラズパイ|Raspberry|オシロ|センサー|LED|M5Stack|Cardputer|HackRF|FIDO|負電源|I2C/, "電子工作");
+  m(/Web|ブラウザ|WASM|WebAssembly|WebMCP|WebUI|ホームページ/, "Web");
+  m(/著書|書籍|新書|同人誌|電子書籍|iBooks|教科書/, "Book");
+  m(/動画|映像|ニコニコ|YouTube|ビデオ|配信/, "Video");
+  if(hasVideo) hit["Video"]=1;
+  var out = TAG_ORDER.filter(function(tag){ return hit[tag]; });
+  if(hasPhoto && out.length<4 && out.indexOf("Photo")===-1) out.push("Photo");
+  return out.slice(0,4);
+}
+function tagRow(tags){
+  if(!tags || !tags.length) return "";
+  return '<div class="tag-row" role="group" aria-label="タグ">'+tags.map(function(tag){ return '<button type="button" class="tag" data-tag="'+esc(tag)+'" aria-pressed="false">'+esc(tag)+'</button>'; }).join("")+'</div>';
+}
+function ytFacade(yt){
+  return '<div class="yt"><button type="button" class="yt-facade" data-yt="'+yt.id+'" aria-label="YouTube動画をページ内で再生: '+esc(yt.title)+'">'
+    + '<img class="yt-thumb" src="assets/yt/'+yt.id+'.jpg" alt="" loading="lazy" decoding="async">'
+    + '<span class="yt-shade" aria-hidden="true"></span>'
+    + '<span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg></span>'
+    + '<span class="yt-caption"><span class="yt-title">'+esc(yt.title)+'</span>'
+    + '<span class="yt-sub">YouTube — タップでこのページ内で再生</span></span></button></div>';
+}
+function xEmbed(url, text){
+  var body = text ? esc(text) : '';
+  return '<div class="x-embed" data-xurl="'+url+'"><div class="x-fallback">'
+    + (body ? '<p class="x-fallback-text">'+body+'</p>' : '')
+    + '<p class="x-fallback-meta">— GOROman (@GOROman) <a href="'+url+'" target="_blank" rel="noopener">Xで元のポストを見る</a></p>'
+    + '<p class="x-state" role="status">Xの公式埋め込みを読み込み中…</p></div>'
+    + '<div class="x-slot" hidden></div></div>';
+}
+function workCard(w){
+  var media;
+  var allImgs = w.imgs || (w.img ? [w.img] : []);
+  if(allImgs.length){ media = '<div class="work-media"><img src="'+allImgs[0]+'" alt="'+esc(w.alt||w.title)+'" loading="lazy" decoding="async" data-kind="work" onerror="imgErr(this)"></div>'; }
+  else { media = '<div class="work-media"><div class="noimg"><div><div class="big-year">'+esc(w.year)+'</div><div class="big-word">'+esc(w.cat)+'</div><div class="noimg-note">写真・スクリーンショットなし</div></div></div></div>'; }
+  var links = (w.links||[]).map(function(l){ return '<a href="'+l[1]+'" target="_blank" rel="noopener">'+LINK_ICON+esc(l[0])+'</a>'; }).join("");
+  if(w.x){ links += '<a class="xlink" href="'+w.x+'" target="_blank" rel="noopener">'+X_ICON+'元のポスト</a>'; }
+  var tags = w._tags || [];
+  var noStr = ("00"+(w._no||0)).slice(-3); var pid = "w-"+noStr;
+  var html = '<article class="work reveal" id="'+pid+'" data-era="'+w.era+'" data-tags="'+esc(tags.join(" "))+'" data-search="'+esc((w.title+" "+w.desc+" "+w.cat+" "+w.year+" "+tags.join(" ")).toLowerCase())+'">'
+    + '<div class="work-grid">' + media
+    + '<div class="work-body"><div class="work-top"><span class="work-year">'+esc(w.year)+'</span><span class="work-cat">'+esc(w.cat)+'</span>'
+    + (w.status ? '<span class="status">'+esc(w.status)+'</span>' : '')
+    + '<span style="margin-left:auto;display:inline-flex;align-items:center;gap:2px"><a class="no-chip" href="#'+pid+'" title="この作品のパーマネントリンク">No.'+noStr+'</a><button type="button" class="copy-btn" data-copy="#'+pid+'" aria-label="作品 No.'+noStr+' のパーマネントリンクをコピー">'+COPY_ICON+'</button></span>'
+    + '</div><h3>'+esc(w.title)+'</h3><p class="desc">'+esc(w.desc)+'</p>'
+    + tagRow(tags)
+    + (allImgs.length>1 ? '<div class="work-gallery">'+allImgs.slice(1).map(function(src){return '<img src="'+src+'" alt="'+esc((w.alt||w.title)+' の写真')+'" loading="lazy" decoding="async" data-kind="photo" onerror="imgErr(this)">';}).join("")+'</div>' : '')
+    + (links ? '<div class="work-links">'+links+'</div>' : '')
+    + (w.yt ? ytFacade(w.yt) : '')
+    + (w.x ? xEmbed(w.x, w.xt) : '')
+    + (w.xs ? w.xs.map(function(pair){ return xEmbed(pair[0], pair[1]); }).join("") : '')
+    + '</div></div></article>';
+  return html;
+}
+function renderTimeline(){
+  var root = document.getElementById("timelineRoot");
+  var html = "";
+  function yearKey(y){ if(y.indexOf("小学")===0) return 1986; if(y.indexOf("高校")===0) return 1992; var n = parseInt(y,10); return isNaN(n)?9999:n; }
+  function skey(w){ if(w.sort) return w.sort; var base = yearKey(w.year); return ("000"+base).slice(-4)+"-00-00"; }
+  function byDate(a,b){ var ka=skey(a), kb=skey(b); return ka<kb?-1:(ka>kb?1:0); }
+  /* stable chronological numbering + tags, assigned once in render order */
+  var __n=0;
+  ERAS.forEach(function(e){
+    WORKS.filter(function(w){return w.era===e.id;}).slice().sort(byDate).forEach(function(w){
+      w._no=++__n;
+      w._tags=tagsFor(w.title+" "+w.desc+" "+w.cat, !!(w.img||w.imgs), !!w.yt);
+    });
+  });
+  ERAS.forEach(function(e){
+    var items = WORKS.filter(function(w){return w.era===e.id;}).slice().sort(byDate);
+    html += '<section class="era-block" data-era-block="'+e.id+'"><div class="era-head"><span class="era-years">'+e.years+'</span><h2>'+e.title+'</h2><p>'+e.sub+'</p></div><div class="era-rule"></div><div class="timeline">'
+      + items.map(workCard).join("") + '</div></section>';
+  });
+  root.innerHTML = html;
+}
+function postCard(p){
+  var embed = '<div class="x-embed" data-xurl="'+p.url+'"><div class="x-fallback x-compact"><p class="x-state" role="status">Xの公式埋め込みを読み込み中…</p><p class="x-fallback-meta"><a href="'+p.url+'" target="_blank" rel="noopener">Xで元のポストを見る</a></p></div><div class="x-slot" hidden></div></div>';
+  return '<article class="post-card reveal">'
+    + '<div class="post-head"><span class="avatar" aria-hidden="true">G_</span><div class="who"><div class="dname">'+esc(p.dname)+'</div><div class="handle">@GOROman</div></div><span class="post-date">'+p.date+'</span></div>'
+    + '<p class="post-text">'+esc(p.text)+'</p>'
+    + '<p class="desc" style="margin:10px 0 0;color:var(--ink2);font-size:.86rem">'+esc(p.note)+'</p>'
+    + '<div class="post-meta"><span>'+HEART+ p.fav.toLocaleString() +'</span><span>'+REPOST+ p.rt.toLocaleString() +'</span></div>'
+    + embed
+    + '<div class="post-actions"><a class="btn mini" href="'+p.url+'" target="_blank" rel="noopener">'+X_ICON+'Xで元のポストを見る</a></div>'
+    + '</article>';
+}
+function renderStream(){
+  document.getElementById("streamGrid").innerHTML = POSTS.map(postCard).join("");
+}
+
+/* ================= filtering / search ================= */
+var state = {era:"all", q:""};
+function applyFilter(){
+  var visible = 0;
+  document.querySelectorAll(".work").forEach(function(card){
+    var okEra = state.era==="all" || card.getAttribute("data-era")===state.era;
+    var okQ = !state.q || card.getAttribute("data-search").indexOf(state.q) !== -1;
+    var okTag = !window.__activeTag || (card.getAttribute("data-tags")||"").split(" ").indexOf(window.__activeTag) !== -1;
+    var show = okEra && okQ && okTag;
+    card.style.display = show ? "" : "none";
+    if(show) visible++;
+  });
+  document.querySelectorAll(".era-block").forEach(function(b){
+    var any = b.querySelectorAll('.work:not([style*="none"])').length;
+    var hasVisible = Array.prototype.some.call(b.querySelectorAll(".work"), function(c){return c.style.display!=="none";});
+    b.style.display = hasVisible ? "" : "none";
+  });
+  document.getElementById("emptyState").style.display = visible===0 ? "block" : "none";
+  document.getElementById("resultLine").textContent = "作品 " + visible + " 件を表示しています（全 " + WORKS.length + " 件）";
+}
+document.querySelectorAll(".era-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll(".era-btn").forEach(function(b){ b.setAttribute("aria-pressed","false"); });
+    btn.setAttribute("aria-pressed","true");
+    state.era = btn.getAttribute("data-era");
+    applyFilter();
+  });
+});
+document.getElementById("search").addEventListener("input", function(e){
+  state.q = e.target.value.trim().toLowerCase();
+  applyFilter();
+});
+
+/* ================= YouTube facade -> iframe ================= */
+document.addEventListener("click", function(e){
+  var f = e.target.closest ? e.target.closest(".yt-facade") : null;
+  if(!f) return;
+  var id = f.getAttribute("data-yt");
+  var wrap = document.createElement("div");
+  wrap.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0" title="YouTube動画プレーヤー" loading="lazy" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="no-referrer"></iframe>';
+  f.replaceWith(wrap.firstChild);
+});
+
+/* ================= reveal on scroll ================= */
+var __revealIO=null, __revealTimer=false;
+function observeReveals(){
+  var els = document.querySelectorAll(".reveal:not(.in)");
+  if(!("IntersectionObserver" in window)){ els.forEach(function(el){el.classList.add("in");}); return; }
+  if(!__revealIO){
+    __revealIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); __revealIO.unobserve(en.target); } });
+    }, {threshold:.05, rootMargin:"0px 0px 30% 0px"});
+  }
+  els.forEach(function(el){ __revealIO.observe(el); });
+  /* Safety net (once): reveal anything already near the viewport if IO stalls. */
+  if(!__revealTimer){ __revealTimer=true; setTimeout(function(){
+    document.querySelectorAll(".reveal:not(.in)").forEach(function(el){ if(el.getBoundingClientRect().top < window.innerHeight*1.6) el.classList.add("in"); });
+  }, 1500); }
+}
+
+/* ================= init ================= */
+renderTimeline();
+document.getElementById("statWorks").textContent = WORKS.length;
+applyFilter();
+observeReveals();
+</script>
+<script>
+/* ================= feed: read progress + quiet search reveal + expanded stream ================= */
+var POST_EXTRA={"https://x.com/GOROman/status/160606132669390848": {"d": "GOROman - SKB01", "a": "assets/avatars/av1.jpg", "p": "assets/posts/160606132669390848-1.jpg"}, "https://x.com/GOROman/status/1141315655859240967": {"d": "GOROman", "a": "assets/avatars/av3.jpg", "p": null}, "https://x.com/GOROman/status/1151046658354032640": {"d": "GOROman", "a": "assets/avatars/av3.jpg", "p": null}, "https://x.com/GOROman/status/1318492551360307202": {"d": "GOROman", "a": "assets/avatars/av4.jpg", "p": null}, "https://x.com/GOROman/status/1536268789654093826": {"d": "GOROman", "a": "assets/avatars/av5.jpg", "p": null}, "https://x.com/GOROman/status/1714829926946545943": {"d": "GOROman", "a": "assets/avatars/av5.jpg", "p": null}, "https://x.com/GOROman/status/1877649758367482057": {"d": "GOROman", "a": "assets/avatars/av6.jpg", "p": null}, "https://x.com/GOROman/status/2004499227691700388": {"d": "GOROman", "a": "assets/avatars/av6.jpg", "p": null}, "https://x.com/GOROman/status/2079762417094135820": {"d": "GOROman", "a": "assets/avatars/av8.jpg", "p": "assets/posts/2079762417094135820-1.jpg"}, "https://x.com/GOROman/status/2081535459470270605": {"d": "GOROman", "a": "assets/avatars/av8.jpg", "p": null}};
+var PHOTOS_MAP={"160606132669390848": ["assets/posts/160606132669390848-1.jpg"], "2079762417094135820": ["assets/posts/2079762417094135820-1.jpg", "assets/posts/2079762417094135820-2.jpg", "assets/posts/2079762417094135820-3.jpg", "assets/posts/2079762417094135820-4.jpg"], "881116618675310592": ["assets/posts/881116618675310592-1.jpg"], "983534779017527296": ["assets/posts/983534779017527296-1.jpg", "assets/posts/983534779017527296-2.jpg"], "997316207521943552": ["assets/posts/997316207521943552-1.jpg"], "1130307287992623105": ["assets/posts/1130307287992623105-1.jpg", "assets/posts/1130307287992623105-2.jpg", "assets/posts/1130307287992623105-3.jpg"], "1318494713163313153": ["assets/posts/1318494713163313153-1.jpg"], "1318619384164700162": ["assets/posts/1318619384164700162-1.jpg", "assets/posts/1318619384164700162-2.jpg", "assets/posts/1318619384164700162-3.jpg", "assets/posts/1318619384164700162-4.jpg"], "1514041989800804354": ["assets/posts/1514041989800804354-1.jpg"], "1524254790204944384": ["assets/posts/1524254790204944384-1.jpg"], "1600430643078627330": ["assets/posts/1600430643078627330-1.jpg", "assets/posts/1600430643078627330-2.jpg", "assets/posts/1600430643078627330-3.jpg"], "1605465352623648769": ["assets/posts/1605465352623648769-1.jpg", "assets/posts/1605465352623648769-2.jpg"], "1824111970389459056": ["assets/posts/1824111970389459056-1.jpg", "assets/posts/1824111970389459056-2.jpg"], "1888923153629601997": ["assets/posts/1888923153629601997-1.jpg", "assets/posts/1888923153629601997-2.jpg"], "1903199376811626665": ["assets/posts/1903199376811626665-1.jpg"], "1938391301613097234": ["assets/posts/1938391301613097234-1.jpg"], "2033182750874956133": ["assets/posts/2033182750874956133-1.jpg"], "2080469302113960444": ["assets/posts/2080469302113960444-1.jpg"], "2086687858602176660": ["assets/posts/2086687858602176660-1.jpg"], "2092030970220417446": ["assets/posts/2092030970220417446-1.jpg", "assets/posts/2092030970220417446-2.jpg"], "1956940599363559561": ["assets/posts/1956940599363559561-1.jpg", "assets/posts/1956940599363559561-2.jpg"], "2090913001469771868": ["assets/posts/2090913001469771868-1.jpg"], "2091398489800634577": ["assets/posts/2091398489800634577-1.jpg"], "2101855979998748892": ["assets/posts/2101855979998748892-1.jpg"], "2101870310626857423": ["assets/posts/2101870310626857423-1.jpg"], "2101952757846671450": ["assets/posts/2101952757846671450-1.jpg", "assets/posts/2101952757846671450-2.jpg"], "2102448051801747470": ["assets/posts/2102448051801747470-1.jpg", "assets/posts/2102448051801747470-2.jpg"], "844174290039721984": ["assets/posts/844174290039721984-1.jpg"], "1518891410233393152": ["assets/posts/1518891410233393152-1.jpg"], "2113189159208890745": ["assets/posts/2113189159208890745-1.jpg", "assets/posts/2113189159208890745-2.jpg", "assets/posts/2113189159208890745-3.jpg"], "833292507110715392": ["assets/posts/833292507110715392-1.jpg"], "832804731290411009": ["assets/posts/832804731290411009-1.jpg"]};
+var EXTRACTED=[["2010-04-29","13054075944","前に作った ARToolKitでファミコンをやるアイデア http://www.nicovideo.jp/watch/sm3598815 #ARToolKit",0,0,0],["2010-06-06","15545536854","【動画】iPhone用MDXプレイヤーを作ってみた http://nico.ms/sm10974105 を投稿しました。 #sm10974105",0,0,0],["2010-06-17","16368765508","東証の適時開示情報を常時モニタし、特定の銘柄のニュースをtwitterに呟くbotをRubyでつくってみた。あとGrowlにも飛ばす。便利だぜ。",0,0,0],["2010-07-29","19821164023","全ての作業をDB(PostgreSQL)にぶっこんだ。それをPukiwikiで表示するプラグイン作った。これ最強！",0,0,0],["2010-08-08","20622069296","自分がAmazonで買ったものの記録を全部吸い出すアプリ作ってみた。8年間ですげー金使っててワロタ。",0,0,0],["2010-08-14","21124723823","お風呂でYoutubeシステム作ってみた。防滴スピーカをBluetoothで繋いでiPadで見る #ipadjp http://tweetphoto.com/38822495",0,0,0],["2010-10-04","26305200805","AR.Droneに内蔵のカメラ映像をPCでOpenGLで表示するやつを作ってみた。PC側でARToolkitで処理して、ターゲットを自動追従するとかできたら楽しそう。",1,0,0],["2011-04-11","57240029113761792","Skype上に横井という名前の仮想社員botを作った。「コンバートしろ」と言えばコンバート作業を自動的に行ってSubversionにコミットする。",0,0,0],["2011-04-26","62878938401222656","会社に電話がかかってきたら、誰からかかってきたかSkypeに表示するプログラムつくった。 YAMAHA Router -> (syslog) -> Server(ruby) -> (Ruby4Skype) -> Skype　的な。",3,2,0],["2011-08-28","107755078848487425","唐揚げスレ見ながら唐揚げ作った",2,0,0],["2012-01-21","160606132669390848","早速iBooks Authorで本作ってみた。",5,1,1],["2012-04-15","191362068706897921","KinectのSDK使ってUDP経由でUnityに情報送るのを作った。これで座標がUnity上で取れるようになったので、何でもできる！",2,3,0],["2012-04-15","191509475448983553","faceAPIという顔の情報取るAPIの値をUDP経由でこれまたUnityに送るヤツも作った。ついでにPS3 Eyeも買ってきた。これはQVGAなら裏モードで秒間125フレームでキャプチャ出来るスグレもの。",3,1,0],["2012-08-09","233366908496408577","中2からホスト局(1200bps)開いてみたり、net-kick作ったり、珍遊記の格ゲー作ってみたり、そのままゲー業界。 #X68000自慢大会",0,0,0],["2012-10-28","262470778178637825","KindleとiPadでテトリス作ってみた",0,0,0],["2012-11-25","272527496648466432","プレステ２の開発やってた頃、当時ピクセルシェーダーなんてなくて大した表現は出来なかったけど、ステンシルバッファ（ディスティーネーションα）を４パスくらいで描いてマスクを塗る「漫☆画太郎シェーダー」を必死に作った。エッジも法線方向にモデルをスケーリングとかそういうので出したり。",0,0,0],["2012-12-14","279386536573812736","両面テープで貼り付けてリバーシブルiPhone作った。docomo+SB",10,4,1],["2013-01-20","292696611174371328","3Dプリンタで作ってみたカスタムレゴブロック。本当に凄い！ 全員買った方がいい。でも、ドライバとアプリ起動するだけで罠だらけ！！\n次はMMDのモデル印刷チャレンジ。",5,5,0],["2013-01-27","295421196156153856","3Dプリンタチャレンジ⑤:\n\n結婚指輪が完成しました。\nプリント時間は5分。\nモデリング時間は15秒！(基本プリミティブだしw\n\n http://t.co/22iQ293G http://t.co/XBKX0JYW",0,0,0],["2013-01-27","295501468977491968","19年前に自分の部屋のエアコンのリモコンをパソコン通信経由で制御するのを作ったよ！。シリアルで赤外線LEDをON/OFF出来る奴。Outside X68000みながら作った。絶対便利だと思ったよ！",0,0,0],["2013-02-03","297964316295057409","パックマンのクッキー型完成！\n\n次はモンスター作ります\n\n#３Ｄプリンタでクッキー型をプリントしてゲームキャラクッキーを焼こう  http://t.co/lAClQftY",1,3,0],["2013-02-03","298017450753142784","3Dプリンタde型をつくってクッキーを焼こう！ 完成！！\n\n#３Ｄプリンタでクッキー型をプリントしてゲームキャラクッキーを焼こう   http://t.co/6mPLvQM0 http://t.co/fJQ2WtFL http://t.co/2bUFUcFK",8,18,0],["2013-02-17","303111441135828992","3Dプリンタをペンタブ使ってリアルタイムで動かすプログラム(3Dman)を作りました。結構レスポンスいいです。",12,25,0],["2013-03-11","310830656303284224","Arduinoで任意の電灯をリモートでオンオフするやつ作った！。XBee搭載なので服からも制御可能。ついでにEthernet対応なのでUDPで #FHC と連携予定。",1,1,0],["2013-03-20","314048915936780290","曲げセンサー曲げるとXBee経由でサーボがクネクネ動くの作った。非常にエロいデバイスに応用できそうであった。",2,0,0],["2013-03-31","318282225189801984","3Dプリンタで作ったファミコンカセット。両面出来ました。 http://t.co/HBddLwHdje",24,46,0],["2013-03-31","318292018960949248","３Dプリントしたファミコンカセット。フタ閉じるとこんな感じです。ファミコンに差してみたい。 http://t.co/M9PQAW5dnN",4,16,1],["2013-05-19","335947280408510466","Miku Miku Moving(MMD互換ソフト)でOculus Riftが使えるプラグインを作りましたが、そもそも需要あるのかな？",1,4,0],["2013-05-20","336402584560619521","OculusRift+RazerHydraで掴んで好きな角度から眺めるデジタルフィギュアシステム作った。未来はフィギュアを3Dスキャンして自炊してバーチャル棚に陳列とかかも？？",12,38,1],["2013-06-30","351015094500597760","Kinect+OculusRiftで好きなキャラになりきるのを作ってみた、結構ノイズでガクブルしちゃう。かなり新体験ですけどｗ",1,2,0],["2013-06-30","351025450048421888","Mikulus 学校バージョン なんぞを作ってみた。\n裏の席に気分が味わえます。\n\n#Mikulus #OculusJP",10,10,1],["2013-06-30","351214884257677314","新作作りました！\nMikulus 学校編 130630版 #bowlroll_net",6,5,0],["2013-07-30","361864120456327169","「LeapMotionでエアくぱぁ をつくってみた」\n「LeapMotionを棒状のものでうごかしてみた」",1,2,0],["2013-10-25","393699871263191040","展示中にライブコーディングしてMiku Muku Karaage作った。",3,8,1],["2013-10-26","393875623115898880","RazerHydra 分解してバーチャル箸つくってみた。唐揚げ用。",4,6,1],["2013-10-28","394801696309665793","そもそもOculusRift貸し出し要員で言ったら、ディレクターさんに 「@GOROman さん面白いですね！」となってノー台本なのでセルフ台本作ってみたものの完全アドリブでフィニッシュしてきました。",1,0,0],["2013-11-14","400809893524819968","3Dスキャンした唐揚げを3Dプリントした挙句、Seeneで3D写真にしてみた。 http://t.co/ILz11cMjlu",5,3,0],["2013-11-22","403787430253178880","PCからTHETAのシャッターを切る最小限のサンプルプログラムをつくってみた\n\n@MobileHackerz さんに大感謝！！",14,9,0],["2013-11-27","405643476252889088","Kinect2+OculusRiftでポジショントラッキング作ってみたけど、位置だけだったらMVN超えた感ある。",8,10,0],["2013-11-29","406228295970062336","腕時計PebbleのBluetoothをHackして家のエアコンをオンにするつくったよ！！\n\nHome Automation - Pebble smart watch",5,5,0],["2013-12-01","406960485116805120","THETA簡易釣竿システムつくった",3,2,1],["2013-12-08","409482185972793345","何故か都合良く家にギターあったのでやってみた。オモシロイ！！\n\nギターの弦がラスタースクロールする。\n太陽光逆光でシャッタースピードMAXが重要。",2,1,1],["2014-01-03","418998056332169218","「からあげ依存症の恐怖」をつくってみた\n\n#karaage",119,332,1],["2014-01-05","419832460440907777","CES 2014 へ日本から行く人用にハッシュタグをつくってみた。\n\n#CES2014JP",2,3,0],["2014-01-10","421448932967723008","日本時間とロス時間を同時に見るシステムつくった",0,1,0],["2014-01-21","425454838353125376","痛Pad miniつくってみた",9,22,1],["2014-01-31","429246697412120576","2010年につくった。\niPhoneで動くMDXプレイヤー (X68000) @youtubeさんから",1,0,0],["2014-02-08","431987998713192449","Unityで スーパーリアル ピヨから様 つくった",28,23,0],["2014-02-09","432185316959461376","とりあえず、山頂から転げ落ちるVRつくってみたけど、いろんな意味で死んだ。",1,0,0],["2014-02-16","434919152856215552","ヘッドマウントNarrativeClip つくってみた",4,3,1],["2014-02-18","435564115642171392","腕時計Pebbleから会社の会議室やロビーとかBARの電気オン・オフ出来るのつくった！！(^O^)",26,19,1],["2014-02-18","435567765693292544","完全シースルーOculusRiftつくった！！ 丸見え！",2,4,1],["2014-02-22","437090570847010816","Wikipedia の OculusRiftページつくったのは俺なので内容なさすぎでスンマセン。",4,2,0],["2014-03-01","439663707807698944","常時バイノーラルマイク耳に突っ込んで音声アンプ通してノイズキャンセルして耳に戻すシステム作った。自分の耳がすげー良くなった！超人。",45,63,1],["2014-04-17","456801492519768064","GoogleGlassから会社の会議室の蛍光灯 On/Off出来るネイティブアプリつくった。\n音声認識 or タッチでOK!",32,46,1],["2014-04-19","457425563448119297","IFTTT()を使って新しいフォロワーが増えたら、Glassへ通知するレシピつくってみた",7,3,1],["2014-05-06","463513726276997120","攻撃色じゃない版もつくってみた。\n\nUnityで王蟲",9,7,1],["2014-06-14","477634964679565314","Super Real MineCraft!! (マインクラフト実写版) やってみた。",29,17,0],["2014-06-17","478701480552038400","ロサンゼルスのお土産つくった",27,9,1],["2014-08-02","495502291185590274","[Unity] Oculus Rift DK2(SDK 0.4.0) でポジショントラッキング有効範囲か？　を判別するコードをつくってみた",32,16,0],["2014-08-09","498114159490252800","Unityで「かまいたちの夜シェーダー」つくった",101,170,1],["2015-06-23","613245165944205312","去年のソードアート・オンラインのVRデモの企画を書いて持ち込んだ。全部持ち出しでつくったので凄まじくお金が消えた。でも鉄拳原田さんと知り合えた。",11,10,0],["2015-09-13","643010897045118976","今日買った #スーパーマリオメーカー でコース作ってみたので遊んでください。\n\nタイトルは「まさに外道!!!!」です。\n\nコースID: AC89-0000-002C-9394",20,20,1],["2015-09-27","648042203319668736","濡れタオルを冷蔵庫に入れてアイスノンをつくった",0,0,0],["2015-10-10","652761568409600001","ちなみにTHETA SのライブビューイングをWifi経由でGear VRで360度見るのは作りました。",4,3,0],["2015-10-15","654595415246028800","DOAX3のPVっぽいのを見てたら、スーパーギャルデリックアワーの尻相撲ステージっぽいのが出てきてファイブミニ吹いた。あのステージはプログラマ　一人（自分）でつくった。",4,8,0],["2015-12-19","678135198249181184","登壇時間3分しかないし、デモアプリとパワーポイントの切り替えが間に合わんので現地でUnity内にスライド出るのを作ってそのままデモにシームレスに入るやつ作った",17,10,0],["2015-12-21","678904884305915904","デゾリスネットのホストプログラム net-kick作りました",4,4,0],["2016-01-03","683625917357420544","動画内ゲームパッド連動システム作った！",68,68,0],["2016-01-13","687278840142495744","FaceRigからパラメータ取得してUnityに適用するのをつくった。",108,79,0],["2016-01-15","687939400672636929","Facerigのパラメータを取得してMMDに反映するMMM用プラグインをつくった。",682,632,0],["2016-01-21","690082058819993600","ファミコンのカセット分解してノギスで計ってモデリングして自宅の3Dプリンターでプリントしたファミコンのカセット https://t.co/iDNbJgkyoE",74,29,2],["2016-04-14","720393291250860032","平面スクリーン時代のアイコンは平面のアイコンだったけど、VR時代のアイコンは球体になると思う。THETA SVRもそんなイメージでつくったけど。",11,5,0],["2016-04-20","722797841161146368","昔dotXSI Traderというのを作った",4,1,0],["2016-07-24","757187529741217792","ポケモンGo 自動孵化装置作ってみた\nが、効果なし",18,15,0],["2016-10-23","790017582598238209","格ゲーのつくりかたとか本も何もないのでスト２の基板を金持ちの友人に借りてビデオデッキで録画してコマ送りしながら研究した。ちなみにほぼBASICでつくった。変数名が全部適当でbakaとかahoとかaとかaaとかaaaaaとかaaaaaaaaaaとかで保守に苦労した。",14,5,0],["2016-11-12","797280939533475840","「VR内Unityリアルタイムエディタ」つくった！\n\n#mikulus",499,414,0],["2016-11-18","799380822532816896","「#Mikulus アーケードモードでVRハイスコアガールをつくってみた」",114,95,0],["2016-12-28","813973912035868672","X68000時代のパソコン通信局ってNet-Cock 3.6とかを逆アセして改造がデファクトスタンダードだったんだけど、フルスクラッチで互換ホストNet-Kickを1から作ったw PSX16650対応。",4,1,0],["2016-12-30","814783373503672320","Rubyで32kHzの俺の耳に聴こえないけど爆音のWAVファイルをつくった。",28,18,1],["2017-01-07","817712142535139329","家中の電気を消すコマンド「バルス」を作った。Siriがちゃんと対応して消してくれる。",932,1089,1],["2017-01-10","818740444888698881","Oculus Medium でファンタジーゾーン をつくってみた！！！",109,70,0],["2017-01-16","820972402209230848","これみんな作りましたよねw\nあとVRAMに自動配置するツール作りましたよ！！デザイナーにめっちゃ感謝された",1,1,0],["2017-02-01","826619237284270080","自分の席が会社に無いので\n\n勝手に会議室に作った",38,13,1],["2017-02-16","832160651581628416","充電機能付カバンをつくった",11,3,1],["2017-02-19","833076100158722048","SAOのVRアプリとドラえもんのVRアプリをライセンスアウトしてもらって2014年に作りました。ロサンゼルスとフランスで出しました。",5,5,0],["2017-02-21","833843063755730944","Twitter専用iPhoneつくった",34,9,1],["2017-02-21","833989173832982528","VAQSO VRさんの匂いのデモは @GOROman & @MuRo_CG が作りました。 #tvm_event",7,4,0],["2017-02-28","836373602156982272","名刺システム作った",11,2,1],["2017-03-08","839298081749282816","ファミコンのROMのピンアサイン変換するやつを作った。これで27C64が使えるはず。",34,15,1],["2017-05-09","861831002099818496","MMD4Mecanimアドオン MecanimJitter作ってみた - Unityの備忘録的な",18,12,0],["2017-05-16","864336778525683712","YM2151へのレジスタアクセスをモニタするやつを作った",17,6,0],["2017-05-28","868651384408870912","2008年につくったのが AR 紙ファミコン\n @youtubeさんから",12,9,0],["2017-06-03","870966418941947904","ファミコンのSRAM引っこ抜いてもプログラムが走るサウンド再生プログラムつくった。割り込みとRAMとスタック全て未使用w",48,19,0],["2017-06-04","871372007266328577","ファミコンのAボタン押したらSRAMに書き込むプログラムを作った。SRAM引っこ抜いてRWを監視するとちゃんと光る。",52,8,0],["2017-06-11","873818264970776576","10bps(秒間1文字)の超低速モデムを作った",55,23,0],["2017-06-13","874466530175602688","4MHzのパッケージが秋月に無かったので8MHzから2分周で作るのと4MHz の水晶振動子からつくる2パターンをやってみた。",12,5,1],["2017-06-26","879296947412021250","20年ほど前にアキバで部品調達して作ったX68000 万能リモコン。ドライバーとかも本見ながら作った。今ではレシーバーも100円で買えて Arduino とかRas Piですぐ出来る。いい時代だなあ。",50,14,1],["2017-07-22","888730946911879178","VR内でフュギュアいじるのはすげー昔につくったな\n\n @youtubeさんから",14,6,0],["2017-09-02","903826668648775680","バレットタイムやってみた",228,113,0],["2017-09-04","904556246539239425","YouTuberからVR Tuber時代を予見させるライブをやってみた",30,13,0],["2017-09-06","905115336386551808","VR 向けの自作 Grabber を作ってみた",10,2,0],["2017-09-10","906884146861039616","Unityの Cinemachine とTimelineとPost Processing StackでPVっぽいのを作ってみた。",70,34,0],["2017-09-24","911769307872321536","デジアイのVRの時はネットワークで全てのPCのファン回転数とCPUとGPU温度も監視してモニタリングするシステムとプロセス常時監視して落ちたら自動再起動とかも作った。こういう展示ノウハウはシェア出来ると良いかもですね。",42,23,0],["2017-10-04","915517503425593344","今日はとある音声収録立会い。先にVRでシーン作って声優さんにVRでその世界を見てもらうという手法をやってみたw 好評だった。",73,43,0],["2018-02-28","968618031143206913","この機能みたいなの昔作ったよねw @koukiwf",8,0,1],["2018-03-19","975394132406419456","それでMikulusつくった",8,5,0],["2018-03-21","976251697596018689","読んでる\n\nObsのプラグイン作ってみた #obsc @SlideShareさんから",7,0,0],["2018-03-21","976290758482251776","MagicLeap に自分を出すアプリ作った。ドッペルゲンガーごっこ出来る？？\n\n実機ください @magicleap",18,7,1],["2018-03-21","976300737754886145","Novint Falconと @hoshistar81 先生の超音波集束装置のUnityラッパー昔作りましたよ\n\nそしたら落合陽一さんから使いたいって当時メール来ましたねw",13,8,0],["2018-03-24","977416626264932352","昔 #ハイスコアガール モード作ったよ。",5,1,0],["2018-03-27","978424649452154880","なんだーかんだー仕事で一番使ったのは3ds max。プラグインもいっぱい作った。",1,0,0],["2018-03-28","978852746953666560","Luaだと実行したまま評価してどんどん書き換えとかが楽なのが良い。昔PS2のゲームでアプリレイヤーをほぼ全部Luaで作った。ビルドと再起動面倒いので仮想ファイルシステムでリロードw",14,6,0],["2018-03-31","979847947453022208","とりあえずSHOWROOMにルームだけ作りました。いつ放送するかは気分次第。",72,37,0],["2018-04-03","981060817998118912","BOOTH上に　#ゴロマンショップ を作ってみた。\nまだ商品ないですけどｗ",14,5,0],["2018-04-06","982047687548723200","ギフティングとコメントのシミュレーションサーバーも作った まあRubyで80行くらいだけどw",5,0,0],["2018-04-08","982661430066335744","シリアルをFSKで矩形波にして懐かしの300bpsのモデムっぽいのをPSoC5でつくってみた(音が出ます)",97,39,0],["2018-04-09","983004335276638208","テープもつくったよ！\n\nゴロマン公式テープ | 【公式】ゴロマン☆ショップ #booth_pm",21,10,0],["2018-04-13","984706505193603073","バナーつくった",20,9,1],["2018-04-16","985823552967340032","本日20:01 SHOWROOMにて\n\n #ゴロマンのオール日中ニッポン\n\n社内スタジオつくった",11,5,1],["2018-05-04","992127790982905856","AniCastはログを再生して界王拳10倍みたいなデバッグ機能をつくった",3,1,0],["2018-05-08","993696415858679809","現地にいるスタッフの聴覚を聴くシステム作った",5,0,0],["2018-06-07","1004538736271491073","身代金ビデオつくった",171,70,0],["2018-06-27","1011841016083591168","自分でコミュニティを作って集団をつくったw\nパソコン通信も\nインターネットのIRCも\n会社も\nVRコミュニティも",14,2,0],["2019-05-06","1125358743313502208","#FM音源完全に理解した いので、最初はGoogle SpreadSheetでグラフ表示するそれっぽいのをつくった。中学とか高校の時にこういうのあったら数学嫌いにならずに済んだかもしれない。",177,65,0],["2019-05-29","1133673935831162882","Oculus Questのバッテリー残量と内部温度モニタを作った。",54,15,0],["2019-05-30","1134020752850661377","Oculus Quest Sを作ってみた",57,11,1],["2019-07-03","1146078746195050498","csv2pma というツール作った",22,5,0],["2019-07-13","1149973589573042176","モーションキャプチャつくってみた\n\n#プリメイドAIハック",305,124,0],["2019-07-29","1155768026458836992","本体の基板ボタンでファームウェアの挙動が変わる機能つくってみた。モードに応じてフルカラーLEDの色も変わる\n\n(改造ファームじゃないなら押しちゃダメ絶対！サーボトリムぶっ壊れる\n\n#プリメイドAIハック",22,5,0],["2019-08-21","1164133807869419520","負電源つくった",44,6,1],["2019-09-09","1170900439904079873","DJI POCKETをリュックに固定するシステムつくった",31,10,1],["2019-09-13","1172485902557253632","Insta360GoとDJI PocketでＰＶっぽいの作ってみた。編集はスマホだけ",57,11,0],["2019-09-17","1173837200443637761","意味がありそう風で特になにもない映像を作ってみた\nDJI POCKET",14,1,0],["2019-09-22","1175606411939565570","LINEにオープンチャットなる機能があったので #X68000 を作ってみた",8,3,1],["2019-10-01","1178778143349342209","iPhoneアプリ作りました",27,0,0],["2019-10-01","1178781932215123968","UnityでiPhoneアプリつくった",99,8,0],["2019-10-12","1182883513416048640","VR内にAR表示やってみた！\nGoとかQuestで見てほしい！",33,15,0],["2019-11-03","1190945851914375169","Siriの「外部音取り込み」が「会津若松」とかに誤認識されるw のでショートカット機能で「外部」つくった。",8,1,1],["2019-11-09","1193098643680612352","Siriのショートカットつくった",7,1,1],["2019-11-26","1199247832697294848","よんでる\n\nプリメイドai用WiFiブリッジを作ったよ プリメイドaiをWiFi化 #Qiita",21,9,0],["2019-12-12","1204781280983826433","全自動ネコジャラシを作ってみた #sm20174200 #ニコニコ動画",8,1,0],["2020-03-23","1241888609260593152","この尻相撲のステージつくったわw",33,7,0],["2020-07-16","1283754499723505665","KeyStep Proは今んところMIDIプログラムチェンジに対応して無いっぽいのでArduino+MIDIシールドで特定のCCが来たらPGに書き換えるプロキシっぽいのを作った。",44,12,0],["2020-09-27","1310171389807140865","PC-6601のRGB出力をアナログRGB15ピンへ変換するやつを作った。",28,3,1],["2020-10-18","1317823975880224768","Z80のエミュレータやら、デバッガやらいっぱいつくったなー。エミュが遅い場合は一旦Cにするやつとか。組み込みハードみたいな部分の移植もやったので、ある意味ソースがいろいろ読めるわけだがw",16,4,0],["2020-11-03","1323456135010025472","PS2開発の現役時代、Unityとか当時無いのでFlashのSWFファイルを実機で読めるシステム作ってプログラマのパラメータでデザイナがFlashでかっこよく組めるシステムを作った。アプリは全部Luaで作れるようにしてホットロード対応した。得意な人が自由にUI設計できるシステム。",109,19,0],["2022-01-13","1481428914580836353","キャラ作ってみた\n\n#WaifuLabs",17,0,1],["2022-05-16","1526009203391102976","OSC飛ばすVST3つくった。",5,1,1],["2022-05-18","1526731627841617920","#PortalGraph 環境をゲットしてから、創作意欲と妄想が止まらないので 作った @vjroba さんと 背中を押してくれた @hachiya さんに感謝。全ては @RMA1701E さんの勘違いでスタートしたけどw",27,3,0],["2022-06-26","1541038293298851845","インスタコードを弾くとM5 Stackが連動してDMXのライトが光るシステムを作りました。",17,4,0],["2022-06-26","1541059609049591814","VRChatの音声をDJI Mic でワイヤレスで飛ばすシステムつくった。有線なので遅延がない。多分30ms以内。あとノイキャン",25,2,0],["2022-06-28","1541520871848017921","コレはXcodeで描画周りはSwiftでARkit使ってつくった",6,1,0],["2022-08-28","1563724844990341125","DJI FPV 自撮システムつくった",24,3,1],["2022-09-28","1575006408939954178","ホットクックで参鶏湯つくった！\n鳥は丸鶏\n\n#Project参鶏湯",23,2,0],["2022-10-08","1578602499917119491","LINE文の後のPAINT文。そしてエロゲーのアルゴリズム(よくローダーだけ処理ぶっこ抜いてつくったけどw",5,1,0],["2022-10-09","1578875193564332032","パラレルナンバーもつくった。",24,4,1],["2022-10-09","1578877648562184192","ハズレもつくったぜ",15,1,1],["2022-10-14","1580684813912092672","pixivFANBOXで人生初のメガネをつくった その①を公開しました！",8,1,0],["2022-10-14","1580770607087595521","カレーつくった。",74,5,1],["2022-10-24","1584389850572107781","ポップコーンメーカーで\nポップコーンを\nつくってみた",33,4,0],["2022-11-14","1592056678509608962","ポップコーン 電気とガスで両方作ってみたが、電気バージョンは油不要なのでヘルシーかも",20,4,1],["2022-11-21","1594533381530058753","冷却システムつくった",9,0,1],["2022-11-23","1595352301723492352","奥様による Roland T-8 プレイ\nM5Stick-C Plus SYNC\n\n夫婦円満の秘訣はつくったものをやってもらうｗｗｗ",128,23,0],["2022-11-23","1595391242409771010","クエン酸と乳酸でカルピスモドキをつくってみた。",24,1,0],["2022-11-23","1595396092668977152","【今日の記録】\n・チーズフォンデュを温度計測しながらつくった\n・SOLDER POT でポップコーンつくった（失敗\n・SOLDER POTに板ハンダでフォンデュ\n・M5Stick-C とRoland T-8のSYNC連動\n・T-８連動撮影システムをつくった\n・乳酸とクエン酸でカルピスモドキをつくった",14,1,1],["2022-11-30","1597885210095652864","フライドポテトつくった。\n1パスと２パス版",26,1,1],["2022-12-17","1603981463871180801","Human68k .X形式のヘッダをバイナリエディタ ImHex () でヘッダを表示する場合のパターン作りました。\n\nTEXTセクションや、DATAセクション、リロケーションテーブルがわかる。",4,0,1],["2022-12-17","1603982029028470784","Human68k .X形式のヘッダをバイナリエディタ ImHex () で表示する場合のパターン作りました。\n\nTEXTセクションや、DATAセクション、リロケーションテーブルがわかる。",1,0,1],["2022-12-17","1603982447150239744","#X68000 Human68k .X形式のヘッダをバイナリエディタ ImHex () で表示する場合のパターン作りました。\n\nTEXTセクションや、DATAセクション、リロケーションテーブルがわかる。",30,8,1],["2022-12-18","1604352592876011520","^C も ^Z も効かなくするクソプログラム 作りました。",20,1,0],["2022-12-19","1604682528841170944","Dual Mac System つくった",164,30,0],["2022-12-31","1609095699836309505","自宅のCO2濃度を教えてくれるLINE Botつくってみた。\n\n #AirQualityProject",27,6,1],["2023-01-02","1609861454840360960","自宅のCO2センサーの値をWebSocketで取得して、部屋のCO2濃度で敵が増えるクソゲーを作った。\n\n#GodotEngine #AirQualityProject",53,17,1],["2023-03-02","1631115949519826945","ChatGPT APIが公開したので自分用の秘書を作った。これは便利！！！！",2619,769,0],["2023-04-24","1650382810421526528","ChatGPTで基板警察を作ってみた。",84,37,1],["2023-04-27","1651563285601456128","手首で ChatGPT できるやつをつくった。M5StickC Plus + iPad",440,111,0],["2023-05-02","1653336522463277056","インスタコード用のドラムシーケンサーをChatGPTに聞きながらマッハでつくってみた",78,20,0],["2023-05-12","1657014392691773450","Pixel Watch (Wear OS)から M5Stack を制御するのをつくってみた。",64,9,0],["2023-05-12","1657028651085443072","Pixel Watch で心拍をモニタしてUDPでブロードキャストするアプリをつくってみた。\n\nM5Stack Coreで心拍を受信とかできる。",48,4,0],["2023-05-13","1657206752914608128","スマートウォッチで自分の心拍モニタして、曲のテンポが連動するのをつくってみた。おもしろい。\n\nPixel Watch→UDP→M5Stack\n Core→M5StampS3→Roland T-8(Sync In)",447,120,0],["2023-05-13","1657213307563180032","Wear OSのアプリ開発もKotlin使うのも初めてだったが、例によって全部ChatGPTに聞きながら2日くらいで作ったwww 過集中マンとAIの相性良すぎる。",138,25,0],["2023-05-16","1658352348572569601","ドローンジャンプボタンつくった。",146,18,0],["2023-05-29","1663124455843930115","FPVドローン用にプロポのボタン押すとVTXの送信周波数(E1/F1/F4)切り替えつつ、ゴーグル側の受信機側も切り替わるのをつくってみた。",61,12,0],["2023-05-30","1663504436801703936","IRC rapidFIREのSPI制御ライブラリをつくった。",6,0,0],["2023-10-03","1708865458949308720","NTPで日付を認識してバースデーソングを鳴らして歌ってくれる機能をつくった。",31,3,0],["2023-10-22","1715986459738739081","学習リモコンつくったなー。",8,2,0],["2023-10-22","1715987199479722376","30年ほど前にアキバで部品調達して作ったX68000 万能リモコン。制御ドライバーとかも本(Outside X68000)見ながら作った。",13,0,1],["2023-10-24","1716568072352682423","Androidだと複数ユーザーが作れるので、スズキサトシをつくってみた。",6,0,1],["2023-10-30","1718800989921403183","DJI Action 3 殻割りして作業記録システムつくった。",41,7,0],["2024-06-17","1802680431915213032","謎のものをつくった。STM32 + MIDI OUT\n#EasyEDA",24,3,1],["2024-08-07","1821174953095655659","40円マイコンでMIDI鳴らす基板を作ってみた。",104,6,1],["2024-11-10","1855583151915155739","米粒AVR(tiny10)のファームウェアをM5Stackから動的にTPIで書き換えるのをつくってみた",13,2,0],["2024-12-10","1866327398427599241","Sora で LGTMeow 作ってみた",20,5,0],["2024-12-21","1870364857079636329","M5でI2C制御可能なミニ四駆つくった。",62,9,0],["2025-01-05","1875884486896099814","ナイトライダーっぽいLEDをつくった。",172,29,0],["2025-01-12","1878200107876982956","ボタンを押すとAIが解説してくれる棒をつくった。\n\n#サザエスティック",65,13,0],["2025-01-12","1878250548358758714","コマンドラインのコマンドをチャットで教えてくれる ai-shell 使ってみた動画。\n\nVrewで動画を適当に作った。　ボタン押すとAIが喋ってくれるのは良い。",32,10,0],["2025-01-15","1879414154936963100","コンソール(iTerm2)でPythonとかgccのエラーが出たら、自動でトリガフックして、ollama呼び出して、ローカルLLM(phi4)でエラーを日本語で解説してもらうやつをつくった。",275,66,0],["2025-01-16","1879768728373694606","Macのターミナルに打ち込んでる文字をデカく表示するのを作ってみた。\n\nプレゼンとか、老眼ズに便利かもしれない。",116,26,0],["2025-01-25","1883052256255492274","ネットワーク🛜無しで動くローカル感を出すなら、こういうスタンドアローンのポケコンみたいなのが一番インパクトあると思ってつくってみた。",26,7,0],["2025-01-26","1883332834162844140","話題の手のひらサイズの AI。\nLLM Cardputer のリポジトリを GitHubに作りました。",187,35,0],["2025-02-02","1885865406252073113","自宅に色々あったので昔のコンピュータっぽい音を出すのをやってみた。",130,27,0],["2025-02-14","1890188894777573552","昔自分の会社のオフィスは電気工事を入れてボタン1個で全部オフになるスイッチをつくったなw",7,0,0],["2025-02-14","1890354913969856975","最近そんなような仕事用の治具を作った。リレーでオンオフしてMQTTでクラウドでグラフ化してなんかあったらSlackにBotが喋るまで自動化した。",3,1,0],["2025-02-15","1890593218082844723","Unit ASR の解説みたいな動画をほとんど自動で作ってみた。",50,9,0],["2025-03-07","1897797692354707925","Mudra BandのFAQを勝手に作ってみたｗｗｗ　あと「むだら」じゃなくて「ミューダ」だった。\n\nMudra Band (ミューダ・バンド) についてよくある質問 (FAQ)\n\n1. Mudra Band (ミューダ・バンド) はどのように動作するのですか？\n\nMudra Band は、腕の筋肉の動きによって生じる微弱な電気信号…",3,0,0],["2025-03-08","1898324544802173112","数学が苦手な人向けの \"回転行列くん\" 作った。\nReactでレスポンシブデザインなのでスマホ対応。",40,11,0],["2025-03-09","1898511620244111397","↓この仕組みでメール送れる仕組みを作った！！！\n\nちゃんとメール届いた\nClaude App + MCP (apple-mcp)\n\n#肩の上の秘書メール",80,15,1],["2025-03-18","1901885660325429478","Chrome拡張で「しばらく観察していると」な\nクソリプを自動ブロックするフィルターを作った。\n\n#XKusoRepFilter #XKRF",144,66,0],["2025-03-18","1901983708334506024","税理くん と 経理くん と 経営くん をAIで作った。",56,5,0],["2025-03-22","1903250591058665665","その後、毎回C++のビルドが面倒でPS2開発機上で全てアプリはLuaで書いて、ホットリロードにし、デザイナーはFlashでオーサリング。swfコンバータを作り全くビルド無しで実機で動くのをつくった。",10,1,0],["2025-03-26","1904697562722165183","ChatGPTで情報商材つくった",11,2,1],["2025-03-29","1905929640323006572","オレがプログラム作ったwww 尻相撲もそう。水面処理もそうw\n\nキマった世界観で美女が尻相撲する神ゲー【スーパーギャルデリックアワー】 @YouTubeより",81,39,0],["2025-03-31","1906596776347652267","免罪くん を作った。",14,4,1],["2025-04-02","1907398985968710099","ナル先生の秘密の掲示板作った。\nガチャ要素",0,0,0],["2025-04-08","1909374440775057456","コードもHTMLも1行も書いてない。全部AI生成。プロフィールもAI生成。ゲームコーナーもAIで作った。\n\n全部 #Windsurf です。",10,0,0],["2025-04-12","1910955587426541905","ChatGPT APIで自分用の秘書を作った。これは便利！！！！",311,28,0],["2025-04-12","1911027451872088147","ちなみにコレもAIでかなり作りました。自分が担当したBLE転送ツール(Python)は全部AIで作りました。あと一緒に作ったエンジニアとプレゼンしたら、大賞30万円もらえました。",15,0,0],["2025-04-12","1911036639163359263","ちなみにコレもAIでかなり作りました。自分が担当したBLE転送ツール(Python)は全部AIで作りました。あと一緒に作ったエンジニアとプレゼンしたら、大賞30万円もらえました。\n\nその縁で来週のRuby Kaigi 愛媛もスポンサー枠でタダで行ける事になりました！",54,6,0],["2025-04-13","1911180189834551444","バイブコーディングでゲーム作ってみた",17,1,0],["2025-04-15","1911942251602927683","Windsurf + GPT-4.1 でガンダムクイズ作ってみた。\n\nガンダム3択クイズに挑戦！\n10問中4問正解（正答率40%） #ガンダムクイズ",0,0,0],["2025-04-15","1911956487897055582","GPT-4.1 で作ってみたクイズゲー",3,0,0],["2025-05-05","1919361610415792408","もう一曲、作詞して作ってみた\n\n　　　「もしもチェンバロが弾けたなら」",29,3,0],["2025-05-08","1920350772157370717","前に作りました。ALL Human マークです。",67,5,1],["2025-05-09","1920675493193421093","Manus でゲーム作りました！！ブラウザで遊べます。\n↓\n\n@ManusAI_HQ @ManusAI_JP",7,0,0],["2025-05-11","1921404294160396641","今 1人で食べた蕎麦の割り勘をPayPayで作ってみた",10,2,1],["2025-05-13","1922061879452561564","バーチャファイター2で自動で千本パンチするジョイスティックつくったよ",23,9,0],["2025-05-13","1922155424263860313","フロッガー風のクソゲーを作りました。",10,1,0],["2025-05-16","1923132031933841854","汎用AIエージェント #Manus が画像生成に対応したのでナル先生のギャラリー作ってみた。（デプロイまでやってくれます）\n\n↓↓\n\n@ManusAI_JP",5,2,1],["2025-05-16","1923255094373482953","中学の時に読んで格闘ゲーム勝手に作りましたw",2,0,0],["2025-05-22","1925398351077679248","Vibe CodingでGPS対応のさわやか待機時間アプリつくった",2196,213,1],["2025-05-23","1925658785760051566","Claude Sonnet 4 で\nすーぱーねこねこランドのランディングページつくってみた",11,0,1],["2025-05-24","1926117598506234040","くっそｗｗｗｗｗ\n\n今話題のVeo 3 で動画（音声あり）作りました。\n\nプロンプト：\n4人の男。一人は黄色いハゲ。手積みの麻雀。天鳳を上がって大騒ぎ！　そのまま気絶して倒れる！",239,30,0],["2025-05-26","1926797527208128557","今話題のVeo 3 で動画作りました！！！\n（音声も生成！！！）",79,6,0],["2025-05-27","1927333219759767997","Veo 3でうどんやってみた\n\n謎の黄色いハゲ",62,13,0],["2025-05-30","1928337964213367120","自己紹介スライドが必要らしいので今作ったwww",21,0,1],["2025-06-01","1929097763154727182","ChatGPT(OpenAI Realtime API搭載)で音声で会話できるミニ四駆を作りました！！",37,7,0],["2025-06-06","1930957015448232432","そうです。草の根BBS同士をリンクさせて、あちゃ @takane69 の豊橋の「三河屋」、あと　おにしょうじの大垣の「ﾃﾞｿﾞﾘｽﾈｯﾄ2」後、@Naga_3003 の東京（昔は田無）の 「NAGA-NETs」と俺の「GORO-NETs」を全てリレーさせてBBSをリンクする機能を作った。自作ホストプトグラムは net-kick 。",10,2,0],["2025-06-24","1937309373417816331","前にマイナンバーカードの残機出すアプリつくった",19,5,0],["2025-07-13","1944211290471510086","Vibe Codingで洗濯機購入ガイドのホームページ作りました\n\n↓\n\nドラム式洗濯機比較ガイド | 5人家族・賃貸マンション向け",19,2,1],["2025-07-19","1946394882991694058","日本の人口ピラミッドをアニメーション化するやつ作った #manus\n\n日本の人口ピラミッド - アニメーション表示",8,1,1],["2025-07-23","1948000522465943725","ヤッター！めん　の収益シミュレータ作りました。\n↓↓↓",11,2,1],["2025-07-26","1948909119647482114","AIでパワポ作ってみた",5,0,1],["2025-07-30","1950355025773133833","中学2年の時にパソコン通信のホスト局GORO-NET作ってSysopしてて、人工無能のオンラインのもつくったw",23,2,0],["2025-08-21","1958380526492086363","今話題のLINE AI FRIENDSでAIフレンズ「ナル夫(なるおっと)」作りました。",69,11,1],["2025-09-20","1969389493720649734","PLATEAUモデル表示とシミュレータ\n\n例によって1行もコードを書いていないw スマホでプロンプト書いてつくった。\n\n#Manus @ManusAI_JP",10,2,1],["2025-10-01","1973234637427339539","AI麻雀を使った男にキレる映像を作りました\n@necobut @yuujii\n#Sora2",20,4,0],["2025-10-03","1974059062808719412","ManusのAPIをpythonから呼んで、好きなタスク登録できるのを作ってみた。",14,2,0],["2025-10-17","1978877942831943976","今日帰国しますけど、Manus でシアトル観光ガイドを作りました。\n\n↓",50,2,1],["2025-11-25","1993223058304422338","さわやかのMCPサーバーつくってみた\nChatGPTから呼べる",443,51,1],["2025-11-25","1993228081721643315","ChatGPTの開発者モードで「さわやか(ハンバーグ)機能」を作ってみた",34,3,0],["2025-11-29","1994609837494440295","Manus で作った 非公式さわやか待ち時間アプリ\nほぼ完成へ",19,1,1],["2025-12-01","1995400037439070594","さわやかアプリとかゲームをManusでつくってみた話とかしよう。",49,5,0],["2025-12-05","1996805881833685176","Ray-Ban Meta （メガネ）のカメラでジェスチャー認識させるやつを作ってみた。なんかに使えそう\nW-DAT",76,13,0],["2025-12-06","1997220933770326440","Ray-Ban Meta のカメラで見えてるものをVLMで解説してくれるやつをとりあえず作った",60,7,1],["2025-12-09","1998331377595433202","Limitlessの規約変更の比較サイトを Manus で作ってみた\n↓",2,0,0],["2025-12-22","2003057993500475674","Claude Code用のApple Watchアプリを作ってみた！ トイレ🚽でもどこでも承認できるw",499,43,1],["2025-12-26","2004499227691700388","Meta の SAM2 を使ったセグメンテーションツールを作ってみた。(Macのローカルで動く)",1172,120,0],["2025-12-31","2006160024322613300","インフルエンザで学校休んでて、テストで20点取って来たので わからんと言ってた部分をつくった。Vibe 教材良いっすw",43,8,0],["2026-01-03","2007291742899601795","#クイズモザイクモザイク　作った",38,7,1],["2026-01-05","2008016579309818285","Manus で作った Galaxy Foldのような折りたたみスマホの曲げ判定アプリ（何故かサイバーになった）",26,1,1],["2026-01-08","2009250960867041584","マウスカーソルをクルクルすると、その範囲をAIが要約してくれるやつを作った。メールの返信も書いてもらえる。\n\n#クルクルミラクル",412,49,0],["2026-01-10","2009917594074263664","全パターンレンダリングしたものをカメラ操作して好きなアングルでプレビューできるビューワを Manus で作りました（スマホでも動くよ）\n↓↓↓",1170,155,0],["2026-01-12","2010717210579468440","1枚絵をアップロードすると色んな角度から画像を生成するやつをManusで作成。画像生成は のAPIでやってみた（256*256 8枚で 0.3ドルくらい？",222,30,0],["2026-01-24","2014939687065186579","奥様が趣味の編み物で困ってるっぽかったのでManusで編み物用ツールを作りました。尚これがなんなのかは自分はわからんけどw（デバッグ不能）\n\n↓\nKnitting Calculator\n編み物の割り出し計算をシンプルに。\n肩下がりや袖下の増減目を簡単に計算できます。",83,20,1],["2026-01-24","2015059077211242761","Switch 2 で Claude Code が動いている間だけ進むことができるマリオカートを作った。\n\n承認やプロンプト入力待ちの時間は強制的にBボタンが押されてバックする。\n\nHooks→MQTT→Wifi→ESP32-C6",448,59,0],["2026-03-04","2028851412000780475","アルジャジーラのライブニュースをLM StudioのQwen 3.5 9Bでローカル翻訳するのを作ってみた。",18,0,1],["2026-03-15","2032989387294965971","いまいちClaude Codeのボーナスタイムが日本時間でいつかわからんので時計作った",1202,201,0],["2026-03-26","2037016194612597170","Web上のどんな画像でもアニメーションつけられるChrome拡張を作った (Claude Codeで",19,2,0],["2026-04-19","2045775156480774480","みなさんから貰った餌代はナルエビの名前に自動反映するスキルを作った",28,0,1],["2026-04-24","2047448012201554067","GPT-5.5 試して作ってみた\n謎のスターウォーズ風ゲー",162,22,0],["2026-04-27","2048563933674643791","Even G2 の ターミナルモード互換サーバーを作った。これで自宅のMacStudio上で動いてるローカルLLMにEven G2からアクセスできる。",109,4,0],["2026-05-02","2050342560313516527","Codex のカスタムペット機能でイルカ作った",15,1,1],["2026-05-02","2050343553004626326","今話題のCodexのペット機能でイルカを作ったよ！\n名前は「カイルくん」\nよろしくね！！",433,71,0],["2026-05-16","2055548862883037678","撮影コーナーをつくった",9,1,0],["2026-06-02","2061612447988146261","あれ ってなんですか？ TR-808のカウベルのアナログ回路を再現してリアルカウベル叩くと808の音がするのとかは作りました\n(作ったものが1000個くらいあるのでどれかわからんw",12,1,0],["2026-06-06","2063130253544005633","とりあえず ハッカソンチームメンバー向けgithub リポジトリを作った",27,1,1],["2026-06-24","2069509210480775192","IEEE754ならいけますね\n3d studio max → PS2のエキスポータはオレも仕事で作ったなー\n\nSoftimage|3Dの dotXSI フォーマットを 3ds max で読むインポータプラグインも作った",11,1,0],["2026-06-25","2069913246640037904","という内容だった。bison(yacc) と flex でパーサー書いて Softimage|3D の .xsi を読むDLLをつくった。\n\nちなみにバイト代は月60万円だったww\n\n前職が正社員で26万だったので 34万円アップであるwww 多分25歳くらいの時",29,0,0],["2026-07-08","2074828335159615747","話題の Claude Fable 5 で\n『唐揚げゲーム』を作りました。",28,3,1],["2026-07-09","2075014416903577795","ファミコンのカートリッジ吸い出しツールと基板\n\n1行もコード書かずにFableで作りました。基板設計もFableで作りました。\n\nファミコン(FC 60ピン)カセット吸い出しツール — M5Stamp S3 + EasyEDA Pro基板 + Python CLI",244,55,0],["2026-07-09","2075044874190205413","今話題のFableでブラウザ上で動くFM音源(YM2151)で808風UIなシンセ作った。X68000のMDX形式ファイル読み込んで音色にアサインも可能！",303,80,0],["2026-07-10","2075587228684910774","今話題のFableでブラウザ上で動くファミコン音源で808風UIなシンセも作った。(飲み屋でVibe Coding)",69,14,1],["2026-07-10","2075590914916127124","GMK ログ機能を作った",11,2,1],["2026-07-17","2077937687005479360","Fable 5 でBLE スペアナ作った。",360,37,0],["2026-07-22","2079819137308881305","ファミコンの斜め差しシミュレータを作りました。",8395,2861,0],["2026-07-24","2080575967832199292","AIにどんだけ頼んでも目ぱちのアニメが作れないので、目ぱちアニメドットエディタを作ったw",266,56,0],["2026-07-26","2081139023746326840","ファミコンのカセットを３Dプリントしたいのでファミカセ専用CADつくった。STLエキスポート対応",116,7,0],["2026-07-26","2081241440747933891","3Dプリントしたファミコンカセット\n いい感じ https://t.co/Q6xpmj9dDB https://t.co/LtTiLZPtdG",168,19,0],["2026-07-27","2081516892527984954","アニメーションプレイヤーを作った",577,84,0],["2026-08-07","2085658313547772096","Codex Micro 互換ハードウェアをつくってみた",230,26,0],["2026-08-08","2085959372321276235","Codex Micro 互換のVibeCoding向け腕時計型デバイス #VibeWatch 作りました。\n\nGithub で公開したのでスター⭐️ください。\n\n#M5StackInnovationContest #M5Stack",241,44,0],["2026-08-09","2086424287532245225","ALIENTEK PD ホットプレート HP20 のモニターを作った。",28,1,0],["2026-08-11","2087105932857954439","3Dプリンタで3Dプリントしました。\nCodex Micro Modoki (CMM) https://t.co/2wkpu8OcmL",172,15,0],["2026-08-15","2088601975919423798","AirTag モドキ。3Dプリンタで3Dプリントした！ https://t.co/FVdEOjnkPR",339,13,1],["2026-08-18","2089533903321305419","ChatGPTの新機能「Computer History(コンピュータの履歴)」を使った日報を生成するSKILL(Daily work report)を作ってみた。便利そう。",57,11,1],["2026-08-18","2089544728291442876","暇なのでX68000のPICフォーマットをMP4にするやつ作った。稲妻レンダリング。",2564,585,0],["2026-08-18","2089618087784091662","任意の画像をX68K柳沢PIC表示にするツールを作りました！\n\n『キミだけの稲妻を堪能しよう！』",99,23,0],["2026-08-19","2090068007867633824","懐かしのピーギャーを作りました！",23,5,0],["2026-08-21","2090720482236764286","WebUI 作った。動いてる予感。",4,1,1],["2026-08-24","2091702333826842804","あの @PalmerLuckey が作った @modretro CHROMATIC を魔改造(FPGAとESP32とカスタムROM)してFM音源を搭載。#かんぷれ みたいな楽器にして弾いてみた！",152,32,0],["2026-09-12","2098600103997211017","発掘したROMライターのアプリインストールするのめんどくせーのでAIで作った",485,70,1],["2026-09-12","2098727689125495084","SC-88Pro のWAVE ROMを吸い出すためのH8のプログラムを作った。88emu上では動いている。",181,29,0],["2026-09-13","2098935887602331812","ロジックアナライザーも繋ぐのが面倒なのでAIで作ったw w",47,10,1],["2026-09-18","2100898970340114943","今話題のJEVでファミコンゲームのジャンル判定器をつくってみた。",58,6,0],["2026-09-18","2100920422430921182","今話題のJevで麻雀の役判定みたいなのやってみた。\nあってるかは知らんw",25,4,0],["2026-09-18","2100940438614212799","Jevによるコード進行 AI選択システムを作ってみた\n金がどんどん溶けるw\nKANTAN-PLAY\n\nCc: @necobut",51,5,0],["2026-09-18","2100943681029357799","今話題のJevによるクソリプ判定システムを作ってみた！\nChrome拡張",212,44,0],["2026-09-18","2100948504596398276","今話題の Jev を使ったクソリプ・AIBot 判定器をつくった！",302,37,0],["2026-09-19","2100976853674754130","今回皆様からいただいた誕生日プレゼントを仕分けするツールを作りました。",47,5,0],["2026-09-19","2100983031138042155","今読んでる文章の段落に応じて、Jevで動的にBGMを自動生成するのを作ってみた。コード進行をいい感じにする。",128,26,0],["2026-09-19","2100989510813446342","青空文庫をXポスト風に読むやつを作ってみた。",1044,230,0],["2026-09-19","2100996766128918828","JevでFM音源の音色パラメータ分類器を作ってみた。",47,4,1],["2026-09-19","2100999542586093937","実際にトークンを燃やしながら学べるJev教室を作った",223,21,1],["2026-09-19","2101148115831300431","一次キャッシュつくった",29,4,1],["2026-09-23","2102587552435933510","前にXで「お前は車のレースゲーを作れ」みたいな事を言っきた人がいたのでレースゲーっぽいのは作ってみた。厳密には違うがw",23,2,0],["2026-09-25","2103290533347287266","パソコン通信用のターミナルアプリを作った",52,9,1],["2026-09-25","2103461740575088971","FAXモデム２台繋げて、FAX受信するの作った。",57,5,0],["2026-09-25","2103469143655932104","パソコンでFAX受信できるようにして、受信完了したら自動でOpenAIのAPIで画像認識させて誰宛か判別するのを作ってみた。",147,20,0],["2026-09-26","2103842428604268858","NET-COCK互換BBSも作ってみた。",23,3,1],["2026-10-06","2107208164915700031","あのクソ面倒な Visit Japan WebにAIエージェントが記入し、QRは電子ペーパー(バッテリ無くなっても表示できる)に転送するやつを作った",702,89,1],["2026-10-06","2107408523810533459","タマタマの3Dプリント成功 https://t.co/4kaQ81znjl",25,0,0],["2026-10-07","2107518710860984328","20代で経験したこと\n\n・コンビニバイトした\n・海外へ行った(SIGGRAPHとGDC)\n・結婚した\n・子供が生まれた\n・勤めてた会社が潰れた\n・会社を作った",127,8,0],["2026-10-07","2107600873669218584","今話題(？)のFM-1を改造してX68000のMDXプレイヤーにしてそのまま好きなチャンネルをその音色で弾けるやつを作ってみた。",76,17,0],["2026-10-08","2108084465386045636","ナルエビちゃん 3Dプリントできた(触角 折れてるがw SAN値チェック https://t.co/7k2uJagwWK",18,1,1],["2026-10-12","2109512176948134338","リトル ナルエビちゃん ピープル\n作ってみた。",7,1,0],["2026-10-13","2109834309444264021","3Dプリントしたゲームボーイカートリッジ 完璧👌 https://t.co/iXjo0tLvuK https://t.co/wLlqdCboD0",204,14,3],["2026-10-15","2110567497326043250","エアブラシ塗装用のターゲットを3Dプリントしました https://t.co/miOaCilixq",8,1,1],["2026-10-15","2110647721522766223","Bambu A1 Mini 用の進捗モニターを\nM5 Tab5で作った。",63,4,0],["2026-10-15","2110682498409910498","Apple Watch に 3Dプリンタ(Bambu)の進捗出すのを作った！！",28,2,0],["2026-10-16","2111075984590200939","バーチャファイター2をBlenderにリアルタイムで持ってくるやつを作ってみた",209,46,0],["2026-10-17","2111228213112553518","自宅3Dプリンタの使用頻度がわかるようにGitHubの草みたいなのを作った。",21,2,1],["2026-10-17","2111233406533357880","自分の買った3Dプリンタ用の機材を自動管理するシステムを作った。\n\nフィラメントは湿度変化を自動で記録する予定。",51,2,1],["2026-10-17","2111241494573277471","3Dプリンタの散財管理を作った",20,1,1],["2026-10-17","2111406942128398726","iPhone Duo 半分印刷した https://t.co/Z4lM87qAk7",58,0,1],["2026-10-18","2111693631421813235","DotsでDotsモデリングしてもらってDotsで3Dプリントした https://t.co/q3ymkuj00B",38,2,1],["2026-10-19","2112072632975970543","Codex+Astra+UltraFastでイベントのスライドをiPhoneで自動で撮って台形補正して字幕を合成するやつを作ったw　SQLiteへ全て保存w",27,0,0],["2026-10-19","2112092717031534636","ナルエビちゃんがイベント出席して実況できるシステム作った。",20,2,0],["2026-10-20","2112399875329720644","3Dプリンタの自動進捗報告システムを作った。発火して火事になった場合も通知が来るので安心です。",9,1,0],["2026-10-20","2112456681980579874","ChatGPT Sites で住所録作ってみた（使わないがw",14,0,1],["2026-10-20","2112474178603667722","#OpenAIDevDayExchange の @seratch_ja 瀬良さんの講演を聞いて ChatGPT Sites で3Dプリンタの管理（？）サイト作ってみた。散財額や機材、湿度管理など。データはSites上のD1のデータベースへ格納",19,0,1],["2026-10-20","2112481801356857426","ハイパー全自動　文字起こし＆翻訳をUltrafastで作った。便利。",26,1,1],["2026-10-21","2112670012427370891","Cue に 旅マン 作った",8,1,1],["2026-10-21","2112670442599403964","Grok BotでAIエージェント「旅野郎」を作った",14,1,1],["2026-10-21","2112834659315020237","セキュリティ野郎をつくった",23,0,1],["2026-10-22","2113055873593704617","暇だったので、SH02フィラメントドライヤーのエミュレータ作ったw w w 再現度完璧な気がするw",10,1,0],["2026-10-22","2113178353499099639","3Dプリンタのフィラメント情報をM5 Paper Nano内蔵のNFCで読み取って、そのまま ラベルプリンタ(P-TOUCH CUBE)で印刷するのを作った！",318,38,0],["2026-10-22","2113189159208890745","暇だったのでフィラメントドライヤーSH02のiPhoneアプリとApple Watch アプリを作った。外出中でも停止できる。",12,2,1],["2026-10-23","2113581300275941503","1Password はCLIがあるので、アカウントを整理するツールを作った。削除したり、パスワード変更させたり。",477,37,0],["2026-10-23","2113601852667478377","PHP使ってるサービスを探すのも作った",29,4,0],["2026-10-24","2113821124073296122","Grok Bot に「あすけんのオトコ」を作った。体重計 WithingsとGoogle Photosを自動で読ませて食ったもの全て管理する予定。GMKログも(肝硬変可能性と余命を出す",24,3,1],["2026-10-25","2114141354410619048","Grok Botに経理担当をつくった。Google Photos繋いでレシートっぽい写真のやつは勝手に登録してもらう。",103,5,1],["2026-10-26","2114557281732079818","暇だったんで、自分が寝てる間、マイクで録音していびきを分析するアプリを作った。\n\nいびきアナライザー #いびアナ",75,5,0],["2026-10-26","2114560636814516702","さらに暇なので、いびき音声だけを抜き出す .IBK(いびきファイルフォーマット）も作った。Museにぶち込むといびきを解析してくれる。キミだけの最高のいびきを手に入れよう！！\n\n#いびアナ",15,2,1],["2026-10-26","2114562284089708597","とりあえず ぴょんぴょんする機能を作った",68,1,0],["2026-10-26","2114576840849543425","暇だったので Yubico と AirTag 合体させるやつを3Dプリントした https://t.co/UfjxmjWF4J",21,1,2],["2026-10-29","2115636897972429144","M5 PAPER DIY ケース 3Dプリントしました\nいい感じになりそう https://t.co/sFEdFXmwlG",36,3,2],["2026-11-01","2116749370670657918","reSpeaker Clip の CFW作った。家に帰ったらBLEでMac Studio検知して、勝手にWifi開いて録音ファイルを自動でHotSync。勝手にRE-USEでノイズキャンセルして自動文字起こし。吸い出したファイルは自動で消す。",157,14,0],["2026-11-04","2117749967624499634","作ってみた\n\nH3Cを実寸ARで部屋に置いて、サイズを確認できます。",77,17,0],["2026-11-04","2117944909634355492","GrokBot つくった #タマタマ\n\n#GrokBotKanagawaMeetup",205,23,0],["2026-11-05","2118122396515496114","自分が加入してるサブスクを仕分けするアプリ作った",248,30,0]];var MORE_POSTS=[{"date": "2016-11-12", "dname": "GOROman", "text": "「VR内Unityリアルタイムエディタ」つくった！\n\n#mikulus", "fav": 499, "rt": 414, "url": "https://x.com/GOROman/status/797280939533475840", "av": "assets/avatars/av2.jpg", "ph": null}, {"date": "2017-03-16", "dname": "GOROman@帰国", "text": "ファミコン実機スーパーマリオ全自動クリアプログラム。\n\nNESBotを最小限構成。Arduinoでパッドをハックして実機TAS再生。", "fav": 409, "rt": 383, "url": "https://x.com/GOROman/status/842198750789427200", "av": "assets/avatars/av2.jpg", "ph": null}, {"date": "2017-11-10", "dname": "GOROman@Estonia", "text": "ファミコンFPGA搭載して魔改造\nBG先読みしてスーパーマリオがダライアス状態にw\n\n #XVIInc", "fav": 744, "rt": 551, "url": "https://x.com/GOROman/status/928958516332675072", "av": "assets/avatars/av2.jpg", "ph": null}, {"date": "2018-05-18", "dname": "GOROman@めぐるーまー@AniCast", "text": "Oculus Go サザビー風 完成！", "fav": 500, "rt": 187, "url": "https://x.com/GOROman/status/997316207521943552", "av": "assets/avatars/av2.jpg", "ph": "assets/posts/997316207521943552-1.jpg"}, {"date": "2019-01-30", "dname": "GOROman", "text": "Mixed Reality Segway たのしい！\n障害物をMRで置いてコース自作できる。", "fav": 437, "rt": 160, "url": "https://x.com/GOROman/status/1090619326556557312", "av": "assets/avatars/av3.jpg", "ph": null}, {"date": "2019-07-14", "dname": "GOROman", "text": "IK動いた!! これで勝つる\n\n#プリメイドAIハック", "fav": 529, "rt": 181, "url": "https://x.com/GOROman/status/1150382780502573056", "av": "assets/avatars/av3.jpg", "ph": null}, {"date": "2019-07-17", "dname": "GOROman", "text": "プリメイドAIで #ペットボトルチャレンジ\n\n#ペットボトルキャップチャレンジ\n#プリメイドAIハック", "fav": 618, "rt": 297, "url": "https://x.com/GOROman/status/1151320747479953409", "av": "assets/avatars/av3.jpg", "ph": null}, {"date": "2020-10-19", "dname": "GOROman", "text": "#マリオカートハック\n\nLogicool のハンドルとかが使えるようになったw", "fav": 1122, "rt": 470, "url": "https://x.com/GOROman/status/1318163382780874752", "av": "assets/avatars/av4.jpg", "ph": null}, {"date": "2022-04-13", "dname": "GOROman", "text": "そろそろVR HMDの外側に映像出せるタイプも出てきてほしい\n\nコレはDK1とOculus Go魔改造して作ったやつ", "fav": 346, "rt": 105, "url": "https://x.com/GOROman/status/1514041989800804354", "av": "assets/avatars/av5.jpg", "ph": "assets/posts/1514041989800804354-1.jpg"}, {"date": "2022-05-11", "dname": "GOROman", "text": "base2048のソースコードを読んでて、そう言えばファミコン版ドラクエの復活の呪文ってbase64っぽいなーと思って改造してたらbaseDQ2ができた。", "fav": 681, "rt": 231, "url": "https://x.com/GOROman/status/1524254790204944384", "av": "assets/avatars/av5.jpg", "ph": "assets/posts/1524254790204944384-1.jpg"}, {"date": "2022-12-21", "dname": "GOROman", "text": "魔改造モニタレスMacBook ProでZoomの会議出てる。モニタはnreal air改 でカメラはiPhone", "fav": 324, "rt": 55, "url": "https://x.com/GOROman/status/1605465352623648769", "av": "assets/avatars/av5.jpg", "ph": "assets/posts/1605465352623648769-1.jpg"}, {"date": "2023-04-30", "dname": "GOROman", "text": "魔改造Nreal Airのマイクをつかって音声認識し、ChatGPTで処理するモールス信号顔面発生マシンが爆誕しました！  顔面間通信可能に？？", "fav": 381, "rt": 106, "url": "https://x.com/GOROman/status/1652594595560321025", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2024-08-08", "dname": "GOROman", "text": "今日は８月８日。HAPPY 808day ということで、TR-808 カウベル回路を再現する基板をつくってリアルカウベルを叩くと808カウベルが鳴るやつをつくりました！\n\n#808day", "fav": 347, "rt": 118, "url": "https://x.com/GOROman/status/1821346302103285814", "av": "assets/avatars/av6.jpg", "ph": null}, {"date": "2024-12-30", "dname": "GOROman", "text": "OpenAI搭載 ミニ四駆。\nターボブースト認識機能できた\n\n#しゃべ四駆", "fav": 319, "rt": 129, "url": "https://x.com/GOROman/status/1873701447252259007", "av": "assets/avatars/av6.jpg", "ph": null}, {"date": "2026-03-15", "dname": "GOROman", "text": "cmux 改造して左側に コンテクスト消費のグラフ出すようにしてる", "fav": 465, "rt": 28, "url": "https://x.com/GOROman/status/2033182750874956133", "av": "assets/avatars/av7.jpg", "ph": "assets/posts/2033182750874956133-1.jpg"}, {"date": "2026-09-19", "dname": "GOROman", "text": "青空文庫をXポスト風に読むやつを作ってみた。", "fav": 1044, "rt": 230, "url": "https://x.com/GOROman/status/2100989510813446342", "av": "assets/avatars/av8.jpg", "ph": null},{"date": "2014-08-31", "dname": "GOROman@Seatle", "text": "ファミコン用の立体視システムを改造してX68000に繋いでファンタジーゾーンやったあたりからヘッドマウント人生がスタートしました。", "fav": 77, "rt": 40, "url": "https://x.com/GOROman/status/506085524579184640", "av": "assets/avatars/av2.jpg", "ph": null},{"date": "2017-03-12", "dname": "GOROman@帰国", "text": "初代ファミコンをUSB給電とコンポジット出力に改造したので、これで飛行機の機内モニタ(コンポジット付)なら飛行機の機内エンタテイメントシステムでファミコンができる。", "fav": 146, "rt": 129, "url": "https://x.com/GOROman/status/840857374718025728", "av": "assets/avatars/av2.jpg", "ph": null},{"date": "2017-06-03", "dname": "GOROman", "text": "ファミコンカセットのROMをFlashROMに出来た！これで自作ファミコンプログラムが実機で動く！", "fav": 153, "rt": 93, "url": "https://x.com/GOROman/status/870902921998630912", "av": "assets/avatars/av2.jpg", "ph": null},{"date": "2017-12-20", "dname": "GOROman@Estonia", "text": "X68000のファンタジーゾーンがファミコン3Dシステムで3Dモードで動いた！ @_mer2 さんありがとうございます。", "fav": 73, "rt": 32, "url": "https://x.com/GOROman/status/943313695345487872", "av": "assets/avatars/av2.jpg", "ph": null},{"date": "2019-08-15", "dname": "GOROman", "text": "スーパーファミコン アクトレイザー\nデジタルS/PDIF出力してOVOデジタル再生ハック", "fav": 73, "rt": 23, "url": "https://x.com/GOROman/status/1161872495810506752", "av": "assets/avatars/av3.jpg", "ph": null},{"date": "2022-05-26", "dname": "GOROman", "text": "ファミコン魔改造 VHFトランスミッター完成", "fav": 64, "rt": 18, "url": "https://x.com/GOROman/status/1529766613897314304", "av": "assets/avatars/av5.jpg", "ph": null},{"date": "2013-05-05", "dname": "GOROman - SKB01", "text": "OculusRift魔改造中。PS3Eyeを分解して張り付け。これは最強のARデバイスになる予感。。。", "fav": 17, "rt": 4, "url": "https://x.com/GOROman/status/330887617338044417", "av": "assets/avatars/av2.jpg", "ph": null},{"date": "2026-09-23", "dname": "GOROman", "text": "完成！「#接待レーサーレボリューション 」\n\n特長① 初代プレステの通信対戦ポートをFPGAでハック！対戦相手はなんとAI！自動運転で接待プレイする！\n\n特長② レースゲームの進捗をWebRTC経由でアナタのスマホでライブビューイングも可能！　AIによるライブ実況も？！\n\n#生成AIなんでも展示会", "fav": 203, "rt": 47, "url": "https://x.com/GOROman/status/2102465215325676031", "av": "assets/avatars/av8.jpg", "ph": null},{"date": "2025-08-17", "dname": "GOROman", "text": "ModRetro Chromatic のファームウェアをソースコードからビルドして、書き換えできた！", "fav": 20, "rt": 4, "url": "https://x.com/GOROman/status/1956939375566320014", "av": "assets/avatars/av6.jpg", "ph": null},{"date": "2025-08-17", "dname": "GOROman", "text": "ModRetro Chromatic ファームウェアのソースコード魔改造してBLE対応してみた（iPhone繋いでリモートでLCD輝度を上げてる）\n\n@modretro", "fav": 66, "rt": 12, "url": "https://x.com/GOROman/status/1957066993133129801", "av": "assets/avatars/av6.jpg", "ph": null},{"date": "2017-05-16", "dname": "GOROman", "text": "X68000エミュレータ上でMXDRV + mmdsp動かしてX68Sound.dllを改造してOPMの出力先はArduino。ガチのYM2151(OPM)のレジスタを叩いてMDX再生するのが出来た！", "fav": 328, "rt": 236, "url": "https://x.com/GOROman/status/864495404766724097", "av": "assets/avatars/av2.jpg", "ph": null},{"date": "2019-05-14", "dname": "GOROman", "text": "矩形波のVCOまで組み立て\n音出してみました\n\n #アナログシンセを理解する", "fav": 68, "rt": 15, "url": "https://x.com/GOROman/status/1128170590588641280", "av": "assets/avatars/av3.jpg", "ph": null},{"date": "2024-12-02", "dname": "GOROman", "text": "KORG nanoKEY Fold に 自作SAM2695基板繋いだらちゃんと動いた。", "fav": 11, "rt": 1, "url": "https://x.com/GOROman/status/1863556690949640608", "av": "assets/avatars/av6.jpg", "ph": null},{"date": "2026-10-07", "dname": "GOROman", "text": "今話題(？)のFM-1を改造してX68000のMDXプレイヤーにしてそのまま好きなチャンネルをその音色で弾けるやつを作ってみた。", "fav": 76, "rt": 17, "url": "https://x.com/GOROman/status/2107600873669218584", "av": "assets/avatars/av8.jpg", "ph": null},{"date": "2017-01-18", "dname": "GOROman", "text": "デジタルオシロスコープでArduinoのシリアルデコード出来た。", "fav": 59, "rt": 19, "url": "https://x.com/GOROman/status/821521293249941504", "av": "assets/avatars/av2.jpg", "ph": null},{"date": "2017-06-18", "dname": "GOROman", "text": "amazonで2200円で買えるオシロスコープDSO138組み立てて見ました。", "fav": 131, "rt": 69, "url": "https://x.com/GOROman/status/876451696880214019", "av": "assets/avatars/av2.jpg", "ph": null},{"date": "2019-10-15", "dname": "GOROman", "text": "ラジコンのサーボをファンクションジェネレーターでハックする", "fav": 70, "rt": 11, "url": "https://x.com/GOROman/status/1184058553012637697", "av": "assets/avatars/av3.jpg", "ph": null},{"date": "2026-07-23", "dname": "GOROman", "text": "自作ファミコンエミュにオシロスコープとプロアクションリプレイ的なメモリ書き換え追加", "fav": 236, "rt": 49, "url": "https://x.com/GOROman/status/2080079464416067857", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2017-02-18", "dname": "GOROman", "text": "オーグメンテッドジョイスティック\n有機ELモニタ搭載完了", "fav": 15, "rt": 8, "url": "https://x.com/GOROman/status/832804731290411009", "av": "assets/avatars/av2.jpg", "ph": null}, {"date": "2017-02-19", "dname": "GOROman", "text": "技をアシストするジョイスティック完成！\n\n#オーグメンテッドジョイスティック", "fav": 121, "rt": 58, "url": "https://x.com/GOROman/status/833292507110715392", "av": "assets/avatars/av2.jpg", "ph": null}, {"date": "2017-03-21", "dname": "GOROman", "text": "FPGAはじめました", "fav": 19, "rt": 6, "url": "https://x.com/GOROman/status/844174290039721984", "av": "assets/avatars/av2.jpg", "ph": null}, {"date": "2017-03-22", "dname": "GOROman", "text": "とりあえずESP32のI/OとFPGA側との通信できた。ESP32の指令に同期してFPGA基板のLEDをLチカ。", "fav": 14, "rt": 3, "url": "https://x.com/GOROman/status/844374211544080384", "av": "assets/avatars/av2.jpg", "ph": null}, {"date": "2022-04-15", "dname": "GOROman", "text": "ホワイトノイズが延々出る素晴らしいVSTが完成した。\n\n#はじめてのVST開発", "fav": 38, "rt": 8, "url": "https://x.com/GOROman/status/1514887810565963787", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2022-04-15", "dname": "GOROman", "text": "X68000のMDXファイルをロードしてトラック別にリアルタイム再生できるVSTプラグインできた！\n\n #はじめてのVST開発", "fav": 57, "rt": 19, "url": "https://x.com/GOROman/status/1514929237756882946", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2022-04-16", "dname": "GOROman", "text": "DAW上でMDXファイルが直接再生できるVSTができました。MIDI入力にも対応！\n\n #はじめてのVST開発", "fav": 68, "rt": 38, "url": "https://x.com/GOROman/status/1515031258958827520", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2022-04-16", "dname": "GOROman", "text": "X68000のMDXをリアルタイムでDAWで鳴らすやつ。思いのほか楽しい感じのができた。\n\n#MDXVST #はじめてのVST開発", "fav": 40, "rt": 19, "url": "https://x.com/GOROman/status/1515193211626606594", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2022-04-20", "dname": "GOROman", "text": "X68000のMDXファイルをVSTでMIDIファイルに変換して、#ConcertCreator でAIにピアノを弾いてもらった。 #MDXVST", "fav": 87, "rt": 31, "url": "https://x.com/GOROman/status/1516561532976795649", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2022-04-26", "dname": "GOROman", "text": "VSTのGUIの作り方を理解した。\n\n#MDXVST #はじめてのVST開発", "fav": 32, "rt": 8, "url": "https://x.com/GOROman/status/1518891410233393152", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2022-04-29", "dname": "GOROman", "text": "好きなMDXファイルで演奏するやつができた。源平討魔伝キーボード。\n\n#MDXVST #はじめてのVST開発", "fav": 165, "rt": 78, "url": "https://x.com/GOROman/status/1519862913582141440", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2022-04-30", "dname": "GOROman", "text": "インスタコードでFM音源\nデジタル琵琶法師\n\n#源平討魔伝 #MDXVST", "fav": 85, "rt": 31, "url": "https://x.com/GOROman/status/1520371889151299584", "av": "assets/avatars/av5.jpg", "ph": null}, {"date": "2025-08-17", "dname": "GOROman", "text": "ModRetro Chromaticのファームウェア Hack。ESP32( esp-idf ) なのでラク\n\nカスタムファームウェア作れる。\nとりあえず連射機能でも付けるかw\n@necobut @PalmerLuckey", "fav": 45, "rt": 5, "url": "https://x.com/GOROman/status/1956940599363559561", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-08-22", "dname": "GOROman", "text": "Codex によるFPGA コーディング 4日目\nMODRETRO Chromaticのコードを Tang Primer 20K へ移植。LCD→HDMIに対応。操作はまだできないw", "fav": 45, "rt": 11, "url": "https://x.com/GOROman/status/2090913001469771868", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-08-23", "dname": "GOROman", "text": "Palmer LuckeyにもらったMODRETRO Chromatic、 FPGA側のファームウェア焼けた。\n\nGOWIN EDA 1.9.9.03 Mac版が見つからないのでForkされた方で", "fav": 29, "rt": 3, "url": "https://x.com/GOROman/status/2091398489800634577", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-08-24", "dname": "GOROman", "text": "PlayStation 1でODEするなら、PU-8のやつがあればOK？メルカリで買ったのはSCPH-3500", "fav": 2, "rt": 1, "url": "https://x.com/GOROman/status/2091734057499627768", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-08-24", "dname": "GOROman", "text": "FPGAでPS1でODEなんかできてた。動くかはしらん。", "fav": 12, "rt": 0, "url": "https://x.com/GOROman/status/2091771236057747928", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-09-21", "dname": "GOROman", "text": "初代プレステ\nSCPH-3500とSCPH-7500で基板のサイズがかなり違う", "fav": 48, "rt": 9, "url": "https://x.com/GOROman/status/2101855979998748892", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-09-21", "dname": "GOROman", "text": "初代プレステの通信ポートを基板からぶっこぬきました。", "fav": 18, "rt": 1, "url": "https://x.com/GOROman/status/2101870310626857423", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-09-21", "dname": "GOROman", "text": "ANKER のモバイルバッテリーで動く初代プレステ基板(SCPH-7500)。USB type-C PD 12V", "fav": 71, "rt": 17, "url": "https://x.com/GOROman/status/2101952757846671450", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-09-23", "dname": "GOROman", "text": "我ながらスゲーものができたwww\n\nプレステのリッジレーサーの通信対戦をFPGAで傍受してWebRTCでスマホでリアルタイムで見れるwww 2P側はAIが操縦www\n\n#生成AIなんでも展示会", "fav": 489, "rt": 96, "url": "https://x.com/GOROman/status/2102448051801747470", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-09-23", "dname": "GOROman", "text": "初代PlayStation の通信ポート(Serial I/O)を使った通信対戦の通信速度は2.1Mbpsくらいあるので、2プレイヤー側のAIはmacOS上のPythonで動いててその情報をFPGAにUSB-UART経由で送る事で実現している。\n\n#接待レーサーレボリューション", "fav": 34, "rt": 5, "url": "https://x.com/GOROman/status/2102586280744010010", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-09-23", "dname": "GOROman", "text": "壊れたのでコレにて初代プレステ ハックは終了☑️ 明日からは他の事やろwww", "fav": 123, "rt": 15, "url": "https://x.com/GOROman/status/2102686782617960699", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-09-25", "dname": "GOROman", "text": "プルアップ忘れるとちゃんと入力が動かないんだよなw。　プレステ１のシリアル通信をFPGAで入力するときにプルアップ設定し忘れててハマってたw", "fav": 13, "rt": 2, "url": "https://x.com/GOROman/status/2103372697883574639", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-10-07", "dname": "GOROman", "text": "MODRETRO ChromaticをMuse Gadgetsに出来た！ ESP32のRAMがあんま無いので苦労した。", "fav": 16, "rt": 2, "url": "https://x.com/GOROman/status/2107692409488585215", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-10-07", "dname": "GOROman", "text": "Modretro Chromatic YM2151(OPM) 8CH +ADPCM HACK", "fav": 19, "rt": 4, "url": "https://x.com/GOROman/status/2107697008589046069", "av": "assets/avatars/av8.jpg", "ph": null}, {"date": "2026-10-16", "dname": "GOROman", "text": "ModRetro @modretro Chromatic\nFPGA/ESP32 MOD\n\nCc: @PalmerLuckey", "fav": 41, "rt": 3, "url": "https://x.com/GOROman/status/2110838019876151694", "av": "assets/avatars/av8.jpg", "ph": null}];
+(function(){
+"use strict";
+/* ---- works: read tracking, progress, next button ---- */
+var TOTAL=WORKS.length, readEls=new Set(), revealed=false;
+var hudCount=document.getElementById("hudCount"), feedCount=document.getElementById("feedCount"), barFill=document.getElementById("readBarFill");
+function updateHud(){
+  var txt="読了 "+readEls.size+" / "+TOTAL;
+  if(hudCount) hudCount.textContent=txt;
+  if(feedCount) feedCount.textContent=txt+" 件";
+  if(barFill) barFill.style.width=(TOTAL?Math.round(readEls.size/TOTAL*100):0)+"%";
+}
+function revealSearch(){
+  if(revealed) return; revealed=true;
+  var c=document.querySelector(".controls");
+  if(c){ c.classList.remove("gated"); if(typeof applyFilter==="function") applyFilter(); }
+}
+if("IntersectionObserver" in window){
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(!en.isIntersecting) return;
+      en.target.classList.add("read");
+      if(!readEls.has(en.target)){ readEls.add(en.target); updateHud(); if(readEls.size>=TOTAL) revealSearch(); }
+      io.unobserve(en.target);
+    });
+  },{threshold:.45});
+  document.querySelectorAll(".work").forEach(function(el){ io.observe(el); });
+  var gate=document.getElementById("endGate");
+  if(gate){
+    var gio=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ revealSearch(); gio.disconnect(); } });
+    },{threshold:.2});
+    gio.observe(gate);
+  }
+} else { revealSearch(); }
+updateHud();
+document.getElementById("hudNext").addEventListener("click",function(){
+  var cards=document.querySelectorAll(".work");
+  for(var i=0;i<cards.length;i++){
+    if(cards[i].style.display!=="none" && !readEls.has(cards[i])){ cards[i].scrollIntoView({behavior:"smooth",block:"start"}); return; }
+  }
+  document.getElementById("stream").scrollIntoView({behavior:"smooth"});
+});
+/* ---- stream: curated + archive picks, batched loading ---- */
+var ALL=POSTS.map(function(p){
+  var e=POST_EXTRA[p.url]||{};
+  return {date:p.date, dname:e.d||p.dname, text:p.text, fav:p.fav, rt:p.rt, url:p.url, note:p.note, av:e.a||null, ph:e.p||null};
+}).concat(MORE_POSTS);
+var seenIds={}; ALL.forEach(function(p){ seenIds[(p.url||"").split("/").pop()]=true; });
+function avFor(date){ var y=parseInt(date.slice(0,4),10), m=parseInt(date.slice(5,7),10);
+  if(y<=2012) return "assets/avatars/av1.jpg";
+  if(y<=2017) return "assets/avatars/av2.jpg";
+  if(y<=2019) return "assets/avatars/av3.jpg";
+  if(y<=2021) return "assets/avatars/av4.jpg";
+  if(y<=2023) return "assets/avatars/av5.jpg";
+  if(y<=2025) return "assets/avatars/av6.jpg";
+  if(m<=6) return "assets/avatars/av7.jpg";
+  return "assets/avatars/av8.jpg"; }
+EXTRACTED.forEach(function(e){
+  if(seenIds[e[1]]) return; seenIds[e[1]]=true;
+  var phs=[]; for(var i=1;i<=e[5];i++) phs.push("assets/posts/"+e[1]+"-"+i+".jpg");
+  ALL.push({date:e[0], dname:"GOROman", text:e[2], fav:e[3], rt:e[4], url:"https://x.com/GOROman/status/"+e[1], av:avFor(e[0]), phs:phs});
+});
+ALL.forEach(function(p){ p.sid=(p.url||"").split("/").pop(); });
+ALL.sort(function(a,b){ if(a.date!==b.date) return a.date<b.date?-1:1; if(a.sid.length!==b.sid.length) return a.sid.length-b.sid.length; return a.sid<b.sid?-1:(a.sid>b.sid?1:0); });
+var statPostsEl=document.getElementById("statPosts"); if(statPostsEl) statPostsEl.textContent=ALL.length.toLocaleString();
+var stEl=document.getElementById("streamTotal"); if(stEl) stEl.textContent="全"+ALL.length.toLocaleString()+"件";
+var st2El=document.getElementById("streamTotal2"); if(st2El) st2El.textContent=ALL.length.toLocaleString();
+var dExtEl=document.getElementById("dExt"); if(dExtEl) dExtEl.textContent=EXTRACTED.length.toLocaleString();
+var dCurEl=document.getElementById("dCur"); if(dCurEl) dCurEl.textContent=(POSTS.length+MORE_POSTS.length).toLocaleString();
+var dDupEl=document.getElementById("dDup"); if(dDupEl) dDupEl.textContent=((POSTS.length+MORE_POSTS.length)+EXTRACTED.length-ALL.length).toLocaleString();
+ALL.forEach(function(p){
+  var id=(p.url||"").split("/").pop();
+  if(PHOTOS_MAP[id]) p.phs=PHOTOS_MAP[id];
+  else if(p.ph) p.phs=[p.ph];
+  else if(!p.phs) p.phs=[];
+});
+/* stable numbers (chronological), tags, popularity tiers — assigned once, never renumbered by loading */
+var WORK_BY_TWEET={};
+WORKS.forEach(function(w){ if(!w._no) return; var urls=[]; if(w.x) urls.push(w.x); (w.xs||[]).forEach(function(pr){ urls.push(pr[0]); }); urls.forEach(function(u){ var mm=/status\/(\d+)/.exec(u||""); if(mm) WORK_BY_TWEET[mm[1]]={no:w._no, title:w.title}; }); });
+ALL.forEach(function(p,i){
+  p.no=i+1;
+  p.tags=tagsFor(p.text, !!(p.phs&&p.phs.length), false);
+  p.pop=(p.fav>=1000||p.rt>=500)?3:((p.fav>=300)?2:((p.fav>=50)?1:0));
+});
+var grid=document.getElementById("streamGrid");
+var moreWrap=document.getElementById("streamMore"), moreBtn=document.getElementById("streamMoreBtn"), countEl=document.getElementById("streamCount");
+var BATCH=30, shownCount=0, lastYear=null, lastYearCards=null, yearCounts={};
+ALL.forEach(function(p){ var y=p.date.slice(0,4); yearCounts[y]=(yearCounts[y]||0)+1; });
+function streamCard(p){
+  var noStr=("00"+p.no).slice(-3); var pid="p-"+noStr;
+  var avatar=p.av
+    ? '<span class="avatar"><span class="av-txt" aria-hidden="true">G_</span><img src="'+p.av+'" alt="" loading="lazy" decoding="async" data-kind="avatar" onerror="imgErr(this)"></span>'
+    : '<span class="avatar" aria-hidden="true">G_</span>';
+  var embed='<div class="x-embed" data-xurl="'+p.url+'"><div class="x-fallback x-compact"><p class="x-state" role="status">Xの公式埋め込みを読み込み中…</p><p class="x-fallback-meta"><a href="'+p.url+'" target="_blank" rel="noopener">Xで元のポストを見る</a></p></div><div class="x-slot" hidden></div></div>';
+  var badge = p.pop===3 ? '<span class="pop-badge">人気のポスト</span>' : (p.pop===2 ? '<span class="pop-badge soft">反響の大きいポスト</span>' : '');
+  return '<article class="post-card reveal'+(p.pop?(" pop"+p.pop):"")+'" id="'+pid+'" data-tags="'+esc((p.tags||[]).join(" "))+'">'
+    + '<div class="post-head">'+avatar+'<div class="who"><div class="dname">'+esc(p.dname)+'</div><div class="handle">@GOROman</div></div>'+badge+'<span class="post-date">'+p.date+'</span></div>'
+    + '<p class="post-text">'+esc(p.text)+'</p>'
+    + (p.phs&&p.phs.length?'<div class="post-photos'+(p.phs.length>1?' multi':'')+'">'+p.phs.map(function(src){return '<img src="'+src+'" alt="投稿に添付された写真" loading="lazy" decoding="async" data-kind="photo" onerror="imgErr(this)">';}).join("")+'</div>':'')
+    + (p.note?'<p class="desc" style="margin:10px 0 0;color:var(--ink2);font-size:.86rem">'+esc(p.note)+'</p>':'')
+    + tagRow(p.tags)
+    + '<div class="post-meta"><span>'+HEART+p.fav.toLocaleString()+'</span><span>'+REPOST+p.rt.toLocaleString()+'</span></div>'
+    + embed
+    + '<div class="post-actions"><a class="no-chip" href="#'+pid+'" title="このポストのパーマネントリンク">No.'+noStr+'</a><button type="button" class="copy-btn" data-copy="#'+pid+'" aria-label="ポスト No.'+noStr+' のパーマネントリンクをコピー">'+COPY_ICON+'</button>'
+    + (WORK_BY_TWEET[p.sid] ? '<a class="btn mini" href="#w-'+("00"+WORK_BY_TWEET[p.sid].no).slice(-3)+'">作品 No.'+("00"+WORK_BY_TWEET[p.sid].no).slice(-3)+'「'+esc(WORK_BY_TWEET[p.sid].title)+'」としても掲載</a>' : '')
+    + '<a class="btn mini" href="'+p.url+'" target="_blank" rel="noopener">'+X_ICON+'Xで元のポストを見る</a></div>'
+    + '</article>';
+}
+function loadMore(){
+  if(shownCount>=ALL.length) return;
+  var slice=ALL.slice(shownCount, shownCount+BATCH);
+  shownCount+=slice.length;
+  slice.forEach(function(p){
+    var y=p.date.slice(0,4);
+    if(y!==lastYear){
+      lastYear=y;
+      grid.insertAdjacentHTML("beforeend", '<section class="year-block" id="y'+y+'" data-year="'+y+'"><div class="year-head"><span class="year-num">'+y+'年</span><span class="year-count">'+yearCounts[y]+'件</span></div><div class="year-cards"></div></section>');
+      lastYearCards=grid.lastElementChild.querySelector(".year-cards");
+    }
+    lastYearCards.insertAdjacentHTML("beforeend", streamCard(p));
+  });
+  if(typeof observeReveals==="function") observeReveals();
+  if(countEl) countEl.textContent="全 "+ALL.length+" 件中 "+shownCount+" 件を表示中";
+  if(shownCount>=ALL.length && moreWrap) moreWrap.style.display="none";
+}
+grid.innerHTML="";
+loadMore();
+if(moreBtn) moreBtn.addEventListener("click", loadMore);
+if("IntersectionObserver" in window && moreWrap){
+  var sio=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting) loadMore(); });
+  },{rootMargin:"1400px 0px"});
+  sio.observe(moreWrap);
+}
+/* permalink: preload batches so #p-NNN exists in the DOM before the router scrolls to it */
+function loadUntilNo(no){
+  var guard=0;
+  while(shownCount<ALL.length && guard<80){
+    var last=ALL[Math.min(shownCount,ALL.length)-1];
+    if(last && last.no>=no) break;
+    loadMore(); guard++;
+  }
+}
+window.__loadStreamUntil=loadUntilNo;
+(function(){ var mm=/#p-(\d{1,4})$/.exec(location.hash||""); if(mm) loadUntilNo(parseInt(mm[1],10)); })();
+/* works <-> stream cross-links: each work that embeds a stream post links back to it */
+var POST_BY_SID={}; ALL.forEach(function(p){ POST_BY_SID[p.sid]=p; });
+document.querySelectorAll(".work").forEach(function(card){
+  var target=null;
+  var embeds=card.querySelectorAll(".x-embed");
+  for(var i=0;i<embeds.length;i++){ var mm2=/status\/(\d+)/.exec(embeds[i].getAttribute("data-xurl")||""); if(mm2 && POST_BY_SID[mm2[1]]){ target=POST_BY_SID[mm2[1]]; break; } }
+  if(!target) return;
+  var body=card.querySelector(".work-body"); if(!body) return;
+  var noStr2=("00"+target.no).slice(-3);
+  var div=document.createElement("div"); div.className="work-links";
+  div.innerHTML='<a href="#p-'+noStr2+'" data-stream-go="'+target.no+'">ストリーム No.'+noStr2+' のポストでも見る</a>';
+  body.appendChild(div);
+});
+document.addEventListener("click", function(e){
+  var a=e.target.closest ? e.target.closest("[data-stream-go]") : null; if(!a) return;
+  e.preventDefault();
+  var no=parseInt(a.getAttribute("data-stream-go"),10);
+  if(window.__loadStreamUntil) window.__loadStreamUntil(no);
+  var el=document.getElementById("p-"+("00"+no).slice(-3));
+  if(el){ try{ history.replaceState(null,"","#p-"+("00"+no).slice(-3)); }catch(err){} el.scrollIntoView({behavior:"smooth",block:"start"}); el.classList.remove("permalink-flash"); void el.offsetWidth; el.classList.add("permalink-flash"); }
+});
+})();
+</script>
+
+
+<script>
+/* ================= view router: works (default) / profile (#profile) ================= */
+(function(){
+"use strict";
+var works=document.getElementById("viewWorks"), prof=document.getElementById("viewProfile"), hud=document.getElementById("hud");
+if(!works||!prof) return;
+var reduced=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function isProfileHash(){ return location.hash==="#profile"||location.hash==="#links"; }
+function render(){
+  var showProf=isProfileHash();
+  works.hidden=showProf;
+  if(showProf){ works.setAttribute("inert",""); } else { works.removeAttribute("inert"); }
+  prof.hidden=!showProf;
+  if(showProf){ prof.removeAttribute("inert"); } else { prof.setAttribute("inert",""); }
+  if(hud) hud.style.display=showProf?"none":"";
+  document.querySelectorAll(".topnav a").forEach(function(a){
+    var nav=a.getAttribute("data-nav");
+    if(nav&&((nav==="profile")===showProf)) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+  });
+  return showProf;
+}
+function applyRoute(){
+  var showProf=render();
+  if(showProf){ window.scrollTo(0,0); return; }
+  if(location.hash&&location.hash!=="#top"){
+    var t=null; try{ t=document.querySelector(location.hash); }catch(e){}
+    if(t){ t.scrollIntoView(); return; }
+  }
+  window.scrollTo(0,0);
+}
+function route(instant){
+  if(!instant&&document.startViewTransition&&!reduced){ document.startViewTransition(applyRoute); }
+  else applyRoute();
+}
+window.addEventListener("hashchange",function(){ route(false); });
+route(true);
+})();
+</script>
+<script>
+/* ================= v10: permalinks / tag filter / year background crossfade / lazy X widgets ================= */
+(function(){
+"use strict";
+/* ---- toast ---- */
+var toast=document.createElement("div"); toast.className="toast"; toast.setAttribute("role","status"); document.body.appendChild(toast);
+var toastTimer=null;
+function showToast(msg){ toast.textContent=msg; toast.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(function(){ toast.classList.remove("show"); },2200); }
+/* ---- copy permalink ---- */
+document.addEventListener("click", function(e){
+  var btn=e.target.closest ? e.target.closest("[data-copy]") : null;
+  if(!btn) return;
+  var hash=btn.getAttribute("data-copy");
+  var url="https://goroman.org/"+hash;
+  function done(){ showToast("パーマネントリンクをコピーしました "+hash); }
+  function fallback(){
+    var ta=document.createElement("textarea"); ta.value=url; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }catch(err){ showToast("リンク: "+url); }
+    ta.remove();
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(done, fallback); } else fallback();
+  if(location.hash!==hash){ try{ history.replaceState(null,"",hash); }catch(err){} }
+});
+/* ---- permalink highlight ---- */
+function flashTarget(){
+  var h=location.hash; if(!/^#(p|w)-\d+$/.test(h)) return;
+  var el=document.querySelector(h); if(!el) return;
+  el.classList.remove("permalink-flash"); void el.offsetWidth; el.classList.add("permalink-flash");
+}
+window.addEventListener("hashchange", function(){
+  var mm=/#p-(\d{1,4})$/.exec(location.hash||"");
+  if(mm && window.__loadStreamUntil){
+    window.__loadStreamUntil(parseInt(mm[1],10));
+    var el=document.querySelector(location.hash);
+    if(el) setTimeout(function(){ el.scrollIntoView(); }, 30);
+  }
+  setTimeout(flashTarget, 80);
+});
+setTimeout(flashTarget, 500);
+/* ---- tag filter ---- */
+var activeTag=null;
+function makeBar(){
+  var b=document.createElement("div"); b.className="tagbar"; b.setAttribute("role","status");
+  b.innerHTML='<span class="tagbar-txt"></span><button type="button">絞り込みを解除</button>';
+  b.querySelector("button").addEventListener("click", function(){ setTag(null); });
+  return b;
+}
+var timelineRoot=document.getElementById("timelineRoot");
+var barW=makeBar(); if(timelineRoot) timelineRoot.parentNode.insertBefore(barW, timelineRoot);
+var streamGrid=document.getElementById("streamGrid");
+var barS=makeBar(); if(streamGrid) streamGrid.parentNode.insertBefore(barS, streamGrid);
+function setTag(tag){
+  activeTag=tag; window.__activeTag=tag;
+  document.querySelectorAll(".tag").forEach(function(el){ el.setAttribute("aria-pressed", el.getAttribute("data-tag")===tag ? "true" : "false"); });
+  if(tag && window.__loadStreamUntil) window.__loadStreamUntil(1000000000);
+  if(typeof applyFilter==="function") applyFilter();
+  var visW=0, visS=0;
+  document.querySelectorAll(".work").forEach(function(el){ if(el.style.display!=="none") visW++; });
+  document.querySelectorAll(".year-block").forEach(function(yb){
+    var any=false;
+    yb.querySelectorAll(".post-card").forEach(function(c){
+      var show=!tag || (c.getAttribute("data-tags")||"").split(" ").indexOf(tag)>-1;
+      c.style.display=show ? "" : "none";
+      if(show){ any=true; visS++; }
+    });
+    yb.style.display=any ? "" : "none";
+  });
+  [[barW,visW,"作品"],[barS,visS,"ポスト"]].forEach(function(pair){
+    if(tag){ pair[0].querySelector(".tagbar-txt").textContent="タグ「"+tag+"」で絞り込み中 — "+pair[2]+" "+pair[1]+" 件"; pair[0].classList.add("show"); }
+    else pair[0].classList.remove("show");
+  });
+  onScroll();
+}
+document.addEventListener("click", function(e){
+  var t=e.target.closest ? e.target.closest(".tag") : null;
+  if(!t) return;
+  var tag=t.getAttribute("data-tag");
+  setTag(activeTag===tag ? null : tag);
+});
+/* ---- year background crossfade (scroll-continuous) ---- */
+var bgEl=document.getElementById("bgFade");
+var LIGHT=[[250,246,238],[253,240,231],[237,245,238],[234,241,248],[253,238,238],[247,241,227],[237,244,241],[253,243,227]];
+var DARK=[[23,21,18],[28,21,18],[19,26,21],[18,22,29],[29,19,20],[26,23,16],[18,26,24],[28,23,18]];
+var mq=window.matchMedia("(prefers-color-scheme: dark)");
+function baseColor(){
+  var cs=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+  var m=/^#(..)(..)(..)$/.exec(cs);
+  return m ? [parseInt(m[1],16),parseInt(m[2],16),parseInt(m[3],16)] : [250,250,248];
+}
+function smooth(t){ t=t<0?0:(t>1?1:t); return t*t*(3-2*t); }
+var ticking=false;
+function paint(){
+  ticking=false;
+  if(!bgEl) return;
+  var pal=mq.matches ? DARK : LIGHT;
+  var bc=baseColor();
+  var col=[bc[0],bc[1],bc[2]];
+  var vh=window.innerHeight, center=vh/2, zone=vh*0.9;
+  document.querySelectorAll(".year-block").forEach(function(b){
+    if(b.style.display==="none") return;
+    var r=b.getBoundingClientRect();
+    if(r.height===0 || r.bottom<-vh || r.top>vh*2) return;
+    var y=parseInt(b.getAttribute("data-year"),10)||0;
+    var tint=pal[y % pal.length];
+    var t=smooth((center-(r.top-vh*0.45))/zone);
+    if(t>0) col=[0,1,2].map(function(i){ return Math.round(col[i]+(tint[i]-col[i])*t); });
+  });
+  var end=document.getElementById("endGate");
+  if(end){
+    var er=end.getBoundingClientRect();
+    var t2=smooth((center-(er.top-vh*0.45))/zone);
+    if(t2>0) col=[0,1,2].map(function(i){ return Math.round(col[i]+(bc[i]-col[i])*t2); });
+  }
+  bgEl.style.backgroundColor="rgb("+col[0]+","+col[1]+","+col[2]+")";
+}
+function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(paint); } }
+window.addEventListener("scroll", onScroll, {passive:true});
+window.addEventListener("resize", onScroll);
+if(mq.addEventListener) mq.addEventListener("change", onScroll);
+paint();
+/* ---- year block reveal ---- */
+var yio=("IntersectionObserver" in window) ? new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); yio.unobserve(en.target); } }); }, {threshold:.02}) : null;
+function watchYears(){
+  document.querySelectorAll(".year-block:not(.in)").forEach(function(b){ if(yio) yio.observe(b); else b.classList.add("in"); });
+}
+watchYears();
+if(streamGrid && "MutationObserver" in window){
+  new MutationObserver(function(){ watchYears(); onScroll(); }).observe(streamGrid, {childList:true});
+}
+/* ---- X embeds: fallback-first. The fallback card (post text + link) is always in the DOM.
+   The official embed is created with twttr.widgets.createTweet into a separate slot and
+   replaces the fallback only after it actually renders. Any failure (script blocked,
+   timeout, deleted/unavailable tweet) keeps the fallback and says so — never a blank. ---- */
+var twReadyPromise=null;
+function loadTwitterWidgets(){
+  if(window.twttr && twttr.widgets && twttr.widgets.createTweet) return Promise.resolve(true);
+  if(twReadyPromise) return twReadyPromise;
+  twReadyPromise = new Promise(function(resolve){
+    var done=false;
+    function fin(ok){ if(!done){ done=true; resolve(ok); } }
+    var timer=setTimeout(function(){ fin(!!(window.twttr && twttr.widgets && twttr.widgets.createTweet)); }, 12000);
+    var js=document.createElement("script");
+    js.src="https://platform.twitter.com/widgets.js"; js.charset="utf-8"; js.async=true;
+    js.onload=function(){ clearTimeout(timer); fin(!!(window.twttr && twttr.widgets && twttr.widgets.createTweet)); };
+    js.onerror=function(){ clearTimeout(timer); fin(false); };
+    document.body.appendChild(js);
+  });
+  return twReadyPromise;
+}
+function xEmbedFail(el){
+  el.classList.add("x-failed");
+  var st=el.querySelector(".x-state");
+  if(st) st.textContent="Xの公式埋め込みを表示できませんでした。ポスト本文と元ポストへのリンクはこのカードに掲載しています。";
+  var slot=el.querySelector(".x-slot"); if(slot){ slot.hidden=true; slot.innerHTML=""; }
+}
+function xEmbedProcess(el){
+  var url=el.getAttribute("data-xurl")||"";
+  var m=/status\/(\d+)/.exec(url);
+  if(!m){ xEmbedFail(el); return; }
+  var id=m[1];
+  loadTwitterWidgets().then(function(ok){
+    if(!ok){ xEmbedFail(el); return; }
+    var slot=el.querySelector(".x-slot"); if(!slot) return;
+    slot.hidden=false;
+    var settled=false;
+    var timer=setTimeout(function(){ if(!settled){ settled=true; xEmbedFail(el); } }, 10000);
+    try{
+      twttr.widgets.createTweet(id, slot, {lang:"ja", dnt:true, align:"center"}).then(function(elm){
+        clearTimeout(timer); if(settled) return; settled=true;
+        if(elm){ var fb=el.querySelector(".x-fallback"); if(fb) fb.hidden=true; el.classList.add("x-done"); }
+        else xEmbedFail(el);
+      }, function(){ clearTimeout(timer); if(!settled){ settled=true; xEmbedFail(el); } });
+    }catch(err){ clearTimeout(timer); if(!settled){ settled=true; xEmbedFail(el); } }
+  });
+}
+var xEmbedIO=("IntersectionObserver" in window) ? new IntersectionObserver(function(es){
+  es.forEach(function(en){ if(en.isIntersecting){ xEmbedIO.unobserve(en.target); xEmbedProcess(en.target); } });
+}, {rootMargin:"600px 0px"}) : null;
+function watchXEmbeds(){
+  document.querySelectorAll(".x-embed:not([data-xw])").forEach(function(el){
+    el.setAttribute("data-xw","1");
+    if(xEmbedIO) xEmbedIO.observe(el); else xEmbedProcess(el);
+  });
+}
+watchXEmbeds();
+if("MutationObserver" in window){ new MutationObserver(function(){ watchXEmbeds(); }).observe(document.body, {childList:true, subtree:true}); }
+/* ---- image fallback backstop: never leave a broken-image glyph ---- */
+document.addEventListener("error", function(e){
+  var t=e.target;
+  if(t && t.tagName==="IMG" && !t.hasAttribute("data-kind")){ t.style.display="none"; }
+}, true);
+})();
+</script>
+</body>
+</html>

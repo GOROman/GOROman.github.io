@@ -42,6 +42,7 @@ jobs:
           # 1) New site at the root (full overwrite, 2026-11-15)
           cp site/index.html deploy/
           cp -r site/assets deploy/
+          cp site/sw.js deploy/
           # 2) Redirect so existing /portfolio.html links do not 404
           printf '<!doctype html><meta http-equiv="refresh" content="0; url=/"><link rel="canonical" href="/"><title>GOROman.org</title><a href="/">GOROman.org</a>' > deploy/portfolio.html
           # 3) MDX player, kept ("mdxは残して"): Vite output goes under deploy/mdx/

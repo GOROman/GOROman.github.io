@@ -625,18 +625,20 @@ body{background:transparent}
 #splash .sp-name{font-weight:900;font-size:1.55rem;letter-spacing:.02em;line-height:1.2}
 #splash .sp-name small{color:var(--accent);font-size:1.05rem}
 #splash .sp-note{font-size:.72rem;color:var(--ink2)}
-/* ===== v12: top progress bar (preload progress -> scroll progress) ===== */
-#pbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:210;background:rgba(128,128,128,.28);pointer-events:none}
-#pbarFill{display:block;height:100%;background:var(--accent);transform:scaleX(0);transform-origin:0 50%;transition:transform .15s linear}
-#pbarPct{position:fixed;top:5px;right:8px;z-index:210;font-family:"Noto Sans Mono",monospace;font-size:10px;font-weight:700;line-height:1.5;color:var(--ink);background:var(--bg);border:1px solid var(--line);padding:0 6px;border-radius:99px;pointer-events:none}
+/* ===== v12 fix: keep ONE top progress bar (the site's own .readbar) =====
+   The v12 #pbar duplicated the existing .readbar (both fixed at top:0 with
+   different fill semantics) and its % pill overlapped the narupo account chip
+   in the sticky header on mobile. The engine now drives .readbar during the
+   splash preload and hands it back to the site's read tracker afterwards;
+   .readbar is raised above the splash so preload progress stays visible. */
+.readbar{z-index:210}
+.sub-btn{max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;justify-content:center}
 html.sp-lock{overflow:hidden}
 @keyframes spSafety{to{opacity:0;visibility:hidden}}
 @media (prefers-reduced-motion: reduce){#splash{transition:none}}
 </style>
 </head>
 <body>
-<div id="pbar" aria-hidden="true"><i id="pbarFill"></i></div>
-<div id="pbarPct" aria-hidden="true">0%</div>
 <div id="splash" role="status" aria-label="読み込み中">
   <img class="sp-logo" src="assets/logo.svg" alt="" width="76" height="76">
   <div class="sp-name">GOROman<small>.ORG</small></div>
@@ -2859,20 +2861,20 @@ document.addEventListener("error", function(e){
   var pageLoaded = false;
   var lastY = window.scrollY, vel = 0, lastMoveT = 0;
 
-  /* ---------- top progress bar ---------- */
-  var pbarFill = document.getElementById('pbarFill');
-  var pbarPct = document.getElementById('pbarPct');
-  var barMode = 'preload';   /* 'preload' | 'scroll' */
+  /* ---------- top progress bar: the site's own .readbar ---------- */
+  var barFill = document.getElementById('readBarFill');
+  var barMode = 'preload';   /* 'preload' (engine drives) | 'scroll' (site's read tracker owns it) */
   function pbarSet(p) {
+    if (barMode !== 'preload' || !barFill) return;
     p = Math.max(0, Math.min(1, p));
-    if (pbarFill) pbarFill.style.transform = 'scaleX(' + p + ')';
-    if (pbarPct) pbarPct.textContent = Math.round(p * 100) + '%';
+    barFill.style.width = (p * 100).toFixed(1) + '%';
   }
-  var sbMax = 0, sbMaxAt = 0;
-  function renderScroll() {
-    var now = performance.now();
-    if (now - sbMaxAt > 600) { sbMax = document.documentElement.scrollHeight - window.innerHeight; sbMaxAt = now; }
-    pbarSet(sbMax > 0 ? window.scrollY / sbMax : 0);
+  function handOffBar() {
+    /* return the bar to the site's works-read tracker (same value updateHud computes) */
+    if (!barFill) return;
+    var ws = document.querySelectorAll('.work');
+    var rd = document.querySelectorAll('.work.read');
+    barFill.style.width = (ws.length ? Math.round(rd.length / ws.length * 100) : 0) + '%';
   }
 
   /* ---------- splash ---------- */
@@ -2896,7 +2898,7 @@ document.addEventListener("error", function(e){
     if (window.__splashKill) window.__splashKill();
     else if (splash) { splash.classList.add('hide'); document.documentElement.classList.remove('sp-lock'); }
     barMode = 'scroll';
-    sbMaxAt = 0; renderScroll();
+    handOffBar();
   }
   if (splashOn) {
     /* hard cap: ~2s on the navigation timeline, even if the batch is unfinished */
@@ -2977,7 +2979,7 @@ document.addEventListener("error", function(e){
     }
     sortQueue(); pump();
   }
-  window.addEventListener('load', function () { pageLoaded = true; flipGate = 0; sbMaxAt = 0; if (barMode === 'scroll') renderScroll(); collect(); }, { once: true });
+  window.addEventListener('load', function () { pageLoaded = true; flipGate = 0; collect(); }, { once: true });
   setTimeout(function () { pageLoaded = true; pump(); }, 6000); /* in case load is somehow delayed */
 
   /* stream "load more": warm the next chunk before it is appended */
@@ -3014,7 +3016,6 @@ document.addEventListener("error", function(e){
     rafPend = true;
     requestAnimationFrame(function () {
       rafPend = false;
-      if (barMode === 'scroll') renderScroll();
       pump();
     });
   }
@@ -3022,10 +3023,10 @@ document.addEventListener("error", function(e){
   var stopT = null;
   window.addEventListener('scroll', function () {
     if (stopT) clearTimeout(stopT);
-    stopT = setTimeout(function () { vel = 0; sbMaxAt = 0; if (barMode === 'scroll') renderScroll(); collect(); }, 280);
+    stopT = setTimeout(function () { vel = 0; collect(); }, 280);
   }, { passive: true });
-  window.addEventListener('resize', function () { vh = window.innerHeight || 800; sbMaxAt = 0; if (barMode === 'scroll') renderScroll(); });
-  window.addEventListener('hashchange', function () { setTimeout(function () { sbMaxAt = 0; if (barMode === 'scroll') renderScroll(); collect(); }, 350); });
+  window.addEventListener('resize', function () { vh = window.innerHeight || 800; });
+  window.addEventListener('hashchange', function () { setTimeout(collect, 350); });
   document.addEventListener('click', function () { setTimeout(collect, 350); }, true);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) pump(); });
   var moT = null;
@@ -3033,7 +3034,6 @@ document.addEventListener("error", function(e){
   var tl = document.getElementById('timelineRoot');
   if (tl) mo.observe(tl, { childList: true, subtree: true });
   if (streamGrid) mo.observe(streamGrid, { childList: true, subtree: true });
-  if (barMode === 'scroll') renderScroll();
   collect();
 })();
 </script>
